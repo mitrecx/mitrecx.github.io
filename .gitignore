@@ -1,0 +1,9 @@
+node_modules
+public
+scaffolds
+db.json
+debug.log
+package.json
+package-lock.json
+!.gitignore
+
