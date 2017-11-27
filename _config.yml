@@ -3,9 +3,9 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: mitre
+title: CX's blog
 subtitle: "Goals determine what you are going to be"
-description: 
+description: "Goals determine what you are going to be"
 author: mitrecx
 language: zh-Hans
 timezone:
@@ -71,7 +71,8 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: cactus-dark
+#theme: cactus-dark
+theme: next
 
 avatar: http://odtumk8fc.bkt.clouddn.com/ForestSister.png
 # Deployment
