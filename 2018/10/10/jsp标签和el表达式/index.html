@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/woAiLuo.jpg?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="jsp,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="jsp标签和el表达式1. jsp标签jsp标签用来替换jsp文件中的java代码。因为直接在jsp文件中写java代码，不方便维护，所以sun制定了 jsp标签技术规范。   可以将jsp标签看做一个占位符，容器遇到jsp标签，会依据标签名找到对应的标签类，然后执行标签类中的代码。简而言之，jsp标签用来代替jsp文件中的java代码    使用jsp标签的好处：1、 jsp文件方便维护2、 方">
+<meta name="keywords" content="jsp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jsp标签和el表达式">
+<meta property="og:url" content="http://yoursite.com/2018/10/10/jsp标签和el表达式/index.html">
+<meta property="og:site_name" content="MITRE">
+<meta property="og:description" content="jsp标签和el表达式1. jsp标签jsp标签用来替换jsp文件中的java代码。因为直接在jsp文件中写java代码，不方便维护，所以sun制定了 jsp标签技术规范。   可以将jsp标签看做一个占位符，容器遇到jsp标签，会依据标签名找到对应的标签类，然后执行标签类中的代码。简而言之，jsp标签用来代替jsp文件中的java代码    使用jsp标签的好处：1、 jsp文件方便维护2、 方">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-09/jsp-taglib1.png">
+<meta property="og:image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-09/jsp-taglib2.png">
+<meta property="og:image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-09/jspTLD1.png">
+<meta property="og:image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-09/jspTLD2.png">
+<meta property="og:updated_time" content="2020-02-22T11:53:17.366Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jsp标签和el表达式">
+<meta name="twitter:description" content="jsp标签和el表达式1. jsp标签jsp标签用来替换jsp文件中的java代码。因为直接在jsp文件中写java代码，不方便维护，所以sun制定了 jsp标签技术规范。   可以将jsp标签看做一个占位符，容器遇到jsp标签，会依据标签名找到对应的标签类，然后执行标签类中的代码。简而言之，jsp标签用来代替jsp文件中的java代码    使用jsp标签的好处：1、 jsp文件方便维护2、 方">
+<meta name="twitter:image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-09/jsp-taglib1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/10/jsp标签和el表达式/">
+
+
+
+
+
+  <title>jsp标签和el表达式 | MITRE</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MITRE</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Goals determine what you are going to be</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/10/jsp标签和el表达式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mitre">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MITRE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">jsp标签和el表达式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-10T20:58:35+08:00">
+                2018-10-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/jsp/" itemprop="url" rel="index">
+                    <span itemprop="name">jsp</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="jsp标签和el表达式"><a href="#jsp标签和el表达式" class="headerlink" title="jsp标签和el表达式"></a>jsp标签和el表达式</h1><h2 id="1-jsp标签"><a href="#1-jsp标签" class="headerlink" title="1. jsp标签"></a>1. jsp标签</h2><p>jsp标签用来替换jsp文件中的java代码。<br>因为直接在jsp文件中写java代码，不方便维护，<br>所以sun制定了 <strong><font color="red">jsp标签技术规范</font></strong>。  </p>
+<p>可以将jsp标签看做一个占位符，容器遇到jsp标签，会依据标签名找到对应的标签类，然后执行标签类中的代码。<br><strong>简而言之，jsp标签用来代替jsp文件中的java代码</strong>   </p>
+<p><strong>使用jsp标签的好处：</strong><br>1、 jsp文件方便维护<br>2、 方便代码的复用  </p>
+<p><strong>jstl ：java标准标签库( java standard tag lib ),</strong> apache 开发的一套标签库，捐献给sun，sun将其命名为jstl。</p>
+<p><strong>如何使用 jstl</strong>：<br>1、 将jstl相关的jar文件拷贝到 WEB-INF/lib 目录下。<br>注：如果使用javaEE 5.0(包含了jstl相关的jar文件)，一般不用拷贝，不绝对，和Tomcat版本有关。<br>2、 使用 <strong><font color="#FF34B3">taglib</font></strong>  指令导入相应的标签。  </p>
+<p><strong>jstl 几个常用的标签：</strong><br>1、 if<br>uri取自standard.jar的META-INF目录中的c.tld(或c-rt.tld)的uri<br><img src="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-09/jsp-taglib1.png" alt><br><img src="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-09/jsp-taglib2.png" alt><br>c 是命名空间的前缀(别名)<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">%@taglib</span> <span class="attr">uri</span>=<span class="string">"http://java.sun.com/jstl/core"</span> <span class="attr">prefix</span>=<span class="string">"c"</span>%&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">c:if</span> <span class="attr">test</span>=<span class="string">""</span> <span class="attr">var</span>=<span class="string">""</span> <span class="attr">scope</span>=<span class="string">""</span>&gt;</span>  </span><br><span class="line"><span class="comment">&lt;!-- test属性为true时，容器会执行if标签体，test属性可以使用el表达式--&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- var属性：指定绑定名称（绑定结果是test结果） --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- scope属性：指定绑定范围，page，request，session，application--&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">c:if</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>2、choose<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">c:choose</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">c:when</span> <span class="attr">test</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--when可以出现一次或多次，当test属性为true时，执行when下的语句--&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">c:when</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">c:otherwise</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--otherwise可以出现0次或1次，表示其他情况--&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">c:otherwise</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">c:choose</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>3、forEach<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--用来遍历集合或数组--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">c:forEach</span> <span class="attr">items</span>=<span class="string">""</span> <span class="attr">var</span>=<span class="string">""</span> <span class="attr">varStatus</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--items属性指定要遍历的集合或数组--&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--var属性指定一个绑定名，绑定范围固定是pageContext--&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">c:forEach</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--注：每次从集合或数组中取一个元素，然后绑定到pageContext上，绑定名由var属性指定--&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><a href="#1">tld自定义jsp标签的实现</a></p>
+<h2 id="2-el表达式"><a href="#2-el表达式" class="headerlink" title="2. el表达式"></a>2. el表达式</h2><p>el (Expression Language) 表达式是一套简单的运算规则，用于给jsp标签的属性赋值，也可以直接输出。  </p>
+<p><strong>el 表达式的使用：</strong><br>1、 <strong><font color="#8080f0">访问 bean 的属性</font></strong>  </p>
+<ul>
+<li>方式一：<strong><font color="#8080f0">${user.name}</font></strong><br>容器会依次从 pageContext，request，session，application 中查找（getAttribute) 绑定名为 <strong>“user” 的对象</strong> ，找到该对象后，调用该对象的 <strong>“getName” 方法</strong> ，然后输出。<br>可以使用 pageScope, requestScope,sessionScope,application 指定查找范围，如，${pageScope.user.name}  </li>
+<li>方式二：<strong><font color="#8080f0">${user[“name”]}</font></strong><br>[ ]里可以是一个绑定名，也可以是从0开始的下标（访问数组）  </li>
+</ul>
+<p>2、 <strong><font color="#008B00">进行一些简单的运算，运算结果可以给jsp标签赋值，也可以直接输出</font></strong>  </p>
+<ul>
+<li>算术运算 “ <strong>+, -, *, /, %</strong> “<br><strong><font color="#008B00">如，${1+1}, ${“3”+”4”}</font></strong></li>
+<li>关系运算 “ <strong>&gt;, &gt;=, &lt;, &lt;=, ==, !=</strong> “<br><strong><font color="#008B00">如，${2&gt;1}, ${user.name==”cx”}</font></strong>  </li>
+<li>逻辑运算 “ <strong>&amp;&amp;, ||, !</strong> “<br><strong><font color="#008B00">如，${1&lt;2 || 3&lt;4} </font></strong>  </li>
+<li>empty运算, 判断集合是否为空，或字符串是否是一个空字符串<br><strong><font color="#008B00">如，${empty str}</font></strong> str为空返回true，不空为false  </li>
+</ul>
+<p>3、 <strong><font color="#00B2EE">读取请求参数值  (jsp负责展示数据，不适合处理请求)</font></strong>  </p>
+<ul>
+<li><strong><font color="#00B2EE">${param.username}</font></strong><br>等价于 request.getParameter(“username”)  </li>
+<li><strong><font color="#00B2EE">${paramValues.friends}</font></strong><br>等价于request.getParameterValues(“friends”)  </li>
+</ul>
+<p>如果 el 表达式解析不了，请检查 web.xml 文件 的 web-app 标签属性，如下配置：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;web-app xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span><br><span class="line">	xmlns=<span class="string">"http://xmlns.jcp.org/xml/ns/javaee"</span></span><br><span class="line">	xsi:schemaLocation=<span class="string">"http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"</span></span><br><span class="line">	id=<span class="string">"WebApp_ID"</span> version=<span class="string">"3.1"</span>&gt;</span><br><span class="line"></span><br><span class="line">&lt;/web-app&gt;</span><br></pre></td></tr></table></figure></p>
+<p></p><h2 id="1">3. jsp 自定义标签</h2><br>tld (tag lib descriptor)<br>自己写一个标签：<br>1、 在WEB-INF目录下建一个文件hello.tld, 文件内容如下：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">taglib</span> <span class="attr">xmlns</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee"</span></span></span><br><span class="line"><span class="tag">	<span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">	<span class="attr">xsi:schemaLocation</span>=<span class="string">"http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"</span></span></span><br><span class="line"><span class="tag">	<span class="attr">version</span>=<span class="string">"2.0"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">tlib-version</span>&gt;</span>1.0<span class="tag">&lt;/<span class="name">tlib-version</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">short-name</span>&gt;</span>ExampleTLD<span class="tag">&lt;/<span class="name">short-name</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">uri</span>&gt;</span>/WEB-INF/hello.tld<span class="tag">&lt;/<span class="name">uri</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>完成一个自定义jsp标签库<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">tag</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>hello<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">tag-class</span>&gt;</span>test.HelloTag<span class="tag">&lt;/<span class="name">tag-class</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">body-content</span>&gt;</span>empty<span class="tag">&lt;/<span class="name">body-content</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">tag</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">taglib</span>&gt;</span></span><br></pre></td></tr></table></figure><p></p>
+<p><img src="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-09/jspTLD1.png" alt><br>2、 编写标签的实现类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> test;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.jsp.JspException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.jsp.JspWriter;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.jsp.tagext.SimpleTagSupport;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloTag</span> <span class="keyword">extends</span> <span class="title">SimpleTagSupport</span> </span>&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doTag</span><span class="params">()</span> <span class="keyword">throws</span> JspException, IOException </span>&#123;</span><br><span class="line">		JspWriter out=getJspContext().getOut();</span><br><span class="line">		out.println(<span class="string">"自定义标签输出，由JspWriter输出"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>3、 使用自定义的tag<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">%@page</span> <span class="attr">pageEncoding</span>=<span class="string">"utf-8"</span> <span class="attr">contentType</span>=<span class="string">"text/html; charset=utf-8"</span> %&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">%@taglib</span> <span class="attr">uri</span>=<span class="string">"/WEB-INF/hello.tld"</span> <span class="attr">prefix</span>=<span class="string">"c1"</span> %&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">body</span> <span class="attr">style</span>=<span class="string">"font-size: 30px;"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">p</span>&gt;</span>自定义标签<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">c1:hello</span>/&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>运行结果：<br><img src="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-09/jspTLD2.png" alt>  </p>
+<p>注：<br>如果在标签里添加属性，需要在实现类里加上对应的属性和setter，实现类属性的值是从标签属性中获取的。<br>同时还需要在tld 文件中配置 <strong>attribute</strong> 标签，<br><strong>attribute</strong> 的子标签(tag Subelements/嵌套元素nested elements) 介绍如下：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">attribute</span>&gt;</span></span><br><span class="line">(Optional) Defines the name of the attribute as it appears in the tag element in the JSP page. For example:</span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>myAttribute<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  (Required)attribute name</span><br><span class="line">  <span class="tag">&lt;<span class="name">required</span>&gt;</span>true | false<span class="tag">&lt;/<span class="name">required</span>&gt;</span></span><br><span class="line">  (Optional) Defines whether this attribute has optional use in the JSP page.   </span><br><span class="line">  If not defined here, the default is false — that is, the attribute is optional by default.</span><br><span class="line">  If true is specified, and the attribute is not used in a JSP page, a translation-time error occurs.</span><br><span class="line">  <span class="tag">&lt;<span class="name">rtexprvalue</span>&gt;</span>true | false<span class="tag">&lt;/<span class="name">rtexprvalue</span>&gt;</span></span><br><span class="line">  (Optional) Defines whether this attribute can take a scriptlet expression as a value,</span><br><span class="line">  allowing it to be dynamically calculated at request time.</span><br><span class="line">  If this element is not specified, the value is presumed to be false.</span><br><span class="line"><span class="tag">&lt;/<span class="name">attribute</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>这只是一个 taglib 入门的例子，很简单，实现类继承的 SimpleTagSupport 还有一些方法, 这里不再深入学习</strong></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>1、 <a href="https://docs.oracle.com/cd/E21043_01/web.1111/e13722/tld.htm" target="_blank" rel="noopener">Creating a Tag Library Descriptor</a>  </p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/jsp/" rel="tag"># jsp</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/09/eclipse中使用git/" rel="next" title="eclipse中使用git">
+                <i class="fa fa-chevron-left"></i> eclipse中使用git
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/12/Spring-Framework-简介/" rel="prev" title="Spring学习1-Spring Framework 简介">
+                Spring学习1-Spring Framework 简介 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png" alt="mitre">
+            
+              <p class="site-author-name" itemprop="name">mitre</p>
+              <p class="site-description motion-element" itemprop="description">Goals determine what you are going to be</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Friends
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.yanmin99.com/" title="yanmin" target="_blank">yanmin</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://whark.cn" title="大鹏" target="_blank">大鹏</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.notall.cn/" title="zkp" target="_blank">zkp</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://qiracle.cn/" title="强强" target="_blank">强强</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#jsp标签和el表达式"><span class="nav-number">1.</span> <span class="nav-text">jsp标签和el表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-jsp标签"><span class="nav-number">1.1.</span> <span class="nav-text">1. jsp标签</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-el表达式"><span class="nav-number">1.2.</span> <span class="nav-text">2. el表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1"><span class="nav-number">1.3.</span> <span class="nav-text">3. jsp 自定义标签</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">1.4.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mitre</span>
+
+  
+</div>
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">totle: <span id="busuanzi_value_site_pv"></span> times</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">Visitors: <span id="busuanzi_value_site_uv"></span></span>
+    <span class="post-meta-divider">|</span>
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

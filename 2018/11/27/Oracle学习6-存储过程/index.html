@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/woAiLuo.jpg?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="数据库,Oracle,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1 Oracle存储过程语法1234567CREATE [OR REPLACE] PROCEDURE 存储过程名[(参数[IN|OUT|IN OUT] 数据类型...)]&amp;#123;AS|IS&amp;#125;[变量声明块]BEGIN可执行部分;[EXCEPTION错误处理部分]END [过程名]; 其中：可选 关键字OR REPLACE 表示如果存储过程已经存在，则用新的存储过程覆盖，通常用于存储过程">
+<meta name="keywords" content="数据库,Oracle">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Oracle-学习6-存储过程">
+<meta property="og:url" content="http://yoursite.com/2018/11/27/Oracle学习6-存储过程/index.html">
+<meta property="og:site_name" content="MITRE">
+<meta property="og:description" content="1 Oracle存储过程语法1234567CREATE [OR REPLACE] PROCEDURE 存储过程名[(参数[IN|OUT|IN OUT] 数据类型...)]&amp;#123;AS|IS&amp;#125;[变量声明块]BEGIN可执行部分;[EXCEPTION错误处理部分]END [过程名]; 其中：可选 关键字OR REPLACE 表示如果存储过程已经存在，则用新的存储过程覆盖，通常用于存储过程">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-11/2018-11-28_145712.png">
+<meta property="og:image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-11/2018-11-28_151527.png">
+<meta property="og:updated_time" content="2020-02-22T11:53:17.358Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Oracle-学习6-存储过程">
+<meta name="twitter:description" content="1 Oracle存储过程语法1234567CREATE [OR REPLACE] PROCEDURE 存储过程名[(参数[IN|OUT|IN OUT] 数据类型...)]&amp;#123;AS|IS&amp;#125;[变量声明块]BEGIN可执行部分;[EXCEPTION错误处理部分]END [过程名]; 其中：可选 关键字OR REPLACE 表示如果存储过程已经存在，则用新的存储过程覆盖，通常用于存储过程">
+<meta name="twitter:image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-11/2018-11-28_145712.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/27/Oracle学习6-存储过程/">
+
+
+
+
+
+  <title>Oracle-学习6-存储过程 | MITRE</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MITRE</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Goals determine what you are going to be</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/27/Oracle学习6-存储过程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mitre">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MITRE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Oracle-学习6-存储过程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-27T09:26:26+08:00">
+                2018-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-Oracle存储过程语法"><a href="#1-Oracle存储过程语法" class="headerlink" title="1 Oracle存储过程语法"></a>1 Oracle存储过程语法</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> [<span class="keyword">OR</span> <span class="keyword">REPLACE</span>] <span class="keyword">PROCEDURE</span> 存储过程名[(参数[<span class="keyword">IN</span>|<span class="keyword">OUT</span>|<span class="keyword">IN</span> <span class="keyword">OUT</span>] 数据类型...)]</span><br><span class="line">&#123;<span class="keyword">AS</span>|<span class="keyword">IS</span>&#125;</span><br><span class="line">[变量声明块]</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">可执行部分;</span><br><span class="line">[EXCEPTION错误处理部分]</span><br><span class="line"><span class="keyword">END</span> [过程名];</span><br></pre></td></tr></table></figure>
+<p>其中：<br>可选 <strong>关键字OR REPLACE</strong> 表示如果存储过程已经存在，则用新的存储过程覆盖，通常用于存储过程的重建。   </p>
+<p><strong>参数</strong> 部分用于定义多个参数(如果没有参数，就可以省略)。<br>参数有三种形式：IN、OUT 和 IN OUT。<br>IN 按值传递，它 <strong>不允许</strong> 在存储过程中被重新赋值，<strong><font color="red">IN 参数被赋值会报错！</font></strong> 如果没有指明参数的形式，则默认为IN。<br><strong>参数的数据类型</strong> 只指明类型名即可，不需要指定宽度。<strong><font color="red">指定参数宽度会报错！</font></strong> 参数的宽度由外部调用者决定。  </p>
+<p><strong>关键字 AS</strong> 也可以写成 IS，<strong>在此定义 局部变量</strong>。<br>可以理解为pl/sql的 declare关键字，用于声明变量。  </p>
+<p>注：部分例子没有实际用处，只是为了说明存储过程的使用。  </p>
+<hr>
+<h2 id="1-1-利用存储过程循环插入"><a href="#1-1-利用存储过程循环插入" class="headerlink" title="1.1 利用存储过程循环插入"></a>1.1 利用存储过程循环插入</h2><p>示例：插入100条数据到test_cus表中<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">or</span> <span class="keyword">replace</span> <span class="keyword">procedure</span> loop_insert</span><br><span class="line"><span class="keyword">as</span></span><br><span class="line">  cus_code varchar2(<span class="number">10</span>);</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">1.</span><span class="number">.100</span> <span class="keyword">loop</span></span><br><span class="line">    cus_code := <span class="string">'1'</span>||<span class="keyword">lpad</span>(i,<span class="number">3</span>,<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">insert</span> <span class="keyword">into</span> test_cus(cus_id,cus_name,cus_age)</span><br><span class="line">    <span class="keyword">values</span>(cus_code,<span class="string">'存储过程'</span>,<span class="number">100</span>);</span><br><span class="line">  <span class="keyword">end</span> <span class="keyword">loop</span>;</span><br><span class="line">  <span class="keyword">commit</span>;</span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">--执行</span></span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  loop_insert();</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure></p>
+<p>结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1001	存储过程	100</span><br><span class="line">1002	存储过程	100</span><br><span class="line">1003	存储过程	100</span><br><span class="line">1004	存储过程	100</span><br><span class="line">1005	存储过程	100</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>注：<br>“ := “ 表示 赋值语句<br>“ = “ 判断是否相等<br>“ :variableName “ 表示 变量绑定  </p>
+<p><a href="#id2_2">关于 for 循环</a>  </p>
+<h2 id="1-2-存储过程参数"><a href="#1-2-存储过程参数" class="headerlink" title="1.2 存储过程参数"></a>1.2 存储过程参数</h2><p>以下存储过程可以正常执行：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">or</span> <span class="keyword">replace</span> <span class="keyword">procedure</span> sp_test5</span><br><span class="line">(</span><br><span class="line">  <span class="comment">--不能指定参数的宽度</span></span><br><span class="line">  para1 <span class="keyword">in</span> <span class="keyword">out</span> varchar2</span><br><span class="line">)</span><br><span class="line"><span class="keyword">as</span></span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">para1 :=<span class="string">'1234567890'</span>;</span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">--调用</span></span><br><span class="line"><span class="keyword">declare</span> p1 varchar2(<span class="number">10</span>):=<span class="string">'a'</span>;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  sp_test5(p1);</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure></p>
+<p>如果把 p1 定义改为 varchar(1) :<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">declare</span> p1 varchar2(<span class="number">10</span>):=<span class="string">'a'</span>;</span><br></pre></td></tr></table></figure></p>
+<p>则会报错：<strong><font color="red">字符串缓冲区太小</font></strong><br><img src="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-11/2018-11-28_145712.png" alt>  </p>
+<p>以下存储过程 <strong>能正常运行</strong>。但如果去掉注释，则会报错，原因是 <strong><font color="red">不能给 IN 参数赋值</font></strong>。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">or</span> <span class="keyword">replace</span> <span class="keyword">procedure</span> sp_test4</span><br><span class="line">(</span><br><span class="line">  para1 varchar2,</span><br><span class="line">  para2 <span class="keyword">out</span> varchar2,</span><br><span class="line">  para3 <span class="keyword">in</span> <span class="keyword">out</span> varchar2</span><br><span class="line">)</span><br><span class="line"><span class="keyword">as</span></span><br><span class="line">  v_name varchar2(<span class="number">20</span>);</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  <span class="comment">--para1 := 'aaa';</span></span><br><span class="line">  <span class="comment">--para2 := 'bbb';</span></span><br><span class="line">  v_name :=<span class="string">' Oracle'</span>;</span><br><span class="line">  para3 := '你好';</span><br><span class="line">  dbms_output.put_line('输出:'||para3||v_name);</span><br><span class="line"><span class="keyword">end</span> sp_test4;</span><br><span class="line"></span><br><span class="line"><span class="comment">--调用</span></span><br><span class="line"><span class="keyword">declare</span> p1 varchar2(<span class="number">20</span>) := <span class="string">'hello1'</span>;</span><br><span class="line">p2 varchar2(20) := 'hello2';</span><br><span class="line">p3 varchar2(20) := 'hello3';</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  sp_test4(p1,p2,p3);</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure></p>
+<p>结果：<br><img src="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-11/2018-11-28_151527.png" alt>  </p>
+<p>再看一个例子：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> test_user</span><br><span class="line">(</span><br><span class="line">  user_id <span class="built_in">int</span>,</span><br><span class="line">  user_Name varchar2(<span class="number">100</span>),</span><br><span class="line">  user_Passwd varchar2(<span class="number">100</span>),</span><br><span class="line">  user_Age  <span class="built_in">int</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> test_user <span class="keyword">values</span>(<span class="number">1</span>,<span class="string">'jack'</span>,<span class="string">'xxx'</span>,<span class="number">23</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> test_user <span class="keyword">values</span>(<span class="number">2</span>,<span class="string">'rose'</span>,<span class="string">'xxx'</span>,<span class="number">21</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> test_user <span class="keyword">values</span>(<span class="number">3</span>,<span class="string">'kiki'</span>,<span class="string">'xxx'</span>,<span class="number">33</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> test_user <span class="keyword">values</span>(<span class="number">4</span>,<span class="string">'cherry'</span>,<span class="string">'xxx'</span>,<span class="number">24</span>);</span><br><span class="line"><span class="keyword">commit</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">--存储过程：用于更改用户年龄</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">or</span> <span class="keyword">replace</span> <span class="keyword">procedure</span> sp_update_age</span><br><span class="line">(</span><br><span class="line">  uname <span class="keyword">in</span> varchar2,</span><br><span class="line">  age <span class="keyword">in</span> <span class="built_in">int</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">as</span></span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  <span class="keyword">update</span> test_user</span><br><span class="line">     <span class="keyword">set</span> user_age=age</span><br><span class="line">   <span class="keyword">where</span> user_name=uname;</span><br><span class="line">   <span class="keyword">commit</span>;</span><br><span class="line"><span class="keyword">end</span> sp_update_age;</span><br><span class="line"></span><br><span class="line"><span class="comment">--调用</span></span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  sp_update_age(<span class="string">'jack'</span>,<span class="number">100</span>);</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure></p>
+<p>结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1	jack	xxx	100</span><br><span class="line">2	rose	xxx	21</span><br><span class="line">3	kiki	xxx	33</span><br><span class="line">4	cherry	xxx	24</span><br></pre></td></tr></table></figure></p>
+<h1 id="2-控制语句"><a href="#2-控制语句" class="headerlink" title="2 控制语句"></a>2 控制语句</h1><h2 id="2-1-if-else"><a href="#2-1-if-else" class="headerlink" title="2.1 if else"></a>2.1 if else</h2><p>利用 if else 实现求一个数的绝对值：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">or</span> <span class="keyword">replace</span> <span class="keyword">procedure</span> sp_test2(x <span class="keyword">in</span> <span class="keyword">out</span> <span class="built_in">number</span>)</span><br><span class="line"><span class="keyword">is</span></span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  <span class="keyword">if</span> x&lt;<span class="number">0</span> <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">      x:= <span class="number">0</span>-x;</span><br><span class="line">    <span class="keyword">end</span>;</span><br><span class="line">  elsif x&gt;0 then  --注意 elsif</span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">      x:= x;</span><br><span class="line">    <span class="keyword">end</span>;</span><br><span class="line">  else</span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">      x:= <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">end</span>;</span><br><span class="line">  <span class="keyword">end</span> <span class="keyword">if</span>;</span><br><span class="line"><span class="keyword">end</span> sp_test2;</span><br><span class="line"></span><br><span class="line"><span class="comment">--调用 sp_test2</span></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">num</span> <span class="built_in">number</span>;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">num</span>:= <span class="number">-106</span>;</span><br><span class="line">    sp_test2(num);</span><br><span class="line">    dbms_output.put_line( 'num = ' || num );</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure></p>
+<p>结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">num = 106</span><br></pre></td></tr></table></figure></p>
+<h2 id="id2_2">2.2 for</h2>
+
+<p>for 循环示例：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">declare</span></span><br><span class="line">x <span class="built_in">number</span> := <span class="number">100</span>;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">1.</span><span class="number">.5</span> <span class="keyword">loop</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">mod</span>(i,<span class="number">2</span>)=<span class="number">0</span> <span class="keyword">then</span></span><br><span class="line">      dbms_output.put_line(<span class="string">'i: '</span>||i||<span class="string">' is even.'</span>);</span><br><span class="line">    else</span><br><span class="line">      dbms_output.put_line('i: '||i||' is odd.');</span><br><span class="line">    <span class="keyword">end</span> <span class="keyword">if</span>;</span><br><span class="line">    x := x+1;</span><br><span class="line">    dbms_output.put_line('x: '||x);</span><br><span class="line">    dbms_output.put_line('');</span><br><span class="line">  <span class="keyword">end</span> <span class="keyword">loop</span>;</span><br><span class="line">  <span class="keyword">commit</span>;</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure></p>
+<p>结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">i: 1 is odd.</span><br><span class="line">x: 101</span><br><span class="line"></span><br><span class="line">i: 2 is even.</span><br><span class="line">x: 102</span><br><span class="line"></span><br><span class="line">i: 3 is odd.</span><br><span class="line">x: 103</span><br><span class="line"></span><br><span class="line">i: 4 is even.</span><br><span class="line">x: 104</span><br><span class="line"></span><br><span class="line">i: 5 is odd.</span><br><span class="line">x: 105</span><br></pre></td></tr></table></figure></p>
+<h2 id="2-3-while"><a href="#2-3-while" class="headerlink" title="2.3 while"></a>2.3 while</h2><p>while 示例：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">or</span> <span class="keyword">replace</span> <span class="keyword">procedure</span> sp_test3( i <span class="keyword">in</span> <span class="keyword">out</span> <span class="built_in">number</span>)</span><br><span class="line"><span class="keyword">as</span></span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  <span class="keyword">while</span> i&lt;=<span class="number">100</span> <span class="keyword">loop</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">      i:=i+<span class="number">10</span>;</span><br><span class="line">    <span class="keyword">end</span>;</span><br><span class="line">  <span class="keyword">end</span> <span class="keyword">loop</span>;</span><br><span class="line"><span class="keyword">end</span> sp_test3;</span><br><span class="line"></span><br><span class="line"><span class="comment">--调用 sp_test3</span></span><br><span class="line"><span class="keyword">declare</span> t3 <span class="built_in">number</span> := <span class="number">2</span>;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  sp_test3(t3);</span><br><span class="line">  dbms_output.put_line(t3);</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure></p>
+<p>结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">102</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+            <a href="/tags/Oracle/" rel="tag"># Oracle</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/26/Oracle学习5-序列/" rel="next" title="Oracle-学习5-序列">
+                <i class="fa fa-chevron-left"></i> Oracle-学习5-序列
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/29/JavaScript笔记4-jQuery和AJAX/" rel="prev" title="JavaScript笔记4-jQuery 和 AJAX">
+                JavaScript笔记4-jQuery 和 AJAX <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png" alt="mitre">
+            
+              <p class="site-author-name" itemprop="name">mitre</p>
+              <p class="site-description motion-element" itemprop="description">Goals determine what you are going to be</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Friends
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.yanmin99.com/" title="yanmin" target="_blank">yanmin</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://whark.cn" title="大鹏" target="_blank">大鹏</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.notall.cn/" title="zkp" target="_blank">zkp</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://qiracle.cn/" title="强强" target="_blank">强强</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Oracle存储过程语法"><span class="nav-number">1.</span> <span class="nav-text">1 Oracle存储过程语法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-利用存储过程循环插入"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 利用存储过程循环插入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-存储过程参数"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 存储过程参数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-控制语句"><span class="nav-number">2.</span> <span class="nav-text">2 控制语句</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-if-else"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 if else</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#id2_2"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 for</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-while"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 while</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mitre</span>
+
+  
+</div>
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">totle: <span id="busuanzi_value_site_pv"></span> times</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">Visitors: <span id="busuanzi_value_site_uv"></span></span>
+    <span class="post-meta-divider">|</span>
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

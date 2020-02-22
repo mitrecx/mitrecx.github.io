@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/woAiLuo.jpg?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Linux,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.  linux系统程序设计—文件系统调用是一种例程。系统调用用于执行文件I/O、分配内存、创建进程等。标准ANSI C库函数，如fopen和printf可以作为对象模块捆绑到一个档案中。系统调用与之不同，它们内置在内核中，一般由汇编语言编写。但是，提供了接口，可以像调用函数一样调用接口。   库函数通常不包含系统调用提供的精细控制功能 。例如：fopen不能设置文件权限，而open可以设置。只">
+<meta name="keywords" content="Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux系统程序设计1--文件">
+<meta property="og:url" content="http://yoursite.com/2018/02/14/Linux系统程序设计1-文件/index.html">
+<meta property="og:site_name" content="MITRE">
+<meta property="og:description" content="1.  linux系统程序设计—文件系统调用是一种例程。系统调用用于执行文件I/O、分配内存、创建进程等。标准ANSI C库函数，如fopen和printf可以作为对象模块捆绑到一个档案中。系统调用与之不同，它们内置在内核中，一般由汇编语言编写。但是，提供了接口，可以像调用函数一样调用接口。   库函数通常不包含系统调用提供的精细控制功能 。例如：fopen不能设置文件权限，而open可以设置。只">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-02-22T11:53:17.354Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux系统程序设计1--文件">
+<meta name="twitter:description" content="1.  linux系统程序设计—文件系统调用是一种例程。系统调用用于执行文件I/O、分配内存、创建进程等。标准ANSI C库函数，如fopen和printf可以作为对象模块捆绑到一个档案中。系统调用与之不同，它们内置在内核中，一般由汇编语言编写。但是，提供了接口，可以像调用函数一样调用接口。   库函数通常不包含系统调用提供的精细控制功能 。例如：fopen不能设置文件权限，而open可以设置。只">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/02/14/Linux系统程序设计1-文件/">
+
+
+
+
+
+  <title>Linux系统程序设计1--文件 | MITRE</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MITRE</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Goals determine what you are going to be</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/14/Linux系统程序设计1-文件/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mitre">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MITRE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux系统程序设计1--文件</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-14T19:48:53+08:00">
+                2018-02-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-linux系统程序设计—文件"><a href="#1-linux系统程序设计—文件" class="headerlink" title="1.  linux系统程序设计—文件"></a>1.  linux系统程序设计—文件</h1><p>系统调用是一种例程。<br>系统调用用于执行文件I/O、分配内存、创建进程等。<br>标准ANSI C库函数，如fopen和printf可以作为对象模块捆绑到一个档案中。系统调用与之不同，它们内置在内核中，一般由汇编语言编写。但是，提供了接口，可以像调用函数一样调用接口。  </p>
+<p><font color="orange">库函数通常不包含系统调用提供的精细控制功能</font> 。例如：<br>fopen不能设置文件权限，而open可以设置。<br>只有利用stat系统调用才能知道文件的大小。<br>只有fork系统调用才能创建进程。  </p>
+<p><strong>系统调用</strong>要比调用<strong>库函数</strong> 的的开销大.  </p>
+<h1 id="2-errno-和-perror：处理错误"><a href="#2-errno-和-perror：处理错误" class="headerlink" title="2.  errno 和 perror：处理错误"></a>2.  errno 和 perror：处理错误</h1><p><strong>系统调用在错误时返回-1</strong><br>错误的发生可能会有多种原因——资源不可用、接收到一个信号、I/O操作失败、调用参数无效。  </p>
+<p>当系统调用返回-1时，内核将静态（全局）变量errno设定为一个正整数。这个<strong>用符号常量表示的整数</strong>与<strong>错误消息</strong>相关联。  </p>
+<p>仅当系统调用返回错误时才使用perror。<br>perror函数语法：<br>void perror(const char *s)  ;<br>函数的以一个字符串s为参数。函数输出：打印该字符串s、一个冒号、一个空格，然后是与errno相关联的消息。  </p>
+<table>
+<thead>
+<tr>
+<th>符号常量</th>
+<th>errno</th>
+<th>消息</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E PERM</td>
+<td>1</td>
+<td>Operation not permitted</td>
+</tr>
+<tr>
+<td>E NOENT</td>
+<td>2</td>
+<td>No such file or directory</td>
+</tr>
+<tr>
+<td>E SRCH</td>
+<td>3</td>
+<td>No such process</td>
+</tr>
+<tr>
+<td>E INTR</td>
+<td>4</td>
+<td>Interrupted system call</td>
+</tr>
+<tr>
+<td>E IO</td>
+<td>5</td>
+<td>I/O error</td>
+</tr>
+<tr>
+<td>E ACCES</td>
+<td>13</td>
+<td>Permission denied</td>
+</tr>
+<tr>
+<td>E EXIT</td>
+<td>17</td>
+<td>File exits</td>
+</tr>
+<tr>
+<td>E NOTDIR</td>
+<td>20</td>
+<td>Not a directory</td>
+</tr>
+<tr>
+<td>EISDIR</td>
+<td>21</td>
+<td>Is a directory</td>
+</tr>
+</tbody>
+</table>
+<p>以下程序show_errors.c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;  //获取open中的O_RDONLY</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;  //获取fprintf中的stderr</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt; //获取exit</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/error.h&gt;  //获取errno</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span>&#123;</span><br><span class="line">  <span class="comment">//以只读模式打开</span></span><br><span class="line">  <span class="keyword">if</span>(open(argv[<span class="number">1</span>],O_RDONLY)==<span class="number">-1</span>) <span class="comment">//O表示open，RD表示read。</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"errno=%d\n"</span>, errno);</span><br><span class="line">    perror(<span class="string">"open"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行时，如：<br>$ ./a.out foofoo<br>errno = 2<br>open: No such file or directory</p>
+<h1 id="3-open-打开和创建文件"><a href="#3-open-打开和创建文件" class="headerlink" title="3. open: 打开和创建文件"></a>3. open: 打开和创建文件</h1><p>一些与文件Ｉ/O相关的系统调用：　　</p>
+<ul>
+<li>open , close</li>
+<li>read , write</li>
+<li>lseek</li>
+<li>truncate , ftruncate</li>
+</ul>
+<p><strong>在读写一个文件之前，必须要用open打开它。</strong><br>open语法：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> open（<span class="keyword">const</span> <span class="keyword">char</span> \*path, <span class="keyword">int</span> oflag, ...)  ;</span><br></pre></td></tr></table></figure></p>
+<p><strong>open以int形式返回一个文件说明符 (<font color="orange"> file description</font> ) 。当发生错误时，open返回 -1 。</strong><br>第一个参数(path)是一个指针，指向一个表示文件路径名的字符串(绝对路径或相对路径)，<br>第二个参数(oflag)用于<strong>设置打开模式</strong>(读、写或读-写)。这一模式用三个符号常量表示：<br><strong>O_RDONLY</strong> 打开文件供读取<br><strong>O_WRONLY</strong>  打开文件供写入<br><strong>O_RDWR</strong>    打开文件供读和写<br>这些常量在/usr/include下的文件 fcnlt.h 中定义。<br>用法:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> fd;</span><br><span class="line"><span class="comment">//以只读方式打开passwd文件，如果打开出错，就打印错误</span></span><br><span class="line"><span class="keyword">if</span>( (fd=open(<span class="string">"/etc/passwd"</span>,O_RDONLY)) == <span class="number">-1</span>)&#123;</span><br><span class="line">  perror(<span class="string">"open"</span>);</span><br><span class="line">  <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>此外，open还有更多打开模式 ( 也在fcntl.h中定义 ):<br><strong>O_APPEND</strong>  追加模式打开文件(仅当打开模式为O_WRONLY或O_RDWR)<br><strong>O_TRUNC</strong>  将文件截短为0(条件同上)，其实就是覆盖文件(注:truncate  截短、缩短)<br><strong>O_CREAT</strong>  若文件不存在，则创建文件<br><strong>O_EXCL</strong>   若指定O_CREAT，且该文件存在，则生成一条错误<br><strong>O_SYNC</strong>  同步读写操作。确保在将数据写到磁盘之前，write不会返回<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//类似shell中的&gt;&gt;</span></span><br><span class="line">fd=open(<span class="string">"foo.txt"</span>, O_WRONLY | O_APPEND )</span><br><span class="line"><span class="comment">//类似shell中的&gt;</span></span><br><span class="line">fd=open(<span class="string">"../foo.txt"</span>, O_WRONLY | O_TRUNC )</span><br></pre></td></tr></table></figure></p>
+<p>如果文件不存在，就要用O_CREAT（有时会用到O_EXCL）创建它，并在第三参数指定其权限。<br><strong>Linux/Unix在sys/stat.h中提供了符号常量以设置权限</strong><br>但是也可以，用八进制(octal)数设置权限，必须添加前缀0。（例如0644而不是644）<br>0644等同于：<br>S_IRUSR|S_IWUSR | S_IRGRP | S_IROTH<br>表示用户可读写，组可读，其他可写<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//打开foo.txt，以截断方式写入，如果foo.txt不存在，就创建该文件</span></span><br><span class="line">fd = open(<span class="string">"foo.txt"</span>, O_WRONLY|O_CREAT|OTRUNC, <span class="number">0644</span>);</span><br></pre></td></tr></table></figure></p>
+<h1 id="4-close-关闭文件"><a href="#4-close-关闭文件" class="headerlink" title="4. close: 关闭文件"></a>4. close: 关闭文件</h1><p><strong>程序在终止之前会关闭所有已打开文件，但不在需要文件时主动关闭是一种好习惯。</strong><br>close系统调用可以关闭一个文件:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">close</span><span class="params">(<span class="keyword">int</span> fd)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p>close用文件描述符( file description )作为参数，实际上是释放<strong>对该进程的文件说明符</strong>。<br>close成功返回0，失败返回-1.  </p>
+<h1 id="5-read-读取文件"><a href="#5-read-读取文件" class="headerlink" title="5. read:  读取文件"></a>5. read:  读取文件</h1><p>两个系统调用——read和write——负责对常规文件(REG,regular)以及管道和套接字进行读写操作。<br><strong>这两个调用的语法类似，都利用了用户定义的缓冲区。</strong><br>read利用open返回的文件说明符来读取文件：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ssize_t</span> read(<span class="keyword">int</span> fildes, <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> nbyte);</span><br></pre></td></tr></table></figure></p>
+<p>read尝试从文件说明符fildes向缓冲区buf中读取nbyte个字符。<br><strong>文件说明符</strong>就是要<strong>读取的对象</strong>，<strong>缓冲区</strong>是读取后<strong>内容存放的地方</strong>，<strong>nbyte</strong>是一次<strong>读取n个字节</strong><br>注：nbyte通常是缓冲区本身的大小<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BUFSIZE 4096</span></span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="keyword">char</span> buf[BUFSIZE];</span><br><span class="line"><span class="keyword">while</span>( (n=read(fd, buf, BUFSIZE))&gt;<span class="number">0</span> ) <span class="comment">//由open获得的fd</span></span><br></pre></td></tr></table></figure></p>
+<p>每次read调用，读取4096个字节。<strong>在遇到EOF之前，read返回所读字符数，<del>而遇到EOF时，返回0</del>( 准确地说，是文件的大小是缓冲区的整数倍，最后一次遇到EOF返回0 )</strong>。但最后一次迭代可能例外，最后一次迭代中，返回的是尚未读取的字符数（因为文件的大小可能不是缓冲区大小的整数倍）。read错误返回-1。<br>例如：如上程序，fd描述的文件有4100个字节，第一次迭代read返回4096，第二次迭代read返回4个字节，第三次返回0。  </p>
+<p>如果要处理所读取的每个字符，可将buf声明为一个char变量，然后将其地址传给read：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="keyword">char</span> buf;</span><br><span class="line"><span class="keyword">while</span>( (n=read(fd, &amp;buf, <span class="number">1</span>))&gt;<span class="number">0</span> )</span><br></pre></td></tr></table></figure></p>
+<p>用单字符缓冲区读取100个字符需要100次系统调用，这个代价高昂。在这种情况下，诸如fgetc之类的<strong>库函数</strong>是比较好的选择。  </p>
+<h1 id="6-write：-写文件"><a href="#6-write：-写文件" class="headerlink" title="6. write： 写文件"></a>6. write： 写文件</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ssize_t</span> write(<span class="keyword">int</span> fildes, <span class="keyword">const</span> <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> nbyte) ;</span><br></pre></td></tr></table></figure>
+<p>write把<strong>缓冲区</strong>的内容写入到fildes说明的<strong>文件</strong>中。<br>write返回所写字符个数。如果write运行期间磁盘已满或文件大小超出系统限制，则write返回-1。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BUFSIZE 8192</span></span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="keyword">char</span> buf[BUFSIZE];</span><br><span class="line">n = write(fd, buf, BUFSIZE);</span><br></pre></td></tr></table></figure></p>
+<p>和read一样，write可以一次写一个字符：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> buf;</span><br><span class="line">write(fd, &amp;buf, <span class="number">1</span>);</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>一个利用系统调用复制文件的程序：  </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//quit.h</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">quit</span><span class="params">(<span class="keyword">char</span> *, <span class="keyword">int</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//quit.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"quit.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">quit</span><span class="params">(<span class="keyword">char</span> *message, <span class="keyword">int</span> exit_status)</span></span>&#123;</span><br><span class="line">        perror(message);</span><br><span class="line">        <span class="built_in">exit</span>(exit_status);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//ccp.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"quit.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BUFSIZE 1024</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> **argv)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> fd1,fd2;</span><br><span class="line">        <span class="keyword">int</span> n;</span><br><span class="line">        <span class="keyword">char</span> buf[BUFSIZE];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>((fd1=open(argv[<span class="number">1</span>],O_RDONLY))==<span class="number">-1</span>)</span><br><span class="line">                quit(<span class="string">"open"</span>,<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span>((fd2=open(<span class="string">"passwd.bak"</span>,O_WRONLY|O_CREAT|O_TRUNC, <span class="number">0664</span>))==<span class="number">-1</span>)</span><br><span class="line">                quit(<span class="string">"open2"</span>,<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>( (n=read(fd1,buf,BUFSIZE))&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(n!=write(fd2,buf,n))</span><br><span class="line">                        quit(<span class="string">"write"</span>,<span class="number">3</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        close(fd1);</span><br><span class="line">        close(fd2);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译、运行：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#编译quit.c 生成quit.o目标文件</span></span><br><span class="line">$ gcc -c quit.c</span><br><span class="line"></span><br><span class="line"><span class="comment">#用ccp.c和quit.o编译出a.out(默认的可执行文件名，可用-o指定别的名)</span></span><br><span class="line">$ gcc ccp.c quit.o</span><br><span class="line"></span><br><span class="line"><span class="comment">#执行程序，复制passwd的内容到当前目录下的passwd.bak文件中</span></span><br><span class="line">$ ./a.out /etc/passwd</span><br></pre></td></tr></table></figure></p>
+<p>write不一定写入磁盘，如果把ccp.c中的第二个open和close删除，把fd2改为1 ( 或改为STDOUT_FILENO，需要包含头文件unistd.h )，就可以写到标准输出了。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"quit.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BUFSIZE 1024</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> **argv)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> fd1,fd2;</span><br><span class="line">        <span class="keyword">int</span> n;</span><br><span class="line">        <span class="keyword">char</span> buf[BUFSIZE];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>((fd1=open(argv[<span class="number">1</span>],O_RDONLY))==<span class="number">-1</span>)</span><br><span class="line">                quit(<span class="string">"open"</span>,<span class="number">1</span>);</span><br><span class="line"><span class="comment">//      if((fd2=open("passwd.bak",O_WRONLY|O_CREAT|O_TRUNC, 0664))==-1)</span></span><br><span class="line"><span class="comment">//              quit("open2",2);</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>( (n=read(fd1,buf,BUFSIZE))&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(n!=write(STDOUT_FILENO,buf,n))</span><br><span class="line">                        quit(<span class="string">"write"</span>,<span class="number">3</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        close(fd1);</span><br><span class="line"><span class="comment">//      close(fd2);</span></span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>注：<br>读写标准流时，应当使用符号常量STDIN_FILENO、STDOUT_FILENO、STDERR_FILENO作为文件说明符，而不是他们所表示的整数0、1、2。这些符号常量在unistd.h中定义。  </p>
+<hr>
+<h2 id="缓冲IO和无缓冲IO"><a href="#缓冲IO和无缓冲IO" class="headerlink" title="缓冲IO和无缓冲IO"></a>缓冲IO和无缓冲IO</h2><p><a href="https://www.cnblogs.com/cavehubiao/p/3981482.html" target="_blank" rel="noopener">带不带缓存是相对层来说的</a>。<br>如果你要写入数据到文件上时（就是写入磁盘上），内核先将数据写入到内核中所设的缓冲储存器。<br>假如这个缓冲储存器的长度是100个字节，你调用系统函：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ssize_t</span> write (<span class="keyword">int</span> fd,<span class="keyword">const</span> <span class="keyword">void</span> * buf,<span class="keyword">size_t</span> count);</span><br></pre></td></tr></table></figure></p>
+<p>写操作时，设每次写入长度count=10个字节，那么你几要调用10次这个函数才能把这个缓冲区写满，<strong>此时数据还是在缓冲区，并没有写入到磁盘。</strong><br>缓冲区满时才进行实际上的IO操作，把数据写入到磁盘上，所以上面说的“不带缓存””不是没有缓存而是没有直写进磁盘。</p>
+<p>那么，既然<strong>不带缓存的操作实际在内核是有缓存器的</strong>，那<strong>带缓存的IO操作</strong>又是怎么回事呢？</p>
+<p>带缓存IO也叫标准IO，符合ANSI C 的标准IO处理，不依赖系统内核，所以移植性强，我们使用标准IO操作很多时候是为了减少对read()和write()的系统调用次数，带缓存IO其实就是在用户层再建立一个缓存区，这个缓存区的分配和优化长度等细节都是标准IO库代你处理好了，不用去操心.<br>还是用上面那个例子说明这个操作过程：<br>内核缓存（注意这个不是用户层缓存区）区长度是100字节，<br>我们调用不带缓存的IO函数write()就要调用10次，这样系统效率低，<br>现在我们在用户层建立另一个缓存区（用户层缓存区或者叫流缓存），假设流缓存的长度是50字节，<br>我们用标准C库函数的fwrite()将数据写入到这个流缓存区里面，流缓存区满50字节后在进入内核缓存区，此时再调用系统函数write()将数据写入到文件（实质是磁盘）上，<br>标准IO操作fwrite()最后还是要掉用无缓存IO操作write,这里进行了两次调用fwrite()写100字节也就是进行两次系统调用write()。  </p>
+<h1 id="lseek-定位偏移指针"><a href="#lseek-定位偏移指针" class="headerlink" title="lseek: 定位偏移指针"></a>lseek: 定位偏移指针</h1><h1 id="truncate和ftruncate：截短文件"><a href="#truncate和ftruncate：截短文件" class="headerlink" title="truncate和ftruncate：截短文件"></a>truncate和ftruncate：截短文件</h1><h1 id="umask：-在创建期间修改文件权限"><a href="#umask：-在创建期间修改文件权限" class="headerlink" title="umask： 在创建期间修改文件权限"></a>umask： 在创建期间修改文件权限</h1><h1 id="目录导航–getcwd"><a href="#目录导航–getcwd" class="headerlink" title="目录导航–getcwd"></a>目录导航–getcwd</h1><h1 id="读取目录"><a href="#读取目录" class="headerlink" title="读取目录"></a>读取目录</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//打开目录</span></span><br><span class="line"><span class="function">DIR *<span class="title">opendir</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *dirname)</span></span>;</span><br><span class="line"><span class="comment">//读打开的目录，这个结构体至少有目录的inode和dirName两个成员</span></span><br><span class="line"><span class="function">struct dirent *<span class="title">readdir</span><span class="params">(DIR *dirp)</span></span>;</span><br><span class="line"><span class="comment">//关闭打开的目录</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">closedir</span><span class="params">(DIR *dirp)</span></span></span><br></pre></td></tr></table></figure>
+<h1 id="修改目录中的项目"><a href="#修改目录中的项目" class="headerlink" title="修改目录中的项目"></a>修改目录中的项目</h1><ol>
+<li>mkdir和rmdir——这些调用的意义与同名命令相同</li>
+<li>link和symlink——link创建一个硬链接，symlink创建一个符号链接</li>
+<li>unlink——和rm差不多，删除一个普通文件或符号链接，它不会删除目录</li>
+<li>rename——和mv一样</li>
+</ol>
+<h1 id="读取Inode：struct-stat-和-stat"><a href="#读取Inode：struct-stat-和-stat" class="headerlink" title="读取Inode：struct stat 和 stat"></a>读取Inode：struct stat 和 stat</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">stat</span>&#123;</span></span><br><span class="line">  <span class="keyword">ino_t</span> st_ino ; <span class="comment">//Inode 编号</span></span><br><span class="line">  <span class="keyword">mode_t</span> st_mode; <span class="comment">//模式(类型和权限)</span></span><br><span class="line">  <span class="keyword">nlink_t</span> st_nlink; <span class="comment">//硬链接数</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">uid_t</span> st_uid; <span class="comment">//UID(所有者)</span></span><br><span class="line">  <span class="keyword">gid_t</span> st_gid; <span class="comment">//GID(用户组所有者)</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">dev_t</span> st_rdev; <span class="comment">//设备ID(用于设备文件)</span></span><br><span class="line">  <span class="keyword">off_t</span> st_size; <span class="comment">//文件大小(字节)</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">time_t</span> st_atime; <span class="comment">//最后访问时间</span></span><br><span class="line">  <span class="keyword">time_t</span> st_mtime; <span class="comment">//最后修改时间</span></span><br><span class="line">  <span class="keyword">time_t</span> st_ctime; <span class="comment">//inode 最后修改时间</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">blksize_t</span> st_blksize ; <span class="comment">//IO的优选块大小</span></span><br><span class="line">  <span class="keyword">blkcnt_t</span> st_blocks; <span class="comment">//分配的块数</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>stat系统调用：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">stat</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, struct stat *buf)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lstat</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, struct stat *buf)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fstat</span><span class="params">(<span class="keyword">int</span> fildes, struct stat *buf)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p>stat和lstat的第一参数需要路径名，第二参数是一个stat结构的地址（把第一参数下的文件信息以stat结构存放在第二参数中）。stat和lstat的区别是，对于符号链接，stat会沿着符号链接前进：如果，文件foo是链接到bar的(foo-&gt;bar)，那么对foo进行stat操作，<strong>stat会用bar的属性填充stat结构</strong>, 而 <strong>lstat会提取foo的属性</strong>。其他方面，stat和lstat没有区别。lstat更常用。<br>fstat的第一参数是文件说明符，第二参数同样是stat结构地址。  </p>
+<h1 id="access：检查实际用户的权限"><a href="#access：检查实际用户的权限" class="headerlink" title="access：检查实际用户的权限"></a>access：检查实际用户的权限</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">access</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">int</span> amode)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>第一参数是 <strong>路径名</strong>, 第二参数指定了 <strong>要测试的访问权限</strong> 。<br>amode可以取以下4个值：<br>R_OK ——读取权限正常<br>W_OK ——写权限OK<br>X_OK ——执行权限OK<br>F_OK ——文件存在</p>
+<h1 id="修改文件属性"><a href="#修改文件属性" class="headerlink" title="修改文件属性"></a>修改文件属性</h1><h2 id="chmod和fchmod：改变文件权限"><a href="#chmod和fchmod：改变文件权限" class="headerlink" title="chmod和fchmod：改变文件权限"></a>chmod和fchmod：改变文件权限</h2><h2 id="chown：改变所有权"><a href="#chown：改变所有权" class="headerlink" title="chown：改变所有权"></a>chown：改变所有权</h2><h2 id="utime：改变时间戳"><a href="#utime：改变时间戳" class="headerlink" title="utime：改变时间戳"></a>utime：改变时间戳</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/22/vim-tutor/" rel="next" title="vim tutor">
+                <i class="fa fa-chevron-left"></i> vim tutor
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/14/Linux系统程序设计2-进程控制/" rel="prev" title="Linux系统程序设计2-进程控制">
+                Linux系统程序设计2-进程控制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png" alt="mitre">
+            
+              <p class="site-author-name" itemprop="name">mitre</p>
+              <p class="site-description motion-element" itemprop="description">Goals determine what you are going to be</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Friends
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.yanmin99.com/" title="yanmin" target="_blank">yanmin</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://whark.cn" title="大鹏" target="_blank">大鹏</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.notall.cn/" title="zkp" target="_blank">zkp</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://qiracle.cn/" title="强强" target="_blank">强强</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-linux系统程序设计—文件"><span class="nav-number">1.</span> <span class="nav-text">1.  linux系统程序设计—文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-errno-和-perror：处理错误"><span class="nav-number">2.</span> <span class="nav-text">2.  errno 和 perror：处理错误</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-open-打开和创建文件"><span class="nav-number">3.</span> <span class="nav-text">3. open: 打开和创建文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-close-关闭文件"><span class="nav-number">4.</span> <span class="nav-text">4. close: 关闭文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-read-读取文件"><span class="nav-number">5.</span> <span class="nav-text">5. read:  读取文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-write：-写文件"><span class="nav-number">6.</span> <span class="nav-text">6. write： 写文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#缓冲IO和无缓冲IO"><span class="nav-number">6.1.</span> <span class="nav-text">缓冲IO和无缓冲IO</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lseek-定位偏移指针"><span class="nav-number">7.</span> <span class="nav-text">lseek: 定位偏移指针</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#truncate和ftruncate：截短文件"><span class="nav-number">8.</span> <span class="nav-text">truncate和ftruncate：截短文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#umask：-在创建期间修改文件权限"><span class="nav-number">9.</span> <span class="nav-text">umask： 在创建期间修改文件权限</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#目录导航–getcwd"><span class="nav-number">10.</span> <span class="nav-text">目录导航–getcwd</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#读取目录"><span class="nav-number">11.</span> <span class="nav-text">读取目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#修改目录中的项目"><span class="nav-number">12.</span> <span class="nav-text">修改目录中的项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#读取Inode：struct-stat-和-stat"><span class="nav-number">13.</span> <span class="nav-text">读取Inode：struct stat 和 stat</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#access：检查实际用户的权限"><span class="nav-number">14.</span> <span class="nav-text">access：检查实际用户的权限</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#修改文件属性"><span class="nav-number">15.</span> <span class="nav-text">修改文件属性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#chmod和fchmod：改变文件权限"><span class="nav-number">15.1.</span> <span class="nav-text">chmod和fchmod：改变文件权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#chown：改变所有权"><span class="nav-number">15.2.</span> <span class="nav-text">chown：改变所有权</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#utime：改变时间戳"><span class="nav-number">15.3.</span> <span class="nav-text">utime：改变时间戳</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mitre</span>
+
+  
+</div>
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">totle: <span id="busuanzi_value_site_pv"></span> times</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">Visitors: <span id="busuanzi_value_site_uv"></span></span>
+    <span class="post-meta-divider">|</span>
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

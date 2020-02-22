@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/woAiLuo.jpg?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Linux,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="进程概述内核为进程映像分配内存，但还会在大量寄存器中维护控制信息。内核利用控制信息来切换进程。   虚拟地址空间在执行C程序时，“程序加载器”把磁盘上的二进制代码转移到内存中。如果 进程 需要，内核还会在内存中生成额外的空间。进程可以访问这一部分内存位置 称为进程的虚拟地址空间。虚拟地址空间划分为许多段：    文本段：包含要执行的指令(instruction)，是从磁盘文件读入的。一个程序的多个">
+<meta name="keywords" content="Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux系统程序设计2-进程控制">
+<meta property="og:url" content="http://yoursite.com/2018/02/14/Linux系统程序设计2-进程控制/index.html">
+<meta property="og:site_name" content="MITRE">
+<meta property="og:description" content="进程概述内核为进程映像分配内存，但还会在大量寄存器中维护控制信息。内核利用控制信息来切换进程。   虚拟地址空间在执行C程序时，“程序加载器”把磁盘上的二进制代码转移到内存中。如果 进程 需要，内核还会在内存中生成额外的空间。进程可以访问这一部分内存位置 称为进程的虚拟地址空间。虚拟地址空间划分为许多段：    文本段：包含要执行的指令(instruction)，是从磁盘文件读入的。一个程序的多个">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/linux_process.png">
+<meta property="og:image" content="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/linux_fork.png">
+<meta property="og:image" content="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/linux_fork_2.png">
+<meta property="og:updated_time" content="2020-02-22T11:53:17.354Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux系统程序设计2-进程控制">
+<meta name="twitter:description" content="进程概述内核为进程映像分配内存，但还会在大量寄存器中维护控制信息。内核利用控制信息来切换进程。   虚拟地址空间在执行C程序时，“程序加载器”把磁盘上的二进制代码转移到内存中。如果 进程 需要，内核还会在内存中生成额外的空间。进程可以访问这一部分内存位置 称为进程的虚拟地址空间。虚拟地址空间划分为许多段：    文本段：包含要执行的指令(instruction)，是从磁盘文件读入的。一个程序的多个">
+<meta name="twitter:image" content="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/linux_process.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/02/14/Linux系统程序设计2-进程控制/">
+
+
+
+
+
+  <title>Linux系统程序设计2-进程控制 | MITRE</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MITRE</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Goals determine what you are going to be</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/14/Linux系统程序设计2-进程控制/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mitre">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MITRE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux系统程序设计2-进程控制</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-14T21:37:12+08:00">
+                2018-02-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="进程概述"><a href="#进程概述" class="headerlink" title="进程概述"></a>进程概述</h1><p>内核为进程映像分配内存，但还会在大量寄存器中维护控制信息。内核利用控制信息来切换进程。  </p>
+<h2 id="虚拟地址空间"><a href="#虚拟地址空间" class="headerlink" title="虚拟地址空间"></a>虚拟地址空间</h2><p>在执行C程序时，“程序加载器”把磁盘上的二进制代码转移到内存中。<br>如果 <strong>进程</strong> 需要，内核还会在内存中生成额外的空间。<strong>进程可以访问这一部分内存位置</strong> 称为进程的<font color="orange">虚拟地址空间</font>。<br>虚拟地址空间划分为许多段：  </p>
+<ul>
+<li>文本段：包含要执行的指令(instruction)，是从磁盘文件读入的。一个程序的多个实例可以共享这个段（如：三个运行vi的用户将使用同一个文本段）。  </li>
+<li>数据段：存储着程序使用的全局、静态变量。  </li>
+<li>栈：存储着局部变量和函数的参数及返回地址。  </li>
+<li>其他段：命令行参数和环境变量通常在栈的底部。  </li>
+</ul>
+<h2 id="进程表"><a href="#进程表" class="headerlink" title="进程表"></a>进程表</h2><p>每个活动的进程的属性都存储在一个结构中，这个结构代表 <strong>进程表</strong> 中的一项。<br>现代Linux/Unix在内存中维护进程表。进程表的重要属性如下：  </p>
+<ul>
+<li>进程的PID和PPID</li>
+<li>进程的状态——运行、睡眠、僵尸等</li>
+<li>进程的真实UID和GID</li>
+<li>进程的事实UID和GID（effective 事实的，有效的）</li>
+<li>文件说明符表</li>
+<li>文件创建掩码</li>
+<li>CPU使用信息</li>
+<li>挂起的信号掩码</li>
+<li>信号处置表</li>
+</ul>
+<p>一个fork子进程的 <strong>进程表项</strong> 有许多字段都是从其父进程复制而来的。<br>当子进程执行一个新程序是，进程表项保留，但一些字段会发生变化。<br><strong><font color="orange"> 进程表中包含了与信号相关的重要数据</font></strong></p>
+<h1 id="进程环境"><a href="#进程环境" class="headerlink" title="进程环境"></a>进程环境</h1><p>一个进程的环境包含存储在栈底部的shell <strong>环境变量</strong>。这些变量可以在全局 environ 变量中获得，在C程序中声明如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">char</span> **environ;</span><br></pre></td></tr></table></figure></p>
+<p>environ 是一个数组，其中的元素是指向char的指针（就是C风格字符串）。<br>这个数组存储的指针指向 name=value 形式的环境变量字符串。这些值可以用两个函数getenv和setenv来设置和提取：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//由环境变量名提取其值value，返回指向char类型(value)的指针</span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">getenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//envname是变量名，envval是变量值，overwrite决定是否覆盖已有值(0不覆盖，1覆盖)</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">setenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *envname, <span class="keyword">const</span> <span class="keyword">char</span> *envval, <span class="keyword">int</span> overwrite)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p>举例：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取PATH的值</span></span><br><span class="line"><span class="keyword">char</span> *path = getenv(<span class="string">"PATH"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//修改PATH为.</span></span><br><span class="line">setenv(<span class="string">"PATH"</span>, <span class="string">"."</span>, <span class="number">1</span>);</span><br></pre></td></tr></table></figure></p>
+<p>process.c查看一些进程属性：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"PID: %4d, PPID: %4d\n"</span>, getpid(), getppid());</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"UID: %4d, GID: %4d\n"</span>, getuid(), getgid());</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"EUID: %4d, EGID: %4d\n"</span>, geteuid(), getegid());</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"PATH = %s\n"</span>, getenv(<span class="string">"PATH"</span>));</span><br><span class="line">        setenv(<span class="string">"PATH"</span>,<span class="string">"."</span>,<span class="number">1</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"New PATH=%s\n"</span>,getenv(<span class="string">"PATH"</span>));</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/linux_process.png" alt>  </p>
+<h1 id="fork-复制当前进程"><a href="#fork-复制当前进程" class="headerlink" title="fork: 复制当前进程"></a>fork: 复制当前进程</h1><p>通过fork()系统调用我们可以创建一个和当前进程印象一样的新进程.我们通常将新进程称为子进程,而当前进程称为父进程.<br>而子进程继承了父进程的整个地址空间,其中包括了进程上下文,堆栈地址,内存信息进程控制块(PCB)等.  </p>
+<p>fork的语法很简单，但其返回方式 <strong>不同寻常</strong> :<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">pid_t</span> fork(<span class="keyword">void</span>);</span><br></pre></td></tr></table></figure></p>
+<p><strong>为使内核能够区分原进程及复制进程</strong>， fork返回两次，分别给出不同的返回值：  </p>
+<ul>
+<li>子进程返回0</li>
+<li>父进程返回子进程的PID  </li>
+</ul>
+<p><img src="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/linux_fork.png" alt><br>一个简单的fork程序：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">pid_t</span> pid;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"before fork \n"</span>);</span><br><span class="line">        pid=fork();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(pid&gt;<span class="number">0</span>) <span class="comment">//返回子进程pid，在父进程中</span></span><br><span class="line">        &#123;</span><br><span class="line">                sleep(<span class="number">1</span>);</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">"parent-----pid:%d\t ppid:%d\t child pid: %d\n"</span>, getpid(), getppid(), pid);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(pid ==<span class="number">0</span>) <span class="comment">//返回0，在子进程中</span></span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">"child -----pid:%d\t ppid:%d\n"</span>,getpid(),getppid());</span><br><span class="line">        <span class="keyword">else</span>  <span class="comment">//这是返回-1的情况</span></span><br><span class="line">        &#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">"fork error\n"</span>);</span><br><span class="line">                <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//以下语句会输出两遍，子父进程各一遍</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Both processes continue from here\n"</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/linux_fork_2.png" alt>  </p>
+<p>以上程序中，sleep(1)是为了让父进程在子进程后执行。<strong>因为子进程和父进程的执行顺序是随机的</strong> 。  </p>
+<p>fork()系统调用总结：<br>1）fork()函数的一次调用返回2次返回。<br>2）fork系统调用之后，父进程和子进程交替执行，并且它们处于不同空间中。<br>3) 将fork()返回值大于零设置为父进程,这是因为子进程获得父进程的pid相对容易,而父进程获子进程pid难,所以在fork()系统调用中将子进程的pid作为父进程的返回值，解决了获得子进程pid的问题。  </p>
+<h1 id="exec-进程创建的最终步骤"><a href="#exec-进程创建的最终步骤" class="headerlink" title="exec: 进程创建的最终步骤"></a>exec: 进程创建的最终步骤</h1><p>我们执行 fork 操作以创建进程，但多半会在后面跟有 exec 操作，在子进程的地址空间中运行另外一个程序。  </p>
+<h2 id="exec叙述："><a href="#exec叙述：" class="headerlink" title="exec叙述：  "></a>exec叙述：  </h2><p>在 fork 期间继承的许多属性都不会因为 exec 而改变。例如：上一个程序的文件说明符、root目录、umask设置、全局变量都保持不变。<br>不过coder可以通过两个方式来改变exec后的环境：  </p>
+<ul>
+<li>关闭一个或多个文件说明符，这样，在 fork 前后打开的文件就不能直接在exec的进程中读取。  </li>
+<li>向exec的进程中传送一个单独的环境，而不是在environ全局变量中保存默认环境。  </li>
+</ul>
+<p>我们经常用 exec 这个名称来指代这种关系，并没有一个名为 exec 的系统调用。<br>事实上，有一个execve，有五个库函数都是以她为基础的。我们直接将她们称为exec或exec系列。<br>整个系列可以分为两个部分，分别为 execl 集和 execv 集。<br>注：<br>execl中的 ”l” 表示一个参数列表（list），而execv中的 “v” 表示参数数目可变（variable）。  </p>
+<h2 id="两个库函数：execl和execv"><a href="#两个库函数：execl和execv" class="headerlink" title="两个库函数：execl和execv"></a>两个库函数：execl和execv</h2><p>execl不使用PATH；第一个参数（path）表示一个绝对或相对路径名；其他参数表示命令行中的每个单词。<br>execl用法：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int execl(const char *path, const char *arg0, ..., (char *) );</span><br></pre></td></tr></table></figure></p>
+<p>例子：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">execl(<span class="string">"/bin/wc"</span>, <span class="string">"wc"</span>, <span class="string">"-l"</span>, <span class="string">"foo"</span>, (<span class="keyword">char</span> *) <span class="number">0</span>);</span><br></pre></td></tr></table></figure></p>
+<p>在例子中我们看到，execl的参数以 <strong>(char *) 0</strong> 结尾，这就是一个0，被强制转换为指向char的指针，相当于NULL。<br>例子表达的意思就是：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wc -l foo</span><br></pre></td></tr></table></figure></p>
+<p>因为execl要求单独指定命令行的每个单词，所以如果 <strong>在运行是才能知道参数</strong> ，execl就无法使用了。解决办法是用execv。<br>execv也不使用PATH，第一个参数（path）表示一个绝对或相对路径名；第二个参数是一个存放字符型指针的数组，数组里存放的是要执行的命令。<br>execv用法：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">char</span> *<span class="keyword">const</span> argv[])</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p>例子：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *cmdargs[]=&#123;<span class="string">"wc"</span>, <span class="string">"-l"</span>, <span class="string">"/etc/passwd"</span>, <span class="literal">NULL</span>&#125;;</span><br><span class="line">execv(<span class="string">"/bin/wc"</span>, cmdargs);</span><br></pre></td></tr></table></figure></p>
+<p>相当于shell中的：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wc -l /etc/passwd</span><br></pre></td></tr></table></figure></p>
+<p><del>其实我并没有感觉execv有优越性。</del><br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">  execl(<span class="string">"/bin/wc"</span>, <span class="string">"wc"</span>, <span class="string">"-l"</span>, <span class="string">"/etc/passwd"</span>, (<span class="keyword">char</span> *)<span class="number">0</span> );</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"execl error"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>为什么最后写一句”输出错误”？<br>因为除非导致错误，否则对exec的调用不会返回。  </p>
+<h2 id="其他exec成员"><a href="#其他exec成员" class="headerlink" title="其他exec成员"></a>其他exec成员</h2><p>execlp和execvp：<br>这些函数使用PATH查找命令的位置，所以第一参数只要给出命令名即可。<br>这里略过。  </p>
+<h1 id="收集退出状态：wait-和-waitpid"><a href="#收集退出状态：wait-和-waitpid" class="headerlink" title="收集退出状态：wait 和 waitpid"></a>收集退出状态：wait 和 waitpid</h1><p>一般情况下，一个进程的终止要么是通过main，要么是调用exit或return。它向调用者返回退出状态，这一状态可以在shell中的参数 “$?” 中获得。<br>当一个进程终止而又没有显式调用exit时，退出状态为 0 。在任何一种情况下，内核都会关闭所有已打开文件，刷新所有输出流，释放进程地址空间。<strong>但进程没有被完全删除</strong>。<br>接下来，内核将退出状态放在进程表中，并将子进程的状态改为僵尸（zombie）。这一机制是“寄希望于” <strong>父进程最终可能调用wait或waitpid</strong>，以拾取退出状态。<br>如果父进程最终这样做了，内核就释放该进程表项，并从系统中删除该进程。<br>注：<br>我们无法杀死一个僵尸，因为它不是进程，但太多的僵尸会消耗进程表的可用位置。ps输出内容在最后一列将僵尸显示为<defunct>。为清除僵尸，可能需要重启系统。  </defunct></p>
+<h2 id="wait：父进程等待子进程死亡"><a href="#wait：父进程等待子进程死亡" class="headerlink" title="wait：父进程等待子进程死亡"></a>wait：父进程等待子进程死亡</h2><h2 id="waitpid：更强大的等待机制"><a href="#waitpid：更强大的等待机制" class="headerlink" title="waitpid：更强大的等待机制"></a>waitpid：更强大的等待机制</h2><p>我不清楚为什么需要 wait和waitpid，如果是为了完全删除进程，显示调用exit不就可以了吗？<br>以后理解再说明。  </p>
+<hr>
+<p>[1]Sumitabha Das, Your UNIX/Linux: the Ultimate Guide, Third Edition</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/14/Linux系统程序设计1-文件/" rel="next" title="Linux系统程序设计1--文件">
+                <i class="fa fa-chevron-left"></i> Linux系统程序设计1--文件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/18/Linux系统管理/" rel="prev" title="Linux系统管理">
+                Linux系统管理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png" alt="mitre">
+            
+              <p class="site-author-name" itemprop="name">mitre</p>
+              <p class="site-description motion-element" itemprop="description">Goals determine what you are going to be</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Friends
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.yanmin99.com/" title="yanmin" target="_blank">yanmin</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://whark.cn" title="大鹏" target="_blank">大鹏</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.notall.cn/" title="zkp" target="_blank">zkp</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://qiracle.cn/" title="强强" target="_blank">强强</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#进程概述"><span class="nav-number">1.</span> <span class="nav-text">进程概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#虚拟地址空间"><span class="nav-number">1.1.</span> <span class="nav-text">虚拟地址空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程表"><span class="nav-number">1.2.</span> <span class="nav-text">进程表</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进程环境"><span class="nav-number">2.</span> <span class="nav-text">进程环境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#fork-复制当前进程"><span class="nav-number">3.</span> <span class="nav-text">fork: 复制当前进程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#exec-进程创建的最终步骤"><span class="nav-number">4.</span> <span class="nav-text">exec: 进程创建的最终步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#exec叙述："><span class="nav-number">4.1.</span> <span class="nav-text">exec叙述：  </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#两个库函数：execl和execv"><span class="nav-number">4.2.</span> <span class="nav-text">两个库函数：execl和execv</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他exec成员"><span class="nav-number">4.3.</span> <span class="nav-text">其他exec成员</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#收集退出状态：wait-和-waitpid"><span class="nav-number">5.</span> <span class="nav-text">收集退出状态：wait 和 waitpid</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#wait：父进程等待子进程死亡"><span class="nav-number">5.1.</span> <span class="nav-text">wait：父进程等待子进程死亡</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#waitpid：更强大的等待机制"><span class="nav-number">5.2.</span> <span class="nav-text">waitpid：更强大的等待机制</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mitre</span>
+
+  
+</div>
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">totle: <span id="busuanzi_value_site_pv"></span> times</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">Visitors: <span id="busuanzi_value_site_uv"></span></span>
+    <span class="post-meta-divider">|</span>
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

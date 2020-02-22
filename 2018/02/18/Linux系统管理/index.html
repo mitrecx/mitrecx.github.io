@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/woAiLuo.jpg?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Linux,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="root: 系统管理员的登录管理员主要使用root用户ID履行职责。1grep &quot;^root&quot; /etc/passwd 以上命令输出可以看出root用户ID为0，事实上，任何一个以0为事实UID的进程都具有root的能力。   123su -#有时候需要用sudo执行sudo su - “ - ” 参数表示使用root的登录环境； 如果想保留当前用户的环境（如，主目录），就不用参数 “ - “。r">
+<meta name="keywords" content="Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux系统管理">
+<meta property="og:url" content="http://yoursite.com/2018/02/18/Linux系统管理/index.html">
+<meta property="og:site_name" content="MITRE">
+<meta property="og:description" content="root: 系统管理员的登录管理员主要使用root用户ID履行职责。1grep &quot;^root&quot; /etc/passwd 以上命令输出可以看出root用户ID为0，事实上，任何一个以0为事实UID的进程都具有root的能力。   123su -#有时候需要用sudo执行sudo su - “ - ” 参数表示使用root的登录环境； 如果想保留当前用户的环境（如，主目录），就不用参数 “ - “。r">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/Linux_etc_passwd.png">
+<meta property="og:image" content="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/Linux_etc_group.png">
+<meta property="og:image" content="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/shutdown_k.png">
+<meta property="og:image" content="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/du_sh.png">
+<meta property="og:image" content="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/0218_1.png">
+<meta property="og:updated_time" content="2020-02-22T11:53:17.355Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux系统管理">
+<meta name="twitter:description" content="root: 系统管理员的登录管理员主要使用root用户ID履行职责。1grep &quot;^root&quot; /etc/passwd 以上命令输出可以看出root用户ID为0，事实上，任何一个以0为事实UID的进程都具有root的能力。   123su -#有时候需要用sudo执行sudo su - “ - ” 参数表示使用root的登录环境； 如果想保留当前用户的环境（如，主目录），就不用参数 “ - “。r">
+<meta name="twitter:image" content="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/Linux_etc_passwd.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/02/18/Linux系统管理/">
+
+
+
+
+
+  <title>Linux系统管理 | MITRE</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MITRE</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Goals determine what you are going to be</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/18/Linux系统管理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mitre">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MITRE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux系统管理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-18T09:31:41+08:00">
+                2018-02-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="root-系统管理员的登录"><a href="#root-系统管理员的登录" class="headerlink" title="root: 系统管理员的登录"></a>root: 系统管理员的登录</h1><p>管理员主要使用root用户ID履行职责。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep <span class="string">"^root"</span> /etc/passwd</span><br></pre></td></tr></table></figure></p>
+<p>以上命令输出可以看出root用户ID为0，事实上，任何一个以0为事实UID的进程都具有root的能力。  </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">su -</span><br><span class="line"><span class="comment">#有时候需要用sudo执行</span></span><br><span class="line">sudo su -</span><br></pre></td></tr></table></figure>
+<p>“ - ” 参数表示使用root的登录环境； 如果想保留当前用户的环境（如，主目录），就不用参数 “ - “。<br>root的提示符（PS1）通常是 #  </p>
+<p>su不仅可以切换到root用户，su可以切换到任何一个用户(su [opt] [uname])：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">su mitre</span><br><span class="line">su mitrecx</span><br></pre></td></tr></table></figure></p>
+<h1 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h1><h2 id="理解-etc-passwd"><a href="#理解-etc-passwd" class="headerlink" title="理解/etc/passwd"></a>理解/etc/passwd</h2><p>除密码以外，所有用户信息都存储在/etc/passwd中。<br>这个文件曾经包含了密码，所以人们还一直在用passwd称呼它。现在密码加密存储在/etc/shadow。<br><strong>login和passwd程序会查阅这两个文件，以完成用户身份验证。</strong>  </p>
+<p>passwd文件一共7个字段：  </p>
+<ol>
+<li><p>用户名</p>
+</li>
+<li><p>密码：早期UNIX系统的密码是放在这个文件中的，但因为这个文件的特性是所有程序都能够读取，所以，这样很容易造成数据被窃取，因此后来就将这个字段的密码数据改放到/etc/shadow中了</p>
+</li>
+<li><p>UID：用户ID，每个账号名称对应一个UID，通常UID=0表示root管理员</p>
+</li>
+<li><p>GID：组ID，与/etc/group有关，/etc/group与/etc/passwd差不多，是用来规范用户组信息的</p>
+</li>
+<li><p>用户信息说明栏： 用来解释这个账号是干什么的</p>
+</li>
+<li><p>家目录：home目录，即用户登陆以后跳转到的目录，以root用户为例，/root是它的家目录，所以root用户登陆以后就跳转到/root目录这里</p>
+</li>
+<li><p>Shell：用户使用的shell，通常使用/bin/bash这个shell，这也就是为什么登陆Linux时默认的shell是bash的原因，就是在这里设置的，如果要想更改登陆后使用的shell，可以在这里修改。另外一个很重要的东西是有一个shell可以用来替代让账号无法登陆的命令，那就是/sbin/nologin。</p>
+</li>
+</ol>
+<p><img src="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/Linux_etc_passwd.png" alt>  </p>
+<h2 id="理解-etc-group"><a href="#理解-etc-group" class="headerlink" title="理解/etc/group"></a>理解/etc/group</h2><p>group一个4个字段：  </p>
+<ol>
+<li>组名  </li>
+<li>密码  </li>
+<li>组ID（GID）</li>
+<li>属于该组的用户列表  </li>
+</ol>
+<p><img src="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/Linux_etc_group.png" alt><br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#添加用户组 gid为1314 gname为offer</span></span><br><span class="line">groupadd -g 1314 offer</span><br><span class="line"><span class="comment">#详细参数man</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="修改和添加用户配置文件"><a href="#修改和添加用户配置文件" class="headerlink" title="修改和添加用户配置文件"></a>修改和添加用户配置文件</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd -u 210 -g dba -c <span class="string">"THE RDBMS"</span> -d /home/oracle -s /bin/ksh -m oracle</span><br></pre></td></tr></table></figure>
+<p><strong>useradd   — create a new user or update default new user information</strong>  </p>
+<p><strong><font color="green">-u, –uid UID</font></strong><br>The numerical value of the user’s ID. This value must be <strong>unique</strong>, <strong>unless</strong> the -o option is used. The value must be non-negative. The default is to use the smallest ID value greater than or equal to UID_MIN and greater than every<br>other user.<br><strong><font color="green">-g, –gid GROUP</font></strong><br><strong>The group name</strong> or number of the user’s initial login group. The group name must exist. A group number must refer to an already existing group.<br>If not specified, the behavior of useradd will depend on the USERGROUPS_ENAB variable in /etc/login.defs. If this variable is set to yes (or -U/–user-group is specified on the command line), a group will be created for the user, with the same name as her loginname.<br><strong><font color="green">-c, –comment COMMENT</font></strong><br>Any text string. It is generally <strong>a short description</strong> of the login, and is currently used as the field for the user’s full name.<br><strong><font color="green">-d, –home-dir HOME_DIR</font></strong><br>The new user will be created using HOME_DIR as the value for the user’s login directory. The default is to append the LOGIN name to BASE_DIR and use that as the login directory name. <strong>The directory HOME_DIR does not have to exist but will not be created if it is missing.</strong>(如果没有HOME_DIE目录，这个-d选项会失效)<br><strong><font color="green">-s, –shell SHELL</font></strong><br>The name of <strong>the user’s login shell</strong>. The default is to leave this field blank, which causes the system to select the default login shell specified by the SHELL variable in /etc/default/useradd, or an empty string by default.<br><strong><font color="green">-m, –create-home</font></strong><br><strong>Create the user’s home directory if it does not exist</strong>. The files and directories contained in the skeleton directory<br>(which can be defined with the -k option) will be copied to the home directory.  </p>
+<p>一个例子：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo useradd -s /bin/bash -m sm</span><br><span class="line">sudo passwd sm</span><br><span class="line">sudo userdel -r sm</span><br></pre></td></tr></table></figure></p>
+<p><strong>userdel — delete a user account and related files</strong>  </p>
+<p><strong><font color="green">-r, –remove</font></strong><br>Files in the user’s home directory will be removed along with the home directory itself and the user’s mail spool.<br>Files located in other file systems will have to be searched for and deleted manually.(如果没有-r选项，就不会删除用户文件,需要自己手动删除)  </p>
+<h1 id="维护安全"><a href="#维护安全" class="headerlink" title="维护安全"></a>维护安全</h1><p><strong>因为计算机系统中的安全性最终与文件相关</strong>，所以错误的文件权限很容易被恶意用户用于hack。<br>维护文件安全的三种机制：  </p>
+<ul>
+<li>受限制的shell（可以在passwd的第七字段设置）  </li>
+<li>Set-User-Id(SUID): 临时能力（不同的事实UID和真实UID）</li>
+<li>粘着位</li>
+</ul>
+<p>粘着位，在/tmp，/usr/tmp目录下，不同的用户创建的文件其他用户可以访问，但不可以删除。这就是通过粘着位实现的。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">chmod 1755 one.txt</span><br><span class="line">ll one.txt</span><br><span class="line">-rwxr-xr-t  1 one   one     54 2月  18 13:53 one.txt*</span><br></pre></td></tr></table></figure></p>
+<p>注意到，other用户的可执行的位置变成了t，即是 sticky bit。<br>这样其他用户就不能删除不归它们所有的文件。（也不能写）<br>粘着位的用处不大啊，不能删除的话，只要设置给other权限为” r - x “不就行了。。。  </p>
+<h1 id="启动与关机"><a href="#启动与关机" class="headerlink" title="启动与关机"></a>启动与关机</h1><p>计算机加电后，<strong>系统</strong> 会查找所有外围设备，然后执行一系列程序，<strong>最终把内核加载到内存中</strong>。<br>内核随后生成init ( PID为1 )，init再进一步生成其他进程。<br><strong>init通常做为 initialization(n,初始化) 的缩写使用</strong><br>正常情况下，系统会处于以下这些系统相关的 <strong>运行级别（run-level）</strong> 之一：<br>0 —— 系统关机<br>1 —— 系统管理模式（加载了本地文件系统）<br>2 —— 多用户模式（NFS不可用）<br>3 —— 完全用户模式<br>5 —— Linux <strong>图形环境模式</strong><br>6 —— 关机和重启模式<br>s或S —— 单用户模式（加载文件系统）  </p>
+<p>当系统重启时，init首先进入 <strong>运行级别</strong> 1或S，然后在转入用户模式（2、3或5）。<br>当系统关闭时，init转为 <strong>运行级别</strong> 0或6 。  </p>
+<p>管理员可以显式使用init命令，将系统转为任意 <strong>运行级别</strong> 。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#查看运行级别</span></span><br><span class="line">who -r</span><br></pre></td></tr></table></figure></p>
+<p>我在一天工作结束时，要关机了！<br>使用shutdown命令关闭计算机，shutdown用wall通知所有用户：系统将要关闭，并给出注销指令。<br>注：<br>一些系统（如Solaris）提供了reboot和halt命令，他们也会关闭系统，但不会向用户发出警告。<br>在管理多用户系统时，应当坚持使用shutdown。  </p>
+<p><img src="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/shutdown_k.png" alt>  </p>
+<h1 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h1><p>文件系统采用目录结构，有自己的根目录。<br>操作系统通常驻留在多个文件系统上。在启动时，这些文件系统使用一种加载技术合并起来，向用户显示为单个文件系统。<br>这些文件系统中有一个特殊系统—— <strong>根文件系统</strong>。它包含UNIX的基本要素——root目录、/bin、/etc、/dev、/lib目录。<br>大多数系统还有 <strong>交换文件系统</strong> ，当系统内存中加载的内容过多时，内核会将一些进程移除内存，放到swap文件系统中。当这些交换的进程做好运行准备时，再将它们加载到内存。用户不能直接访问swap。  </p>
+<p>除了这些基本的文件系统之外，还有更多的文件系统。<strong>系统文件应当与用户创建的数据文件隔离存放</strong>。因此，通常有一个/home文件系统来容纳所有用户，将/usr、/tmp等作为独立的文件系统。  </p>
+<p>文件系统的4个组成部分：  </p>
+<ol>
+<li>启动块——这个块 <strong>包含了</strong> 一个小的 <strong>启动程序和分区表</strong>，它经常被称为主引导记录（MBR）。<font color="red">(原来，MBR在文件系统中)</font>  </li>
+<li>超级块——这个区域包含了有关文件系统的全局信息。包括iNode和数据块的空闲列表。  </li>
+<li>inode块——包含了文件系统中 <strong>每个文件的inode</strong>。创建一个文件时，会在这里分配一个inode。  </li>
+<li>数据块——用户生成的 <strong>所有数据和程序</strong> 都存储在这一区域。  </li>
+</ol>
+<p><strong><font color="orange">文件系统类型</font></strong>:<br>ext4,ext3<br>nfs<br>swap<br>vfat<br>fat32<br>windows里还有NTFS  </p>
+<h1 id="加载和卸载文件系统"><a href="#加载和卸载文件系统" class="headerlink" title="加载和卸载文件系统"></a>加载和卸载文件系统</h1><p>mount : mount a filesystem<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#mount device dir</span></span><br><span class="line">mount  /dev/sda1 /tmp</span><br></pre></td></tr></table></figure></p>
+<p>umount: unmount file systems<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#umount &#123;directory|device&#125;</span></span><br><span class="line">umount /dev/sda1</span><br></pre></td></tr></table></figure></p>
+<p>注：<br>在使用mount -a时，在mount配置文件中列出的所有文件系统都将被加载。在系统启动时会执行mount -a 。<br>同样道理，shutdown会运行 umount -a 。  </p>
+<h1 id="fsck：-文件系统检查"><a href="#fsck：-文件系统检查" class="headerlink" title="fsck： 文件系统检查"></a>fsck： 文件系统检查</h1><p><strong>fsck（file system consistency check，文件系统一致性检查）</strong>：<br>update守护进程每30秒调用一次sync，将超级块和 inode 的内存副本写到磁盘。<br>这一延迟为文件系统的不一致性创建了条件。如果在将超级块写到磁盘之前发生了掉电，文件系统将不在完整。<br><strong>fsck 命令用于检查和修复被破坏的文件系统。</strong>  </p>
+<h1 id="管理磁盘空间"><a href="#管理磁盘空间" class="headerlink" title="管理磁盘空间"></a>管理磁盘空间</h1><h2 id="df-查看磁盘空闲空间"><a href="#df-查看磁盘空闲空间" class="headerlink" title="df: 查看磁盘空闲空间"></a>df: 查看磁盘空闲空间</h2><p><strong>df (disk free，磁盘空闲)命令分别报告每个文件系统上的空闲空间数。</strong><br>df - report file system disk space usage  </p>
+<h2 id="du-磁盘利用率"><a href="#du-磁盘利用率" class="headerlink" title="du: 磁盘利用率"></a>du: 磁盘利用率</h2><p><strong>我们经常要查看一个特定目录树的使用情况，而不是整个文件系统的耗用情况</strong>。<br><strong>du（disk usage，磁盘利用率）命令会递推查看目录树。</strong><br>如果直接使用du，通常会显示很多文件（列出目录下的所有子目录，子目录的子目录…的使用情况）。一般我们可以使用 -s （summary）选项，只显示一层子目录，而且还是汇总的。  </p>
+<p>查看/home目录下各用户耗用的空间量：<br><img src="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/du_sh.png" alt>  </p>
+<h2 id="fdisk"><a href="#fdisk" class="headerlink" title="fdisk"></a>fdisk</h2><p>fdisk - manipulate disk partition table ，磁盘分区表操作工具；<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo fdisk -l</span><br></pre></td></tr></table></figure></p>
+<p>分别在不同主机上运行，结果如下：<br><img src="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/0218_1.png" alt><br>注：<br>fdisk可以添加、删除、转换分区，自己还没有尝试，略略…  </p>
+<h1 id="tar-备份文件"><a href="#tar-备份文件" class="headerlink" title="tar: 备份文件"></a>tar: 备份文件</h1><p><strong>tar — The GNU version of the tar archiving utility</strong>  </p>
+<p>键选项（只能使用一个）：  </p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-c</td>
+<td>创建一个新档案</td>
+</tr>
+<tr>
+<td>-x</td>
+<td>从档案中提取文件</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>列出档案中的内容</td>
+</tr>
+<tr>
+<td>-r, -u</td>
+<td>在档案中追加文件, -u只追加比档案新的文件</td>
+</tr>
+</tbody>
+</table>
+<p>非键选项：</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-f</td>
+<td>archive file，就是要操作的档案</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>以长格式列出文件</td>
+</tr>
+<tr>
+<td>-j</td>
+<td>–bzip2</td>
+</tr>
+<tr>
+<td>-z</td>
+<td>–gzip, –gunzip –ungzip</td>
+</tr>
+</tbody>
+</table>
+<p>测试：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#把当前目录下的shell脚本备份到 666档案</span></span><br><span class="line">mitre@mitre-TM1701666:~/Desktop$ tar -cvf 666 *.sh</span><br><span class="line">hh.sh</span><br><span class="line">ifStr.sh</span><br><span class="line">set.sh</span><br><span class="line">test.sh</span><br><span class="line">tt.sh</span><br><span class="line"></span><br><span class="line"><span class="comment">#把 以f开头的文件 追加到 666</span></span><br><span class="line">mitre@mitre-TM1701666:~/Desktop$ tar -uvf 666 f*</span><br><span class="line">first_prog.c</span><br><span class="line">foo</span><br><span class="line"></span><br><span class="line">mitre@mitre-TM1701666:~/Desktop$ tar -tvf 666</span><br><span class="line">-rwxrwxr-x mitre/mitre      56 2018-02-03 23:43 hh.sh</span><br><span class="line">-rwxrwxr-x mitre/mitre     166 2018-02-03 15:28 ifStr.sh</span><br><span class="line">-rwxrwxr-x mitre/mitre      77 2018-02-03 22:29 set.sh</span><br><span class="line">-rwxrwxr-x mitre/mitre     209 2018-02-03 02:29 test.sh</span><br><span class="line">-rwxrwxr-x mitre/mitre     268 2018-02-10 22:03 tt.sh</span><br><span class="line">-rw-rw-r-- mitre/mitre     425 2018-02-07 13:32 first_prog.c</span><br><span class="line">-rw-rw-r-- mitre/mitre     191 2018-01-31 18:01 foo</span><br><span class="line"></span><br><span class="line"><span class="comment">#备份目录</span></span><br><span class="line">mitre@mitre-TM1701666:~/Desktop$ tar -jcvf dir.bzip2 Dir/</span><br><span class="line">Dir/</span><br><span class="line">Dir/rec_deposit</span><br><span class="line">Dir/Makefile2</span><br><span class="line">Dir/cdir/</span><br><span class="line">Dir/cdir/kk</span><br><span class="line">Dir/Makefile</span><br><span class="line">Dir/rec_deposit.o</span><br><span class="line">Dir/quit.o</span><br><span class="line">Dir/quit.c</span><br><span class="line">Dir/rec_deposit.c</span><br><span class="line">Dir/arg_check.h</span><br><span class="line">Dir/quit.h</span><br><span class="line">Dir/arg_check.c</span><br><span class="line">Dir/progs.tar</span><br><span class="line">Dir/arg_check.o</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/14/Linux系统程序设计2-进程控制/" rel="next" title="Linux系统程序设计2-进程控制">
+                <i class="fa fa-chevron-left"></i> Linux系统程序设计2-进程控制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/03/work-whark/" rel="prev" title="work&whark">
+                work&whark <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png" alt="mitre">
+            
+              <p class="site-author-name" itemprop="name">mitre</p>
+              <p class="site-description motion-element" itemprop="description">Goals determine what you are going to be</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Friends
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.yanmin99.com/" title="yanmin" target="_blank">yanmin</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://whark.cn" title="大鹏" target="_blank">大鹏</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.notall.cn/" title="zkp" target="_blank">zkp</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://qiracle.cn/" title="强强" target="_blank">强强</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#root-系统管理员的登录"><span class="nav-number">1.</span> <span class="nav-text">root: 系统管理员的登录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用户管理"><span class="nav-number">2.</span> <span class="nav-text">用户管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#理解-etc-passwd"><span class="nav-number">2.1.</span> <span class="nav-text">理解/etc/passwd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#理解-etc-group"><span class="nav-number">2.2.</span> <span class="nav-text">理解/etc/group</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改和添加用户配置文件"><span class="nav-number">2.3.</span> <span class="nav-text">修改和添加用户配置文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#维护安全"><span class="nav-number">3.</span> <span class="nav-text">维护安全</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#启动与关机"><span class="nav-number">4.</span> <span class="nav-text">启动与关机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件系统"><span class="nav-number">5.</span> <span class="nav-text">文件系统</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#加载和卸载文件系统"><span class="nav-number">6.</span> <span class="nav-text">加载和卸载文件系统</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#fsck：-文件系统检查"><span class="nav-number">7.</span> <span class="nav-text">fsck： 文件系统检查</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#管理磁盘空间"><span class="nav-number">8.</span> <span class="nav-text">管理磁盘空间</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#df-查看磁盘空闲空间"><span class="nav-number">8.1.</span> <span class="nav-text">df: 查看磁盘空闲空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#du-磁盘利用率"><span class="nav-number">8.2.</span> <span class="nav-text">du: 磁盘利用率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fdisk"><span class="nav-number">8.3.</span> <span class="nav-text">fdisk</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tar-备份文件"><span class="nav-number">9.</span> <span class="nav-text">tar: 备份文件</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mitre</span>
+
+  
+</div>
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">totle: <span id="busuanzi_value_site_pv"></span> times</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">Visitors: <span id="busuanzi_value_site_uv"></span></span>
+    <span class="post-meta-divider">|</span>
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

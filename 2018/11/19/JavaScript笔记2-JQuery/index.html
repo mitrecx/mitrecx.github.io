@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/woAiLuo.jpg?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="JavaScript,jQuery,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在上一节说到，web developers 必修的三门语言：    HTML   CSS   JavaScript    学习 jQuery 必须对上面 3 门语言有一定的了解。   为什么要学习 jQuery：    jQuery 是一个优秀的、轻量级的 JS 库。极大的简化了 JS 编程。     jQuery 封装了 JS、 CSS、 DOM， 提供了一致的简洁的 API。    使用户更方">
+<meta name="keywords" content="JavaScript,jQuery">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript笔记2-jQuery">
+<meta property="og:url" content="http://yoursite.com/2018/11/19/JavaScript笔记2-JQuery/index.html">
+<meta property="og:site_name" content="MITRE">
+<meta property="og:description" content="在上一节说到，web developers 必修的三门语言：    HTML   CSS   JavaScript    学习 jQuery 必须对上面 3 门语言有一定的了解。   为什么要学习 jQuery：    jQuery 是一个优秀的、轻量级的 JS 库。极大的简化了 JS 编程。     jQuery 封装了 JS、 CSS、 DOM， 提供了一致的简洁的 API。    使用户更方">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-11/2018-11-20_144025.png">
+<meta property="og:updated_time" content="2020-02-22T11:53:17.351Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript笔记2-jQuery">
+<meta name="twitter:description" content="在上一节说到，web developers 必修的三门语言：    HTML   CSS   JavaScript    学习 jQuery 必须对上面 3 门语言有一定的了解。   为什么要学习 jQuery：    jQuery 是一个优秀的、轻量级的 JS 库。极大的简化了 JS 编程。     jQuery 封装了 JS、 CSS、 DOM， 提供了一致的简洁的 API。    使用户更方">
+<meta name="twitter:image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-11/2018-11-20_144025.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/19/JavaScript笔记2-JQuery/">
+
+
+
+
+
+  <title>JavaScript笔记2-jQuery | MITRE</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MITRE</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Goals determine what you are going to be</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/19/JavaScript笔记2-JQuery/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mitre">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MITRE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JavaScript笔记2-jQuery</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-19T23:29:52+08:00">
+                2018-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在<a href="https://mitrecx.github.io/2018/11/15/JavaScript%E7%AC%94%E8%AE%B0-1/" target="_blank" rel="noopener">上一节</a>说到，web developers 必修的三门语言：  </p>
+<ol>
+<li>HTML  </li>
+<li>CSS  </li>
+<li>JavaScript  </li>
+</ol>
+<p>学习 jQuery 必须对上面 3 门语言有一定的了解。  </p>
+<p>为什么要学习 jQuery：  </p>
+<ol>
+<li><p>jQuery 是一个优秀的、<strong>轻量级的 JS 库</strong>。极大的简化了 JS 编程。   </p>
+</li>
+<li><p>jQuery 封装了 JS、 CSS、 DOM， 提供了一致的简洁的 API。  </p>
+</li>
+<li><p>使用户更方便的处理 HTML、 Events， 实现动画效果。</p>
+</li>
+<li><p>方便地为网站提供 AJAX 交互。  </p>
+</li>
+</ol>
+<p><strong>jQuery 的使用步骤：</strong>  </p>
+<ol>
+<li><p>引入 <a href="https://code.jquery.com/jquery-3.3.1.min.js" target="_blank" rel="noopener">jQuery 库</a>。   </p>
+</li>
+<li><p>使用 <strong>选择器</strong> 定位要操作的节点。  </p>
+</li>
+<li><p>调用 jQuery 方法 进行操作。  </p>
+</li>
+</ol>
+<p><strong><font color="red">jQuery 语法： $(selector).action()</font></strong><br>美元符号定义 jQuery<br>选择器（selector）”查询” HTML 元素<br>action() 执行对元素的操作  </p>
+<h1 id="1-jQuery-对象"><a href="#1-jQuery-对象" class="headerlink" title="1 jQuery 对象"></a>1 jQuery 对象</h1><p><strong>DOM对象</strong>： 用传统的方法(javascript)获得的对象。<br><strong>jQuery对象</strong>： 通过 jQuery选择器 获得的对象 是 jQuery对象，如<code>$(“.class1”)</code>, <code>$(“#id1”)</code>。  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//DOM对象</span></span><br><span class="line"><span class="keyword">var</span> domObj = <span class="built_in">document</span>.getElementById(<span class="string">"id"</span>);</span><br><span class="line"></span><br><span class="line"> <span class="comment">//jQuery对象;</span></span><br><span class="line"><span class="keyword">var</span> $obj = $(<span class="string">"#id"</span>);</span><br></pre></td></tr></table></figure>
+<p><strong>jQuery对象</strong> 是jQuery独有的。如果一个对象是jQuery对象，那么就可以使用jQuery里的方法，例:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取id为foo的元素内的html代码，html()是jQuery特有的方法</span></span><br><span class="line">$(<span class="string">"#foo"</span>).html();</span><br></pre></td></tr></table></figure></p>
+<p>以上代码等价于：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// innerHTML 是 DOM对象 的方法</span></span><br><span class="line"><span class="built_in">document</span>.getElementById(<span class="string">"foo"</span>).innerHTML;</span><br></pre></td></tr></table></figure></p>
+<p><strong><font color="red">注：在jQuery对象中无法使用DOM对象的任何方法。</font></strong><br>当然，DOM对象也无法使用jQuery对象的任何方法。    </p>
+<p><strong>重点：<font color="green"> jQuery对象 的本质是 DOM对象 数组</font></strong>    </p>
+<p><strong>jQuery对象和DOM对象的互相转换：</strong>  </p>
+<p>jquery提供了两种方法将一个jquery对象转换成一个dom对象，即 <strong>[index]</strong> 和 <strong>get(index)</strong>。    </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通过id选择器 获取 jquery对象</span></span><br><span class="line"><span class="keyword">var</span> $cr=$(<span class="string">"#cr"</span>);</span><br><span class="line"><span class="comment">// jQuery 对象 转化为 DOM对象</span></span><br><span class="line"><span class="keyword">var</span> domObj = $cr[<span class="number">0</span>]; <span class="comment">//也可写成 var domObj=$cr.get(0);</span></span><br></pre></td></tr></table></figure>
+<p>dom对象转换成jquery对象： 只需要用$()把dom对象包装起来，就可以获得一个jquery对象。<br>方法为 $(dom对象)。  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//dom对象</span></span><br><span class="line"><span class="keyword">var</span> domObj=<span class="built_in">document</span>.getElementById(<span class="string">"cr"</span>);</span><br><span class="line"><span class="comment">// DOM对象 转换成 jquery对象</span></span><br><span class="line"><span class="keyword">var</span> $cr = $(domObj);</span><br></pre></td></tr></table></figure>
+<p>平时用到的jquery对象都是通过$()函数制造出来的，$()函数就是一个jQuery对象的制造工厂。   </p>
+<p>建议:<br><strong>如果获取的对象是 jQuery对象，那么在变量前面加上$</strong> , 这样方便容易识别出哪些是jQuery对象。<br>例如:<br><code> var $variable = jQuery对象;</code><br>如果获取的是dom对象，则定义如下:<br><code> var variable = dom对象;</code>  </p>
+<h1 id="2-jQuery-选择器"><a href="#2-jQuery-选择器" class="headerlink" title="2. jQuery 选择器"></a>2. jQuery 选择器</h1><p>jQuery选择器 和 CSS选择器 类似，但是比 CSS选择器 更丰富。  </p>
+<p>CSS选择器：选择元素，施加样式。<br>jQuery选择器：选择元素，施加方法。  </p>
+<p>1 基本选择器<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">"#id"</span>)            <span class="comment">//id选择器, 根据属性id名 定位元素</span></span><br><span class="line">$(<span class="string">"div"</span>)            <span class="comment">//元素选择器， 根据 标签名 定位元素</span></span><br><span class="line">$(<span class="string">".classname"</span>)     <span class="comment">//类选择器 ，根据 属性class名 定位元素</span></span><br><span class="line">$(<span class="string">".classname,.classname1,#id1"</span>)     <span class="comment">//组合选择器，定位一组选择器所对应的 所有元素</span></span><br></pre></td></tr></table></figure></p>
+<p>2 层次选择器<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">"select1 select2"</span>)  <span class="comment">//在 select1元素下， 选中所有满足 select2 的 子孙元素</span></span><br><span class="line">$(<span class="string">"select1 &gt; select2"</span>)<span class="comment">//在 select1元素下， 选中所有满足 select2 的 子元素  (只是子元素，不是子孙元素)</span></span><br><span class="line"></span><br><span class="line">$(<span class="string">"#id .classname "</span>)    <span class="comment">//后代元素选择器</span></span><br><span class="line">$(<span class="string">"#id &gt; .classname "</span>)    <span class="comment">//子元素选择器</span></span><br><span class="line">$(<span class="string">"#id + .classname "</span>)    <span class="comment">//紧邻下一个元素选择器（下一个兄弟）</span></span><br><span class="line">$(<span class="string">"#id ~ .classname "</span>)    <span class="comment">//兄弟元素选择器（所有兄弟）</span></span><br></pre></td></tr></table></figure></p>
+<p>3 过滤选择器(重点)<br>3.1 基本过滤选择器 ( 用于表格和列表，可以在一组同样的元素中，选第一个，最后一个，奇数位等等 )<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">"li:first"</span>)    <span class="comment">//第一个li</span></span><br><span class="line">$(<span class="string">"li:last"</span>)     <span class="comment">//最后一个li</span></span><br><span class="line">$(<span class="string">"li:even"</span>)     <span class="comment">//挑选下标为偶数的li</span></span><br><span class="line">$(<span class="string">"li:odd"</span>)      <span class="comment">//挑选下标为奇数的li</span></span><br><span class="line"></span><br><span class="line">$(<span class="string">"li:eq(4)"</span>)    <span class="comment">//下标等于 4 的li(第五个 li 元素)</span></span><br><span class="line">$(<span class="string">"li:gt(2)"</span>)    <span class="comment">//下标大于 2 的li</span></span><br><span class="line">$(<span class="string">"li:lt(2)"</span>)    <span class="comment">//下标小于 2 的li</span></span><br><span class="line">$(<span class="string">"li:not(#runoob)"</span>) <span class="comment">//挑选除 id="runoob" 以外的所有li</span></span><br></pre></td></tr></table></figure></p>
+<p>3.2 内容过滤选择器<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">"div:contains('Runob')"</span>)    <span class="comment">// 包含 Runob文本的元素</span></span><br><span class="line">$(<span class="string">"td:empty"</span>)                 <span class="comment">//不包含子元素或者文本的空元素</span></span><br><span class="line"></span><br><span class="line">$(<span class="string">"div:has(selector)"</span>)        <span class="comment">//含有选择器所匹配的元素</span></span><br><span class="line">$(<span class="string">"td:parent"</span>)                <span class="comment">//含有子元素或者文本的元素</span></span><br></pre></td></tr></table></figure></p>
+<p>3.3 可见性过滤选择器<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">"li:hidden"</span>)       <span class="comment">//匹配所有不可见元素，或type为hidden的元素</span></span><br><span class="line">$(<span class="string">"li:visible"</span>)      <span class="comment">//匹配所有可见元素</span></span><br></pre></td></tr></table></figure></p>
+<p>3.4 <strong>属性过滤选择器</strong> (根据属性 定位元素)<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">"div[id]"</span>)        <span class="comment">//所有含有 id 属性 的 div 元素</span></span><br><span class="line">$(<span class="string">"div[id='123']"</span>)        <span class="comment">// id属性值为123的div 元素</span></span><br><span class="line">$(<span class="string">"div[id!='123']"</span>)        <span class="comment">// id属性值不等于123的div 元素</span></span><br><span class="line"></span><br><span class="line">$(<span class="string">"div[id^='qq']"</span>)        <span class="comment">// id属性值以qq开头的div 元素</span></span><br><span class="line">$(<span class="string">"div[id$='zz']"</span>)        <span class="comment">// id属性值以zz结尾的div 元素</span></span><br><span class="line">$(<span class="string">"div[id*='bb']"</span>)        <span class="comment">// id属性值包含bb的div 元素</span></span><br><span class="line">$(<span class="string">"input[id][name$='man']"</span>) <span class="comment">//多属性选过滤，同时满足两个属性的条件的元素</span></span><br></pre></td></tr></table></figure></p>
+<p>3.5 状态过滤选择器<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">"input:enabled"</span>)    <span class="comment">// 匹配可用的 input</span></span><br><span class="line">$(<span class="string">"input:disabled"</span>)   <span class="comment">// 匹配不可用的 input</span></span><br><span class="line">$(<span class="string">"input:checked"</span>)    <span class="comment">// 匹配选中的 input</span></span><br><span class="line">$(<span class="string">"option:selected"</span>)  <span class="comment">// 匹配选中的 option</span></span><br></pre></td></tr></table></figure></p>
+<p>4 表单选择器<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">":input"</span>)      <span class="comment">//匹配所有 input, textarea, select 和 button 元素</span></span><br><span class="line">$(<span class="string">":text"</span>)       <span class="comment">//所有的单行文本框，$(":text") 等价于$("[type=text]")，推荐使用$("input:text")效率更高，下同</span></span><br><span class="line">$(<span class="string">":password"</span>)   <span class="comment">//所有密码框</span></span><br><span class="line">$(<span class="string">":radio"</span>)      <span class="comment">//所有单选按钮</span></span><br><span class="line">$(<span class="string">":checkbox"</span>)   <span class="comment">//所有复选框</span></span><br><span class="line">$(<span class="string">":submit"</span>)     <span class="comment">//所有提交按钮</span></span><br><span class="line">$(<span class="string">":reset"</span>)      <span class="comment">//所有重置按钮</span></span><br><span class="line">$(<span class="string">":button"</span>)     <span class="comment">//所有button按钮</span></span><br><span class="line">$(<span class="string">":file"</span>)       <span class="comment">//所有文件域</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="3-jQuery-属性和方法"><a href="#3-jQuery-属性和方法" class="headerlink" title="3 jQuery 属性和方法"></a>3 jQuery 属性和方法</h1><p>属性：<br><code>$jqObj.length</code>    包含 jQuery 对象中元素的数目  </p>
+<p>jQuery对象的 方法 可以分为 4类：  </p>
+<ol>
+<li>事件方法  </li>
+<li>效果方法</li>
+<li>HTML/CSS 方法  </li>
+<li>遍历节点</li>
+</ol>
+<h2 id="3-1-事件方法"><a href="#3-1-事件方法" class="headerlink" title="3.1 事件方法"></a>3.1 事件方法</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">blur()	<span class="comment">// 添加/触发失去焦点事件</span></span><br><span class="line">change()	<span class="comment">// 添加/触发 change 事件</span></span><br><span class="line">click()	<span class="comment">// 添加/触发 click 事件</span></span><br><span class="line">dblclick()	<span class="comment">// 添加/触发 double click 事件</span></span><br><span class="line"></span><br><span class="line">mousedown()	<span class="comment">// 添加/触发 mousedown 事件</span></span><br><span class="line">mouseup()	<span class="comment">// 添加/触发 mouseup 事件</span></span><br><span class="line"></span><br><span class="line">mouseleave()	<span class="comment">// 添加/触发 mouseleave 事件</span></span><br><span class="line">mousemove()	<span class="comment">// 添加/触发 mousemove 事件</span></span><br><span class="line">mouseout()	<span class="comment">// 添加/触发 mouseout 事件</span></span><br><span class="line">mouseover()	<span class="comment">// 添加/触发 mouseover 事件</span></span><br></pre></td></tr></table></figure>
+<h2 id="3-2-效果方法"><a href="#3-2-效果方法" class="headerlink" title="3.2 效果方法"></a>3.2 效果方法</h2><p>用于创建动画效果的 jQuery 方法。<br>略。  </p>
+<h2 id="3-3-HTML-CSS-方法"><a href="#3-3-HTML-CSS-方法" class="headerlink" title="3.3 HTML/CSS 方法"></a>3.3 HTML/CSS 方法</h2><p>读写节点的 HTML 内容：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 读</span></span><br><span class="line">$jqObj.html();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写</span></span><br><span class="line">$jqObj.html(<span class="string">"&lt;span&gt; hello &lt;/span&gt;"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>读写节点的文本内容：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 读</span></span><br><span class="line">$jqOjb.text();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写</span></span><br><span class="line">$jqObj.text(<span class="string">"hello"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>读写 <strong>表单或按钮等 <font color="red">value</font> 属性</strong> 值：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 读</span></span><br><span class="line">$jqObj.val();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写</span></span><br><span class="line">$jqObj.val(<span class="string">"hello"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>读写节点的 <strong>属性值</strong> ：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 读</span></span><br><span class="line">$jqObj.attr(<span class="string">"属性名"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写</span></span><br><span class="line">$jqObj.attr(<span class="string">"属性名"</span>,<span class="string">"新的属性值"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>增删节点：  </p>
+<p><strong>创建 DOM 节点</strong>：  <code> $(“节点内容”) </code><br>创建的节点 <strong>会存在 内存里</strong>。 但是页面上看不到，只有把 节点 <strong>追加到已经存在的某个节点下</strong>， 页面上才能看到。  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建一个 DOM 节点</span></span><br><span class="line"><span class="keyword">var</span> pNode = $(<span class="string">"&lt;i&gt; hello &lt;/i&gt;"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 插入 DOM 节点</span></span><br><span class="line"><span class="comment">// 在 p元素之前插入 DOM节点 (pNode 作为 p 的上一个兄弟节点)</span></span><br><span class="line">$(<span class="string">"p"</span>).before(pNode);</span><br><span class="line"><span class="comment">//结果：</span></span><br><span class="line"><span class="comment">//&lt;i&gt; hello &lt;/i&gt;</span></span><br><span class="line"><span class="comment">//&lt;p&gt;xxx&lt;/p&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// pNode 作为 p 的 下一个兄弟节点</span></span><br><span class="line">$(<span class="string">"p"</span>).after(pNode);</span><br><span class="line"></span><br><span class="line"><span class="comment">// pNode 做为 p 的第一个子节点</span></span><br><span class="line">$(<span class="string">"p"</span>).prepend(pNode);</span><br><span class="line"><span class="comment">//结果：</span></span><br><span class="line"><span class="comment">//&lt;p&gt;&lt;i&gt; hello &lt;/i&gt;xxx&lt;/p&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// pNode 作为 p 的最后一个子节点</span></span><br><span class="line">$(<span class="string">"p"</span>).append(pNode);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删除节点</span></span><br><span class="line">$(<span class="string">"p"</span>).remove();</span><br><span class="line"><span class="comment">// 清空节点： 节点还在，内容清空</span></span><br><span class="line">$(<span class="string">"p"</span>).empty();</span><br></pre></td></tr></table></figure>
+<h2 id="3-4-遍历节点"><a href="#3-4-遍历节点" class="headerlink" title="3.4 遍历节点"></a>3.4 遍历节点</h2><p>略。</p>
+<h1 id="4-示例"><a href="#4-示例" class="headerlink" title="4 示例"></a>4 示例</h1><p>把 input 元素（type 属性值 为 “password”）的 type 属性值改为 “text”。  </p>
+<p><strong>jQuery 实现</strong>：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">	&lt;script src=<span class="string">"jquery-3.3.1.min.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line">	&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line">		<span class="function"><span class="keyword">function</span> <span class="title">doclick</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">			$(<span class="string">"#password1"</span>).attr(<span class="string">"type"</span>,<span class="string">"text"</span>);</span><br><span class="line"></span><br><span class="line">			alert($(<span class="string">"#password1"</span>).val());</span><br><span class="line">		&#125;</span><br><span class="line">	&lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">	&lt;form&gt;</span><br><span class="line">		&lt;input type=<span class="string">"password"</span> id=<span class="string">"password1"</span> value=<span class="string">"123456"</span> /&gt;</span><br><span class="line">		&lt;input type=<span class="string">"button"</span> id=<span class="string">"button1"</span> onclick=<span class="string">"doclick();"</span> value=<span class="string">"Show default value"</span> /&gt;</span><br><span class="line">	&lt;<span class="regexp">/form&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>body&gt;</span><br><span class="line">&lt;<span class="regexp">/html&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>也可以写成如下形式：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">	&lt;script src=<span class="string">"jquery-3.3.1.min.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line">	&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line">		 $(<span class="built_in">document</span>).ready(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		 	$(<span class="string">"#button1"</span>).click(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		 		$(<span class="string">"#password1"</span>).attr(<span class="string">"type"</span>,<span class="string">"text"</span>);</span><br><span class="line"></span><br><span class="line">				alert($(<span class="string">"#password1"</span>).val());</span><br><span class="line">			&#125;)&#125;);</span><br><span class="line">	&lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">	&lt;form&gt;</span><br><span class="line">	&lt;input type=<span class="string">"password"</span> id=<span class="string">"password1"</span> value=<span class="string">"123456"</span> /&gt;</span><br><span class="line">	&lt;input type=<span class="string">"button"</span> id=<span class="string">"button1"</span>  value=<span class="string">"Show default value"</span> /&gt;</span><br><span class="line">	&lt;<span class="regexp">/form&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>body&gt;</span><br><span class="line">&lt;<span class="regexp">/html&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>ready() 方法：</strong> 在文档加载后激活函数。<br>当 DOM（文档对象模型） 已经加载，会发生 ready 事件。<br>ready()方法 有三种语法：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//语法 1</span></span><br><span class="line">$(<span class="built_in">document</span>).ready(<span class="function"><span class="keyword">function</span>)</span></span><br><span class="line"><span class="function">//语法 2</span></span><br><span class="line"><span class="function"><span class="title">$</span>(<span class="params"></span>).<span class="title">ready</span>(<span class="params">function</span>)</span></span><br><span class="line"><span class="function">//语法 3</span></span><br><span class="line"><span class="function"><span class="title">$</span>(<span class="params">function</span>)</span></span><br></pre></td></tr></table></figure></p>
+<p>注： 语法 3 和 DOM对象转jQuery对象的语法一样 ！！！  </p>
+<p><strong>JS 实现</strong>：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">	&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line">		<span class="function"><span class="keyword">function</span> <span class="title">doClick</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">			<span class="built_in">document</span>.getElementById(<span class="string">"password1"</span>).type=<span class="string">"text"</span>;</span><br><span class="line"></span><br><span class="line">			alert(<span class="built_in">document</span>.getElementById(<span class="string">"password1"</span>).value);</span><br><span class="line">		&#125;</span><br><span class="line">	&lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">	&lt;form&gt;</span><br><span class="line">		&lt;input type=<span class="string">"password"</span> id=<span class="string">"password1"</span> value=<span class="string">"123456"</span> /&gt;</span><br><span class="line">		&lt;input type=<span class="string">"button"</span> id=<span class="string">"button1"</span> onclick=<span class="string">"doClick();"</span> value=<span class="string">"Show default value"</span> /&gt;</span><br><span class="line">	&lt;<span class="regexp">/form&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>body&gt;</span><br><span class="line">&lt;<span class="regexp">/html&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ol>
+<li><p><a href="https://www.cnblogs.com/yellowapplemylove/archive/2011/04/19/2021583.html" target="_blank" rel="noopener">DOM对象和JQuery对象的区别</a>   </p>
+</li>
+<li><p><a href="https://www.runoob.com/jquery/jquery-ref-selectors.html" target="_blank" rel="noopener">菜鸟教程: jQuery 选择器</a></p>
+</li>
+</ol>
+<h1 id="附"><a href="#附" class="headerlink" title="附"></a>附</h1><p><img src="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-11/2018-11-20_144025.png" alt>  </p>
+<p>上图是在 Chrome 浏览器 的 console 控制台测试的结果。  </p>
+<p><strong>通过 jQuery 的 id 选择器选择的结果 可以调用 DOM对象的value属性</strong>， <strong><font color="red">但不可以调用 jQuery对象的 val() 方法</font></strong> 。  </p>
+<p>jQuery 选择器返回的结果 为什么 不是 jQuery 对象？</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/jQuery/" rel="tag"># jQuery</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/15/JavaScript笔记-1/" rel="next" title="JavaScript笔记1-JS基础">
+                <i class="fa fa-chevron-left"></i> JavaScript笔记1-JS基础
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/20/JavaScript笔记3-AJAX/" rel="prev" title="JavaScript笔记3-AJAX">
+                JavaScript笔记3-AJAX <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png" alt="mitre">
+            
+              <p class="site-author-name" itemprop="name">mitre</p>
+              <p class="site-description motion-element" itemprop="description">Goals determine what you are going to be</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Friends
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.yanmin99.com/" title="yanmin" target="_blank">yanmin</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://whark.cn" title="大鹏" target="_blank">大鹏</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.notall.cn/" title="zkp" target="_blank">zkp</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://qiracle.cn/" title="强强" target="_blank">强强</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-jQuery-对象"><span class="nav-number">1.</span> <span class="nav-text">1 jQuery 对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-jQuery-选择器"><span class="nav-number">2.</span> <span class="nav-text">2. jQuery 选择器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-jQuery-属性和方法"><span class="nav-number">3.</span> <span class="nav-text">3 jQuery 属性和方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-事件方法"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 事件方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-效果方法"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 效果方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-HTML-CSS-方法"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 HTML/CSS 方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-遍历节点"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 遍历节点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-示例"><span class="nav-number">4.</span> <span class="nav-text">4 示例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附"><span class="nav-number">6.</span> <span class="nav-text">附</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mitre</span>
+
+  
+</div>
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">totle: <span id="busuanzi_value_site_pv"></span> times</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">Visitors: <span id="busuanzi_value_site_uv"></span></span>
+    <span class="post-meta-divider">|</span>
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

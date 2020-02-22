@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/woAiLuo.jpg?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1 为什么需要字符流纯英文环境下，只要 字节流 就能完成一切任务。   在中文环境下，字节流 也能完成大多数 I/O 操作。但是遇到 读取中文文本文件，或 写入中文到文件中 这种操作时，就需要 字符流 了。 注意：复制中文文本文件 字节流 可以做。但是 读取中文文本文件 并 打印到控制台 这种操作 字节流 做不了，因为不知道中文字符占 2个字节(GBK) 还是 3个字节(UTF-8)，所以无法准确">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java I&#x2F;O 学习系列三: 字符流">
+<meta property="og:url" content="http://yoursite.com/2019/01/24/Java-I-O-学习系列三-字符流/index.html">
+<meta property="og:site_name" content="MITRE">
+<meta property="og:description" content="1 为什么需要字符流纯英文环境下，只要 字节流 就能完成一切任务。   在中文环境下，字节流 也能完成大多数 I/O 操作。但是遇到 读取中文文本文件，或 写入中文到文件中 这种操作时，就需要 字符流 了。 注意：复制中文文本文件 字节流 可以做。但是 读取中文文本文件 并 打印到控制台 这种操作 字节流 做不了，因为不知道中文字符占 2个字节(GBK) 还是 3个字节(UTF-8)，所以无法准确">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-02-22T11:53:17.349Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java I&#x2F;O 学习系列三: 字符流">
+<meta name="twitter:description" content="1 为什么需要字符流纯英文环境下，只要 字节流 就能完成一切任务。   在中文环境下，字节流 也能完成大多数 I/O 操作。但是遇到 读取中文文本文件，或 写入中文到文件中 这种操作时，就需要 字符流 了。 注意：复制中文文本文件 字节流 可以做。但是 读取中文文本文件 并 打印到控制台 这种操作 字节流 做不了，因为不知道中文字符占 2个字节(GBK) 还是 3个字节(UTF-8)，所以无法准确">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/24/Java-I-O-学习系列三-字符流/">
+
+
+
+
+
+  <title>Java I/O 学习系列三: 字符流 | MITRE</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MITRE</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Goals determine what you are going to be</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/24/Java-I-O-学习系列三-字符流/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mitre">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MITRE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java I/O 学习系列三: 字符流</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-24T15:29:34+08:00">
+                2019-01-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-为什么需要字符流"><a href="#1-为什么需要字符流" class="headerlink" title="1 为什么需要字符流"></a>1 为什么需要字符流</h1><p>纯英文环境下，只要 <strong>字节流</strong> 就能完成一切任务。  </p>
+<p>在中文环境下，<strong>字节流</strong> 也能完成大多数 I/O 操作。<br>但是遇到 读取中文文本文件，或 写入中文到文件中 这种操作时，就需要 <strong><font color="#2eb82e">字符流</font></strong> 了。</p>
+<p>注意：<br>复制中文文本文件 <strong>字节流</strong> 可以做。<br>但是 读取中文文本文件 并 打印到控制台 这种操作 <strong>字节流</strong> 做不了，<br>因为不知道中文字符占 2个字节(GBK) 还是 3个字节(UTF-8)，所以无法准确获取中文字符。<br>这种情况下，<strong><font color="#2eb82e">字符流</font></strong> 就能 准确地获取到 中文字符。因为 <strong><font color="#2eb82e">字符流</font></strong> 是 按字符读取文件的。</p>
+<h1 id="2-Reader-和-Writer"><a href="#2-Reader-和-Writer" class="headerlink" title="2 Reader 和 Writer"></a>2 Reader 和 Writer</h1><p>Reader 是一个 <strong>抽象类</strong>， Writer 也是一个 <strong>抽象类</strong> 。  </p>
+<h2 id="2-1-Reader"><a href="#2-1-Reader" class="headerlink" title="2.1 Reader"></a>2.1 Reader</h2><h3 id="Reader-简介"><a href="#Reader-简介" class="headerlink" title="Reader 简介"></a>Reader 简介</h3><p><strong>Abstract class for reading character streams</strong>.<br>The only methods that a subclass must implement are read(char[], int, int) and close().<br>Most subclasses, however, will override some of the methods defined here in order to provide higher efficiency, additional functionality, or both.<br><strong>Reader 是一个 读取字符流 的抽象类</strong>。<br>Reader 的子类 必须实现 read(char[], int, int) 和 close() 方法。<br>然而，大多数子类 为了提高效率或附加功能 会覆盖许多其他的方法。  </p>
+<h3 id="Fields"><a href="#Fields" class="headerlink" title="Fields"></a>Fields</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 用于同步流的操作。为提高效率，Reader的子类应该用此字段 而不是 this对象 或 synchronized方法</span></span><br><span class="line"><span class="keyword">protected</span> Object lock;</span><br></pre></td></tr></table></figure>
+<h3 id="Methods"><a href="#Methods" class="headerlink" title="Methods"></a>Methods</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Closes the stream and releases any system resources associated with it.</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Marks the present position in the stream.</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">mark</span><span class="params">(<span class="keyword">int</span> readAheadLimit)</span> <span class="keyword">throws</span> IOException</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Tells whether this stream supports the mark() operation.</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">markSupported</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Reads a single character.</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">read</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Reads characters into an array. 读取多个字符放在 cbuf 数组里</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">read</span><span class="params">(<span class="keyword">char</span>[] cbuf)</span> <span class="keyword">throws</span> IOException</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Reads characters into a portion of an array.</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">read</span><span class="params">(<span class="keyword">char</span>[] cbuf, <span class="keyword">int</span> off,<span class="keyword">int</span> len)</span> <span class="keyword">throws</span> IOException</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Attempts to read characters into the specified character buffer.</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">read</span><span class="params">(CharBuffer target)</span> <span class="keyword">throws</span> IOException</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Tells whether this stream is ready to be read.</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">ready</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Resets the stream.</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">reset</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Skips n个 characters.</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">skip</span><span class="params">(<span class="keyword">long</span> n)</span> <span class="keyword">throws</span> IOException</span></span><br></pre></td></tr></table></figure>
+<h3 id="Reader-的直接子类"><a href="#Reader-的直接子类" class="headerlink" title="Reader 的直接子类"></a>Reader 的直接子类</h3><p><strong>BufferedReader</strong><br>CharArrayReader<br>FilterReader<br><strong>InputStreamReader</strong><br>PipedReader<br>StringReader  </p>
+<h2 id="2-2-Writer"><a href="#2-2-Writer" class="headerlink" title="2.2 Writer"></a>2.2 Writer</h2><p><strong>Abstract class for writing to character streams</strong>.<br>The only methods that a subclass must implement are write(char[], int, int), flush(), and close().<br>Most subclasses, however, will override some of the methods defined here in order to provide higher efficiency, additional functionality, or both.<br><strong>Writer 是一个写入字符流的 抽象类</strong>。<br>Writer 的子类必须要实现(覆盖) write(char[], int, int), flush(), 和 close() 方法。<br>然而，大多数子类 为了提高效率或附加功能 会覆盖许多其他的方法。  </p>
+<h3 id="Fields-1"><a href="#Fields-1" class="headerlink" title="Fields"></a>Fields</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 用于同步流的操作。 为提高效率，Writer的子类应该用此字段 而不是 this对象 或 synchronized方法</span></span><br><span class="line"><span class="keyword">protected</span> Object lock;</span><br></pre></td></tr></table></figure>
+<h3 id="Methods-1"><a href="#Methods-1" class="headerlink" title="Methods"></a>Methods</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Appends the specified character to this writer.</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Writer <span class="title">append</span><span class="params">(<span class="keyword">char</span> c)</span> <span class="keyword">throws</span> IOException</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Appends the specified character sequence to this writer.</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Writer <span class="title">append</span><span class="params">(CharSequence csq)</span> <span class="keyword">throws</span> IOException</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Appends a subsequence of the specified character sequence to this writer.</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Writer <span class="title">append</span><span class="params">(CharSequence csq, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> <span class="keyword">throws</span> IOException</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Closes the stream, flushing it first.</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Flushes the stream.</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">flush</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Writes an array of characters.</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">write</span><span class="params">(<span class="keyword">char</span>[] cbuf)</span> <span class="keyword">throws</span> IOException</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Writes a portion of an array of characters. 写入字符数组的一部分。</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">write</span><span class="params">(<span class="keyword">char</span>[] cbuf, <span class="keyword">int</span> off, <span class="keyword">int</span> len)</span> <span class="keyword">throws</span> IOException</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Writes a single character.</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">write</span><span class="params">(<span class="keyword">int</span> c)</span> <span class="keyword">throws</span> IOException</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Writes a string.</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">write</span><span class="params">(String str)</span> <span class="keyword">throws</span> IOException</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Writes a portion of a string. 写入字符串的一部分。</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">write</span><span class="params">(String str, <span class="keyword">int</span> off, <span class="keyword">int</span> len)</span> <span class="keyword">throws</span> IOException</span></span><br></pre></td></tr></table></figure>
+<h3 id="Writer-的直接子类"><a href="#Writer-的直接子类" class="headerlink" title="Writer 的直接子类"></a>Writer 的直接子类</h3><p><strong>BufferedWriter</strong><br>CharArrayWriter<br>FilterWriter<br><strong>OutputStreamWriter</strong><br>PipedWriter<br>PrintWriter<br>StringWriter  </p>
+<h1 id="3-InputStreamReader-和-OutputStreamWriter"><a href="#3-InputStreamReader-和-OutputStreamWriter" class="headerlink" title="3 InputStreamReader 和 OutputStreamWriter"></a>3 InputStreamReader 和 OutputStreamWriter</h1><p>继承关系：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Reader</span><br><span class="line">   |__InputStreamReader</span><br><span class="line"></span><br><span class="line">Writer</span><br><span class="line">   |__OutputStreamWriter</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-1-InputStreamReader"><a href="#3-1-InputStreamReader" class="headerlink" title="3.1 InputStreamReader"></a>3.1 InputStreamReader</h2><p>public class InputStreamReader extends Reader  </p>
+<h3 id="InputStreamReader-简介"><a href="#InputStreamReader-简介" class="headerlink" title="InputStreamReader 简介"></a>InputStreamReader 简介</h3><p><strong>An InputStreamReader is a bridge from byte streams to character streams</strong>: It reads bytes and decodes them into characters using a specified charset.<br>The charset that it uses may be specified by name or may be given explicitly, or the platform’s default charset may be accepted.<br><strong>InputStreamReader 是 字节流 到 字符流 的桥梁：</strong> InputStreamReader 读取字节 并 使用指定的字符集 解码为字符。<br>InputStreamReader 使用的字符集 可以通过名称指定，也可以显式给定，或者接受平台默认的字符集。  </p>
+<p>每次调用 InputStreamReader 的 read 方法 可能导致从 <strong>底层字节输入流(underlying byte-input stream)</strong> 读取一个或多个字节。<br>为了能有效的将字节转为字符，从 基础流中 提前读取的字节数 可能超过 当前读取操作所需的字节数。<br>为了获得最高效率，一般在 BufferedReader 中 包装(wrapping) 一个 InputStreamReader ，例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BufferedReader in = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in));</span><br></pre></td></tr></table></figure></p>
+<h3 id="Constructors"><a href="#Constructors" class="headerlink" title="Constructors"></a>Constructors</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Creates an InputStreamReader that uses the default charset.</span></span><br><span class="line">InputStreamReader(InputStream in)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Creates an InputStreamReader that uses the given charset.</span></span><br><span class="line">InputStreamReader(InputStream in, Charset cs)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Creates an InputStreamReader that uses the given charset decoder.</span></span><br><span class="line">InputStreamReader(InputStream in, CharsetDecoder dec)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Creates an InputStreamReader that uses the named charset.</span></span><br><span class="line">InputStreamReader(InputStream in, String charsetName)</span><br></pre></td></tr></table></figure>
+<h2 id="3-2-OutputStreamWriter"><a href="#3-2-OutputStreamWriter" class="headerlink" title="3.2 OutputStreamWriter"></a>3.2 OutputStreamWriter</h2><p>public class OutputStreamWriter extends Writer</p>
+<h3 id="OutputStreamWriter-简介"><a href="#OutputStreamWriter-简介" class="headerlink" title="OutputStreamWriter 简介"></a>OutputStreamWriter 简介</h3><p><strong>An OutputStreamWriter is a bridge from character streams to byte streams</strong>: Characters written to it are encoded into bytes using a specified charset.<br>The charset that it uses may be specified by name or may be given explicitly, or the platform’s default charset may be accepted.<br><strong>OutputStreamWriter 是字符流 到 字节流 的桥梁</strong>： 使用指定的字符集编码字符 后写入。<br>OutputStreamWriter 使用的字符集 可以通过名称指定，也可以显式给定，或者接受平台默认的字符集。  </p>
+<p>每次调用 OutputStreamWriter 的 write 方法都会 对待处理的字符调用 编码转换器(encoding converter)。<br>字节被写入 <strong>底层输入层流(underlying output stream)</strong> 之前被累计放在 <strong>缓冲区</strong> 中。<br>缓冲区 的大小可以指定，但通常默认的大小足以满足大多数情况。<br>注意，传递给 write 方法的 字符不会被缓冲。  </p>
+<p>为了获得最高效率，一般在 BufferedWriter 中 包装(wrapping) 一个 OutputStreamWriter ，这样可以避免频繁地调用转换器(converter)，例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Writer out = <span class="keyword">new</span> BufferedWriter(<span class="keyword">new</span> OutputStreamWriter(System.out));</span><br></pre></td></tr></table></figure></p>
+<h3 id="Constructors-1"><a href="#Constructors-1" class="headerlink" title="Constructors"></a>Constructors</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Creates an OutputStreamWriter that uses the default character encoding.</span></span><br><span class="line">OutputStreamWriter(OutputStream out)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Creates an OutputStreamWriter that uses the given charset.</span></span><br><span class="line">OutputStreamWriter(OutputStream out, Charset cs)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Creates an OutputStreamWriter that uses the given charset encoder.</span></span><br><span class="line">OutputStreamWriter(OutputStream out, CharsetEncoder enc)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Creates an OutputStreamWriter that uses the named charset.</span></span><br><span class="line">OutputStreamWriter(OutputStream out, String charsetName)</span><br></pre></td></tr></table></figure>
+<h1 id="4-FileReader-和-FileWriter"><a href="#4-FileReader-和-FileWriter" class="headerlink" title="4 FileReader 和 FileWriter"></a>4 FileReader 和 FileWriter</h1><p>继承关系：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Reader</span><br><span class="line">   |__InputStreamReader</span><br><span class="line">               |__FileReader</span><br><span class="line"></span><br><span class="line">Writer</span><br><span class="line">   |__OutputStreamWriter</span><br><span class="line">               |__FileWriter</span><br></pre></td></tr></table></figure></p>
+<h2 id="4-1-FileReader"><a href="#4-1-FileReader" class="headerlink" title="4.1 FileReader"></a>4.1 FileReader</h2><h3 id="FileReader-简介"><a href="#FileReader-简介" class="headerlink" title="FileReader 简介"></a>FileReader 简介</h3><p><strong>Convenience class for reading character files</strong>.<br>The constructors of this class assume that the default character encoding and the default byte-buffer size are appropriate.<br>To specify these values yourself, construct an InputStreamReader on a FileInputStream.<br><strong>FileReader 是一个 从文件读取字符的 便利类</strong>。<br>FileWriter 的构造器 全都假定 默认的字符编码和默认的字节缓冲大小 是 符合要求的( 可接受的 )。<br>如果要自己指定这些值得话，需要在 FileInputStream 上构造 InputStreamReader。  </p>
+<p>FileReader用于读取字符流。对于读取原始字节流，要使用 FileInputStream。</p>
+<h3 id="Constructors-2"><a href="#Constructors-2" class="headerlink" title="Constructors"></a>Constructors</h3><p>和 <strong>(字节)文件输入流 FileInputStream</strong> 一样，有 3 个构造函数，参数分别是 File、FileDescriptor、String：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Creates a new FileReader, given the File to read from.</span></span><br><span class="line">FileReader(File file)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Creates a new FileReader, given the FileDescriptor to read from.</span></span><br><span class="line">FileReader(FileDescriptor fd)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Creates a new FileReader, given the name of the file to read from.</span></span><br><span class="line">FileReader(String fileName)</span><br></pre></td></tr></table></figure></p>
+<h2 id="4-2-FileWriter"><a href="#4-2-FileWriter" class="headerlink" title="4.2 FileWriter"></a>4.2 FileWriter</h2><h3 id="FileWriter-简介"><a href="#FileWriter-简介" class="headerlink" title="FileWriter 简介"></a>FileWriter 简介</h3><p><strong>Convenience class for writing character files</strong>.<br>The constructors of this class assume that the default character encoding and the default byte-buffer size are acceptable.<br>To specify these values yourself, construct an OutputStreamWriter on a FileOutputStream.<br><strong>FileWriter 是一个 写入字符到文件的 便利类</strong>。<br>FileWriter 的构造器 全都假定 默认的字符编码和默认的字节缓冲大小 是 符合要求的( 可接受的 )。<br>如果要自己指定这些值得话，需要在 FileOutputStream 上构造 OutputStreamWriter。  </p>
+<h3 id="Constructors-3"><a href="#Constructors-3" class="headerlink" title="Constructors"></a>Constructors</h3><p>和 <strong>(字节)文件输出流 FileOutputStream</strong> 一样，有 5 个构造函数：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Constructs a FileWriter object given a File object.</span></span><br><span class="line">FileWriter(File file)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Constructs a FileWriter object given a File object.</span></span><br><span class="line">FileWriter(File file, <span class="keyword">boolean</span> append)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Constructs a FileWriter object associated with a file descriptor.</span></span><br><span class="line">FileWriter(FileDescriptor fd)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Constructs a FileWriter object given a file name.</span></span><br><span class="line">FileWriter(String fileName)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Constructs a FileWriter object given a file name with a boolean indicating whether or not to append the data written.</span></span><br><span class="line">FileWriter(String fileName, <span class="keyword">boolean</span> append)</span><br></pre></td></tr></table></figure></p>
+<h1 id="5-处理流：BufferedReader-和-BufferedWriter"><a href="#5-处理流：BufferedReader-和-BufferedWriter" class="headerlink" title="5 处理流：BufferedReader 和 BufferedWriter"></a>5 处理流：BufferedReader 和 BufferedWriter</h1><p>继承关系：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Reader</span><br><span class="line">   |__BufferedReader</span><br><span class="line"></span><br><span class="line">Writer</span><br><span class="line">   |__BufferedWriter</span><br></pre></td></tr></table></figure></p>
+<h2 id="5-1-BufferedReader"><a href="#5-1-BufferedReader" class="headerlink" title="5.1 BufferedReader"></a>5.1 BufferedReader</h2><h3 id="BufferedReader-简介"><a href="#BufferedReader-简介" class="headerlink" title="BufferedReader 简介"></a>BufferedReader 简介</h3><p><strong>Reads text from a character-input stream, buffering characters so as to provide for the efficient reading of characters, arrays, and lines</strong>.<br>The buffer size may be specified, or the default size may be used. The default is large enough for most purposes.<br><strong>BufferedReader 从 字符输入流 中读取文本，缓冲字符 以便有效地读取字符、数组和行</strong> 。<br>可以指定缓冲区大小，也可以使用默认的缓冲区，在大多数场合默认缓冲区是够用的。  </p>
+<p>In general, <strong>each read request made of a Reader causes a corresponding read request to be made of the underlying character or byte stream</strong>.<br>It is therefore advisable to wrap a BufferedReader around any Reader whose read() operations may be costly, such as FileReaders and InputStreamReaders.<br>通常， <strong>Reader 的 read 请求 会触发 相应的 底层的字符或字节流(underlying character or byte stream)的 read 请求</strong>。<br>因此，建议将 BufferedReader 包装在 read() 操作代价高昂的 Reader 上，例如 FileReader 和 InputStreamreader。<br>例如:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BufferedReader in  = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> FileReader(<span class="string">"foo.in"</span>));</span><br></pre></td></tr></table></figure></p>
+<h3 id="Constructors-4"><a href="#Constructors-4" class="headerlink" title="Constructors"></a>Constructors</h3><p>BufferedReader 的 构造函数 和 BufferedInputStream 类似：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Creates a buffering character-input stream that uses a default-sized input buffer.</span></span><br><span class="line">BufferedReader(Reader in)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Creates a buffering character-input stream that uses an input buffer of the specified size.</span></span><br><span class="line">BufferedReader(Reader in, <span class="keyword">int</span> sz)</span><br></pre></td></tr></table></figure></p>
+<h3 id="部分-Methods"><a href="#部分-Methods" class="headerlink" title="部分 Methods"></a>部分 Methods</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Reads a single character.</span></span><br><span class="line"><span class="function"><span class="keyword">int</span>	<span class="title">read</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Reads characters into a portion of an array.</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span>	<span class="title">read</span><span class="params">(<span class="keyword">char</span>[] cbuf, <span class="keyword">int</span> off, <span class="keyword">int</span> len)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Reads a line of text.</span></span></span><br><span class="line"><span class="function">String	<span class="title">readLine</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="5-2-BufferedWriter"><a href="#5-2-BufferedWriter" class="headerlink" title="5.2 BufferedWriter"></a>5.2 BufferedWriter</h2><h3 id="BufferedWriter-简介"><a href="#BufferedWriter-简介" class="headerlink" title="BufferedWriter 简介"></a>BufferedWriter 简介</h3><p><strong>Writes text to a character-output stream, buffering characters so as to provide for the efficient writing of single characters, arrays, and strings</strong>.<br>The buffer size may be specified, or the default size may be accepted. The default is large enough for most purposes.<br><strong>BufferedWriter 把文本写入到 字符输出流，缓冲字符 以便有效地 写入单个字符、数组、字符串</strong>。  </p>
+<p>A newLine() method is provided, which uses the platform’s own notion of line separator as defined by the system property line.separator.<br>Not all platforms use the newline character ( <strong>‘\n’</strong> ) to terminate lines.<br>Calling this method to terminate each output line is therefore preferred to writing a newline character directly.<br>BufferedWriter 提供了 newLine() 方法，这个方法是 用平台自己的 行分隔符(line separator) 来换行 (注：行分隔符定义在系统属性 line.separator 中)。<br>不是所有的 platform 都支持  <strong>‘\n’</strong> 换行。<br>因此，调用 newLine() 方法换行 比 直接用 写换行符换行 更可取。  </p>
+<p>In general, a Writer sends its output immediately to the underlying character or byte stream.<br>Unless prompt output is required, it is advisable to wrap a BufferedWriter around any Writer whose write() operations may be costly, such as FileWriters and OutputStreamWriters.<br>通常， Writer 会立即发送它的输出 到 底层字符或字节流(the underlying character or byte stream)。<br>除非需要提示输出，否则 建议 使用 BufferedWriter 包装 write() 操作代价高昂的 Writer 上，例如 FileWriter 和 OutputStreamWriter。<br>例如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PrintWriter out = <span class="keyword">new</span> PrintWriter(<span class="keyword">new</span> BufferedWriter(<span class="keyword">new</span> FileWriter(<span class="string">"foo.out"</span>)));</span><br></pre></td></tr></table></figure></p>
+<h3 id="Constructors-5"><a href="#Constructors-5" class="headerlink" title="Constructors"></a>Constructors</h3><p>BufferedWriter 的 构造方法 和 BufferedOutputStream 类似：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Creates a buffered character-output stream that uses a default-sized output buffer.</span></span><br><span class="line">BufferedWriter(Writer out)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Creates a new buffered character-output stream that uses an output buffer of the given size.</span></span><br><span class="line">BufferedWriter(Writer out, <span class="keyword">int</span> sz)</span><br></pre></td></tr></table></figure></p>
+<h3 id="部分-Methods-1"><a href="#部分-Methods-1" class="headerlink" title="部分 Methods"></a>部分 Methods</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Writes a line separator.</span></span><br><span class="line"><span class="function"><span class="keyword">void</span>	<span class="title">newLine</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Writes a portion of an array of characters.</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span>	<span class="title">write</span><span class="params">(<span class="keyword">char</span>[] cbuf, <span class="keyword">int</span> off, <span class="keyword">int</span> len)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Writes a single character.</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span>	<span class="title">write</span><span class="params">(<span class="keyword">int</span> c)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// Writes a portion of a String.</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span>	<span class="title">write</span><span class="params">(String s, <span class="keyword">int</span> off, <span class="keyword">int</span> len)</span></span></span><br></pre></td></tr></table></figure>
+<h1 id="6-PrintWriter"><a href="#6-PrintWriter" class="headerlink" title="6 PrintWriter"></a>6 PrintWriter</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">java.lang.Object</span><br><span class="line">      |__java.io.Writer</span><br><span class="line">            |__java.io.PrintWriter</span><br></pre></td></tr></table></figure>
+<p>PrintWriter 是一种 <strong>字符输出流</strong>。<br>PrintWriter 的构造函数 可以接收的参数类型：<br>1、 file对象<br>2、 字符串对象<br>3、 字节输出流 OutputStream<br>4、 字符输出流 Writer  </p>
+<p>示例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PrintWriterDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    BufferedReader bufr = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in));</span><br><span class="line">    <span class="comment">// true表示自动刷新</span></span><br><span class="line">    PrintWriter out = <span class="keyword">new</span> PrintWriter(<span class="keyword">new</span> FileWriter(<span class="string">"aaaa.txt"</span>), <span class="keyword">true</span>);</span><br><span class="line">    String line = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">while</span> ((line = bufr.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">      out.println(line);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="7-综合示例"><a href="#7-综合示例" class="headerlink" title="7 综合示例"></a>7 综合示例</h1><p>待更新…</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>1、 <a href="https://docs.oracle.com/javase/8/docs/api/" target="_blank" rel="noopener">Java Standard Edition 8 API Specification</a>  </p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/23/Java-I-O-学习系列二-字节流/" rel="next" title="Java I/O 学习系列二: 字节流">
+                <i class="fa fa-chevron-left"></i> Java I/O 学习系列二: 字节流
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/11/Java-I-O-学习系列四-RandomAccessFile/" rel="prev" title="Java I/O 学习系列四: RandomAccessFile">
+                Java I/O 学习系列四: RandomAccessFile <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png" alt="mitre">
+            
+              <p class="site-author-name" itemprop="name">mitre</p>
+              <p class="site-description motion-element" itemprop="description">Goals determine what you are going to be</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Friends
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.yanmin99.com/" title="yanmin" target="_blank">yanmin</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://whark.cn" title="大鹏" target="_blank">大鹏</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.notall.cn/" title="zkp" target="_blank">zkp</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://qiracle.cn/" title="强强" target="_blank">强强</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-为什么需要字符流"><span class="nav-number">1.</span> <span class="nav-text">1 为什么需要字符流</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Reader-和-Writer"><span class="nav-number">2.</span> <span class="nav-text">2 Reader 和 Writer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-Reader"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 Reader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Reader-简介"><span class="nav-number">2.1.1.</span> <span class="nav-text">Reader 简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fields"><span class="nav-number">2.1.2.</span> <span class="nav-text">Fields</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Methods"><span class="nav-number">2.1.3.</span> <span class="nav-text">Methods</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reader-的直接子类"><span class="nav-number">2.1.4.</span> <span class="nav-text">Reader 的直接子类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-Writer"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 Writer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Fields-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">Fields</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Methods-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">Methods</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Writer-的直接子类"><span class="nav-number">2.2.3.</span> <span class="nav-text">Writer 的直接子类</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-InputStreamReader-和-OutputStreamWriter"><span class="nav-number">3.</span> <span class="nav-text">3 InputStreamReader 和 OutputStreamWriter</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-InputStreamReader"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 InputStreamReader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#InputStreamReader-简介"><span class="nav-number">3.1.1.</span> <span class="nav-text">InputStreamReader 简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Constructors"><span class="nav-number">3.1.2.</span> <span class="nav-text">Constructors</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-OutputStreamWriter"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 OutputStreamWriter</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#OutputStreamWriter-简介"><span class="nav-number">3.2.1.</span> <span class="nav-text">OutputStreamWriter 简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Constructors-1"><span class="nav-number">3.2.2.</span> <span class="nav-text">Constructors</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-FileReader-和-FileWriter"><span class="nav-number">4.</span> <span class="nav-text">4 FileReader 和 FileWriter</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-FileReader"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 FileReader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FileReader-简介"><span class="nav-number">4.1.1.</span> <span class="nav-text">FileReader 简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Constructors-2"><span class="nav-number">4.1.2.</span> <span class="nav-text">Constructors</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-FileWriter"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 FileWriter</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FileWriter-简介"><span class="nav-number">4.2.1.</span> <span class="nav-text">FileWriter 简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Constructors-3"><span class="nav-number">4.2.2.</span> <span class="nav-text">Constructors</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-处理流：BufferedReader-和-BufferedWriter"><span class="nav-number">5.</span> <span class="nav-text">5 处理流：BufferedReader 和 BufferedWriter</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-BufferedReader"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 BufferedReader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BufferedReader-简介"><span class="nav-number">5.1.1.</span> <span class="nav-text">BufferedReader 简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Constructors-4"><span class="nav-number">5.1.2.</span> <span class="nav-text">Constructors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部分-Methods"><span class="nav-number">5.1.3.</span> <span class="nav-text">部分 Methods</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-BufferedWriter"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 BufferedWriter</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BufferedWriter-简介"><span class="nav-number">5.2.1.</span> <span class="nav-text">BufferedWriter 简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Constructors-5"><span class="nav-number">5.2.2.</span> <span class="nav-text">Constructors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部分-Methods-1"><span class="nav-number">5.2.3.</span> <span class="nav-text">部分 Methods</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-PrintWriter"><span class="nav-number">6.</span> <span class="nav-text">6 PrintWriter</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-综合示例"><span class="nav-number">7.</span> <span class="nav-text">7 综合示例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">8.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mitre</span>
+
+  
+</div>
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">totle: <span id="busuanzi_value_site_pv"></span> times</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">Visitors: <span id="busuanzi_value_site_uv"></span></span>
+    <span class="post-meta-divider">|</span>
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

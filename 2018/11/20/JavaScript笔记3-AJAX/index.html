@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/woAiLuo.jpg?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="JavaScript,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="AJAX = Asynchronous JavaScript and XML（异步的 JavaScript 和 XML）。   xml 和 json ：1234&amp;lt;person&amp;gt;  &amp;lt;name&amp;gt;mitre&amp;lt;/mitre&amp;gt;  &amp;lt;age&amp;gt;24&amp;lt;/age&amp;gt;&amp;lt;/person&amp;gt; 1&amp;#123;&quot;name&quot;:&quot;mitre&quot;, &quot;age&quot;:&quot;">
+<meta name="keywords" content="JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript笔记3-AJAX">
+<meta property="og:url" content="http://yoursite.com/2018/11/20/JavaScript笔记3-AJAX/index.html">
+<meta property="og:site_name" content="MITRE">
+<meta property="og:description" content="AJAX = Asynchronous JavaScript and XML（异步的 JavaScript 和 XML）。   xml 和 json ：1234&amp;lt;person&amp;gt;  &amp;lt;name&amp;gt;mitre&amp;lt;/mitre&amp;gt;  &amp;lt;age&amp;gt;24&amp;lt;/age&amp;gt;&amp;lt;/person&amp;gt; 1&amp;#123;&quot;name&quot;:&quot;mitre&quot;, &quot;age&quot;:&quot;">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-11/2018-11-21_235128.png">
+<meta property="og:image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-11/2018-11-22_225259.png">
+<meta property="og:image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-11/2018-11-22_225715.png">
+<meta property="og:image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-11/2018-11-29_091814.png">
+<meta property="og:image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-11/2018-11-28_224552.png">
+<meta property="og:image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-11/2018-11-29_085332.png">
+<meta property="og:updated_time" content="2020-02-22T11:53:17.352Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript笔记3-AJAX">
+<meta name="twitter:description" content="AJAX = Asynchronous JavaScript and XML（异步的 JavaScript 和 XML）。   xml 和 json ：1234&amp;lt;person&amp;gt;  &amp;lt;name&amp;gt;mitre&amp;lt;/mitre&amp;gt;  &amp;lt;age&amp;gt;24&amp;lt;/age&amp;gt;&amp;lt;/person&amp;gt; 1&amp;#123;&quot;name&quot;:&quot;mitre&quot;, &quot;age&quot;:&quot;">
+<meta name="twitter:image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-11/2018-11-21_235128.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/20/JavaScript笔记3-AJAX/">
+
+
+
+
+
+  <title>JavaScript笔记3-AJAX | MITRE</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MITRE</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Goals determine what you are going to be</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/20/JavaScript笔记3-AJAX/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mitre">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MITRE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JavaScript笔记3-AJAX</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-20T21:41:34+08:00">
+                2018-11-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>AJAX</strong> = Asynchronous JavaScript and XML（<strong>异步的 JavaScript 和 XML</strong>）。  </p>
+<p>xml 和 json ：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">person</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>mitre<span class="tag">&lt;/<span class="name">mitre</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">age</span>&gt;</span>24<span class="tag">&lt;/<span class="name">age</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">person</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"name"</span>:<span class="string">"mitre"</span>, <span class="attr">"age"</span>:<span class="string">"24"</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>AJAX 通过 XMLHttpRequest 对象发请求：<br><img src="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-11/2018-11-21_235128.png" alt>  </p>
+<p>普通交互模式（特点：全页面刷新 + 请求与响应同步处理(一个请求发送必须等到对应的相应回来才能再发下一个请求)）：   </p>
+<ol>
+<li>浏览器发请求   </li>
+<li>Tomcat服务器 处理请求返回响应结果给浏览器   </li>
+<li>浏览器显示结果   </li>
+</ol>
+<p>AJAX交互模式（特点：局部刷新 + 请求与响应异步处理）：   </p>
+<ol>
+<li>浏览器发请求   </li>
+<li><strong><font color="#bf00ff">XMLHttpRequest 发请求</font></strong>   </li>
+<li>Tomcat服务器 处理请求返回响应结果给浏览器    </li>
+<li><strong><font color="#bf00ff">XMLHttpRequest 接收响应</font></strong>  </li>
+<li>浏览器显示结果   </li>
+</ol>
+<p>AJAX 局部刷新，异步处理 <strong>提高了程序交互效率</strong>。  </p>
+<p>AJAX 技术：  </p>
+<ul>
+<li>基于 JS 发请求和响应处理。  </li>
+<li><strong>以 XMLHttpRequest对象 为核心</strong>。  </li>
+<li>涉及 HTML，CSS 页面渲染技术。  </li>
+<li>涉及 XML，JSON 等数据交互格式。  </li>
+</ul>
+<hr>
+<h1 id="1-普通交互模式"><a href="#1-普通交互模式" class="headerlink" title="1 普通交互模式"></a>1 普通交互模式</h1><p>web.xml<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">web-app</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="attr">xmlns</span>=<span class="string">"http://xmlns.jcp.org/xml/ns/javaee"</span> <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"</span> <span class="attr">id</span>=<span class="string">"WebApp_ID"</span> <span class="attr">version</span>=<span class="string">"3.1"</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">display-name</span>&gt;</span>ajax01<span class="tag">&lt;/<span class="name">display-name</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>demo1<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>cn.mitrecx.DemoServlet<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>demo1<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/demo1.do<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>DemoServlet.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.mitrecx;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">    request.setCharacterEncoding(<span class="string">"utf-8"</span>);</span><br><span class="line">    response.setContentType(<span class="string">"text/html;charset=utf-8"</span>);</span><br><span class="line">    PrintWriter out = response.getWriter();</span><br><span class="line">    out.println(<span class="string">"上证指数:2645.43"</span>);</span><br><span class="line">    out.flush();</span><br><span class="line">    out.close();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>demo1.jsp<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">%@page</span> <span class="attr">pageEncoding</span>=<span class="string">"utf-8"</span> <span class="attr">contentType</span>=<span class="string">"text/html; charset=utf-8"</span> %&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"demo1.do"</span> &gt;</span>查看上证指数<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">hr</span>/&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">table</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>股市新闻<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>时间<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>新一代股神mitre<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>2018-11-22<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>股市肿么了<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>2018-11-21<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">tr</span>&gt;</span>			</span><br><span class="line">			<span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>大海你真美<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">td</span>&gt;</span>2018-11-21<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">tr</span>&gt;</span>			</span><br><span class="line">		<span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>结果：<br><img src="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-11/2018-11-22_225259.png" alt>   </p>
+<h1 id="2-AJAX交互模式"><a href="#2-AJAX交互模式" class="headerlink" title="2 AJAX交互模式"></a>2 AJAX交互模式</h1><p>web.xml 和 DemoServlet.java 与普通交互模式相同。  </p>
+<p>jsp文件做以区分，命名为 demo2.jsp，内容入下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@page pageEncoding=<span class="string">"utf-8"</span> contentType=<span class="string">"text/html; charset=utf-8"</span>%&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line">	<span class="comment">//创建 XMLHttpRequest对象</span></span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">getXhr</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="keyword">var</span> xhr</span><br><span class="line">		<span class="keyword">if</span> (<span class="built_in">window</span>.XMLHttpRequest) &#123;</span><br><span class="line">			xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;<span class="comment">//老版IE</span></span><br><span class="line">			xhr = <span class="keyword">new</span> ActiveXObject(<span class="string">"Microsoft.XMLHTTP"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//alert(xhr);</span></span><br><span class="line">		<span class="keyword">return</span> xhr;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">sendRequest</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="keyword">var</span> xhr = getXhr();<span class="comment">//获取XMLHttpRequest对象</span></span><br><span class="line">		xhr.open(<span class="string">"get"</span>, <span class="string">"demo1.do"</span>);<span class="comment">//创建一个HTTP请求</span></span><br><span class="line">		<span class="comment">//注册一个回调函数</span></span><br><span class="line">		xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">			<span class="comment">//readyState==4 表示请求处理完毕</span></span><br><span class="line">			<span class="keyword">if</span> (xhr.readyState == <span class="number">4</span>) &#123;</span><br><span class="line">				<span class="comment">//获取服务器返回的信息</span></span><br><span class="line">				<span class="keyword">var</span> msg = xhr.responseText;</span><br><span class="line">				<span class="comment">//将消息放到span中显示</span></span><br><span class="line">				<span class="built_in">document</span>.getElementById(<span class="string">"msg"</span>).innerHTML = msg;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;;</span><br><span class="line">		xhr.send(<span class="literal">null</span>);<span class="comment">//发送HTTP请求</span></span><br><span class="line">	&#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body style=<span class="string">"font-size: 30px;"</span>&gt;</span><br><span class="line">	&lt;a href=<span class="string">"#"</span> onclick=<span class="string">"sendRequest();"</span>&gt;查看上证指数&lt;<span class="regexp">/a&gt;</span></span><br><span class="line"><span class="regexp">	&lt;span id="msg"&gt;&lt;/</span>span&gt;</span><br><span class="line">	&lt;hr /&gt;</span><br><span class="line">	&lt;table&gt;</span><br><span class="line">		&lt;tr&gt;</span><br><span class="line">			&lt;td&gt;股市新闻&lt;<span class="regexp">/td&gt;</span></span><br><span class="line"><span class="regexp">			&lt;td&gt;时间&lt;/</span>td&gt;</span><br><span class="line">		&lt;<span class="regexp">/tr&gt;</span></span><br><span class="line"><span class="regexp">		&lt;tr&gt;</span></span><br><span class="line"><span class="regexp">			&lt;td&gt;新一代股神mitre&lt;/</span>td&gt;</span><br><span class="line">			&lt;td&gt;<span class="number">2018</span><span class="number">-11</span><span class="number">-22</span>&lt;<span class="regexp">/td&gt;</span></span><br><span class="line"><span class="regexp">		&lt;/</span>tr&gt;</span><br><span class="line">		&lt;tr&gt;</span><br><span class="line">			&lt;td&gt;股市肿么了&lt;<span class="regexp">/td&gt;</span></span><br><span class="line"><span class="regexp">			&lt;td&gt;2018-11-21&lt;/</span>td&gt;</span><br><span class="line">		&lt;<span class="regexp">/tr&gt;</span></span><br><span class="line"><span class="regexp">		&lt;tr&gt;</span></span><br><span class="line"><span class="regexp">			&lt;td&gt;大海你真美&lt;/</span>td&gt;</span><br><span class="line">			&lt;td&gt;<span class="number">2018</span><span class="number">-11</span><span class="number">-21</span>&lt;<span class="regexp">/td&gt;</span></span><br><span class="line"><span class="regexp">		&lt;/</span>tr&gt;</span><br><span class="line">	&lt;<span class="regexp">/table&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>body&gt;</span><br><span class="line">&lt;<span class="regexp">/html&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>结果：<br><img src="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-11/2018-11-22_225715.png" alt>  </p>
+<h1 id="3-XMLHttpRequest-对象"><a href="#3-XMLHttpRequest-对象" class="headerlink" title="3 XMLHttpRequest 对象"></a>3 XMLHttpRequest 对象</h1><p>XMLHttpRequest 对象目前还没有完全标准化。</p>
+<p><strong>XMLHttpRequest 对象提供了基于 HTTP协议 的交互方法。包括发送 POST 和 HEAD 请求和普通的 GET 请求。</strong><br>XMLHttpRequest 可以同步或异步地返回 Web服务器 的响应，并能够以文本或 DOM文档 的形式返回内容。  </p>
+<p>XMLHttpRequest 并不限于和 XML 文档一起使用：<strong>它可以接收任何形式的文本文档</strong>。  </p>
+<h2 id="3-1-属性"><a href="#3-1-属性" class="headerlink" title="3.1 属性"></a>3.1 属性</h2><h3 id="1-readyState"><a href="#1-readyState" class="headerlink" title="1 readyState"></a>1 readyState</h3><p>readyState 表示 HTTP 请求的状态。<br>当一个 XMLHttpRequest 初次创建时，readyState = 0 ；接收到完整的 HTTP 响应时，这个值增加到 4。<br><img src="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-11/2018-11-29_091814.png" alt><br>每次这个属性的值增加的时候，都会 <strong>触发 onreadystatechange 事件句柄</strong>。  </p>
+<h3 id="2-responseText"><a href="#2-responseText" class="headerlink" title="2 responseText"></a>2 responseText</h3><p>responseText属性的值 是到目前为止 <strong>客户端接收到的响应体</strong>（不包括头部）。  </p>
+<p><code>readyState &lt; 3 </code>，responseText属性值 是一个空字符串。<br><code>readyState = 3 </code>，responseText属性值 是目前已经接收的响应部分。<br><code>readyState = 4 </code>，responseText属性值 是完整的响应体。  </p>
+<h3 id="3-responseXML"><a href="#3-responseXML" class="headerlink" title="3 responseXML"></a>3 responseXML</h3><p>功能和 responseText 类似。<br>对请求的响应，解析为 XML 并作为 Document 对象返回。  </p>
+<h3 id="4-status"><a href="#4-status" class="headerlink" title="4 status"></a>4 status</h3><p>由服务器返回的 HTTP 状态码。<br>如 200 表示成功，404 表示 “Not Found” 错误。<br>当 readyState 小于 3 的时候读取这一属性会导致一个异常。</p>
+<h2 id="3-2-事件句柄"><a href="#3-2-事件句柄" class="headerlink" title="3.2 事件句柄"></a>3.2 事件句柄</h2><h3 id="onreadystatechange"><a href="#onreadystatechange" class="headerlink" title="onreadystatechange"></a>onreadystatechange</h3><p>每次 <strong>readyState属性</strong> 改变的时候调用的事件句柄函数。<br>当 readyState 为 3 时，它也可能调用多次。  </p>
+<h2 id="3-3-方法"><a href="#3-3-方法" class="headerlink" title="3.3 方法"></a>3.3 方法</h2><h3 id="1-open"><a href="#1-open" class="headerlink" title="1 open()"></a>1 open()</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">open(method, url, async, username, password)</span><br><span class="line"><span class="comment">// method 参数是用于请求的 HTTP 方法。值包括 GET、POST 和 HEAD</span></span><br><span class="line"><span class="comment">//async 参数指示请求是否异步执行，默认不填或 true 请求为异步。 false为同步。</span></span><br><span class="line"><span class="comment">//username 和 password 参数是可选的，为 url 所需的授权提供认证资格。</span></span><br></pre></td></tr></table></figure>
+<p><strong>初始化 HTTP 请求参数</strong>。<br>例如 URL 和 请求方法，但是并不发送请求。  </p>
+<p><strong><font color="red">open() 会把 readyState 设置为 1</font></strong>。</p>
+<h3 id="2-send"><a href="#2-send" class="headerlink" title="2 send()"></a>2 send()</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">send(body)</span><br></pre></td></tr></table></figure>
+<p><strong>发送 HTTP 请求</strong>。<br>如果 readyState 不是 1，send() 抛出一个异常。否则，它发送一个 HTTP 请求(POST 或 PUT、GET等)。<br>该请求由以下几部分组成：  </p>
+<ol>
+<li>调用 open() 时指定的 HTTP 方法、URL 以及认证资格（如果有的话）。  </li>
+<li>调用 setRequestHeader() 时指定的请求头部（如果有的话）。  </li>
+<li>传递给这个方法的 body 参数。  </li>
+</ol>
+<p>一旦请求发布了，<strong><font color="red">send() 会把 readyState 设置为 2</font></strong>，并触发 onreadystatechange 事件句柄。</p>
+<p>POST请求 的请求参数 需要放在 send() 中发送:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// post请求 http://localhost:8080/ajax01/check.do?name=cherry</span></span><br><span class="line">xhr.open(<span class="string">"POST"</span>,<span class="string">"/ajax01/check.do"</span>);</span><br><span class="line"><span class="comment">// setRequestHeader 和 事件句柄 处理略</span></span><br><span class="line">xhr.send(<span class="string">"name="</span>+<span class="string">"cherry"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>而 GET 请求的请求参数放在 open中：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//get请求 http://localhost:8080/ajax01/check.do?name=cherry</span></span><br><span class="line">xhr.open(<span class="string">"GET"</span>,<span class="string">"/ajax01/check.do?name="</span>+<span class="string">"cherry"</span>);</span><br><span class="line"><span class="comment">// 事件句柄 处理略</span></span><br><span class="line">xhr.send(<span class="keyword">null</span>);</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-setRequestHeader"><a href="#3-setRequestHeader" class="headerlink" title="3 setRequestHeader()"></a>3 setRequestHeader()</h3><p>POST请求 必须给 HTTP协议 设置请求头参数(不设置服务端将取不到请求参数)。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xhr.setRequestHeader(<span class="string">"content-type"</span>,<span class="string">"application/x-www-form-urlencoded"</span>);</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-abort"><a href="#4-abort" class="headerlink" title="4 abort()"></a>4 abort()</h3><p>取消当前响应，关闭连接并且结束任何未决的网络活动。  </p>
+<p>abort() 会把 readyState属性值 置为 0 ，并且取消所有未决的网络活动。<br>如果请求用了太长时间，而且响应不再必要的时候，可以调用 abort()。  </p>
+<h1 id="head4">4 附例</h1>
+
+<p>在上例基础上， 修改demo2.jsp 实现 “检查用户名是否可用” 功能 。(<a href="https://mitrecx.github.io/2018/11/29/JavaScript%E7%AC%94%E8%AE%B04-jQuery%E5%92%8CAJAX/" target="_blank" rel="noopener">查看本例的 jQuery实现</a>)<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">%@page</span> <span class="attr">pageEncoding</span>=<span class="string">"utf-8"</span> <span class="attr">contentType</span>=<span class="string">"text/html; charset=utf-8"</span>%&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">		<span class="comment">//创建 XMLHttpRequest对象</span></span></span><br><span class="line"><span class="javascript">		<span class="function"><span class="keyword">function</span> <span class="title">getXhr</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">			<span class="keyword">var</span> xhr</span></span><br><span class="line"><span class="javascript">			<span class="keyword">if</span> (<span class="built_in">window</span>.XMLHttpRequest) &#123;</span></span><br><span class="line"><span class="javascript">				xhr = <span class="keyword">new</span> XMLHttpRequest();</span></span><br><span class="line"><span class="javascript">			&#125; <span class="keyword">else</span> &#123;<span class="comment">//老版IE</span></span></span><br><span class="line"><span class="javascript">				xhr = <span class="keyword">new</span> ActiveXObject(<span class="string">"Microsoft.XMLHTTP"</span>);</span></span><br><span class="line"><span class="undefined">			&#125;</span></span><br><span class="line"><span class="javascript">			<span class="comment">//alert(xhr);</span></span></span><br><span class="line"><span class="javascript">			<span class="keyword">return</span> xhr;</span></span><br><span class="line"><span class="undefined">		&#125;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">		<span class="function"><span class="keyword">function</span> <span class="title">sendRequest</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">			<span class="keyword">var</span> xhr = getXhr();<span class="comment">//获取XMLHttpRequest对象</span></span></span><br><span class="line"><span class="javascript">			xhr.open(<span class="string">"get"</span>, <span class="string">"demo1.do"</span>);<span class="comment">//创建一个HTTP请求</span></span></span><br><span class="line"><span class="javascript">			<span class="comment">//注册一个回调函数</span></span></span><br><span class="line"><span class="javascript">			xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">				<span class="comment">//readyState==4 表示请求处理完毕</span></span></span><br><span class="line"><span class="javascript">				<span class="keyword">if</span> (xhr.readyState == <span class="number">4</span>) &#123;</span></span><br><span class="line"><span class="javascript">					<span class="comment">//获取服务器返回的信息</span></span></span><br><span class="line"><span class="javascript">					<span class="keyword">var</span> msg = xhr.responseText;</span></span><br><span class="line"><span class="javascript">					<span class="comment">//将消息放到span中显示</span></span></span><br><span class="line"><span class="javascript">					<span class="built_in">document</span>.getElementById(<span class="string">"msg"</span>).innerHTML = msg;</span></span><br><span class="line"><span class="undefined">				&#125;</span></span><br><span class="line"><span class="undefined">			&#125;;</span></span><br><span class="line"><span class="javascript">			xhr.send(<span class="literal">null</span>);<span class="comment">//发送HTTP请求</span></span></span><br><span class="line"><span class="undefined">		&#125;</span></span><br><span class="line"><span class="undefined">	</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">		<span class="comment">//检查用户名是否可用</span></span></span><br><span class="line"><span class="javascript">		<span class="function"><span class="keyword">function</span> <span class="title">checkName</span>(<span class="params"></span>)</span>&#123;</span></span><br><span class="line"><span class="javascript">			<span class="keyword">var</span> name=<span class="built_in">document</span>.getElementById(<span class="string">"username"</span>).value;</span></span><br><span class="line"><span class="javascript">			<span class="keyword">var</span> xhr=getXhr();</span></span><br><span class="line"><span class="javascript">			<span class="comment">/* get请求 */</span></span></span><br><span class="line"><span class="javascript">			<span class="comment">//xhr.open("GET","/ajax01/check.do?name="+name);</span></span></span><br><span class="line"><span class="javascript">			<span class="comment">//xhr.send(null);</span></span></span><br><span class="line"><span class="javascript">			<span class="comment">/* post请求 */</span></span></span><br><span class="line"><span class="javascript">			xhr.open(<span class="string">"POST"</span>,<span class="string">"/ajax01/check.do"</span>);</span></span><br><span class="line"><span class="javascript">			<span class="comment">// POST请求必须给HTTP协议设置请求头参数(不设置服务端将取不到请求参数)</span></span></span><br><span class="line"><span class="javascript">			xhr.setRequestHeader(<span class="string">"content-type"</span>,<span class="string">"application/x-www-form-urlencoded"</span>);</span></span><br><span class="line"><span class="javascript">			<span class="comment">//注册回调函数</span></span></span><br><span class="line"><span class="javascript">			xhr.onreadystatechange=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span></span><br><span class="line"><span class="javascript">				<span class="comment">//如果请求处理完毕且响应正常</span></span></span><br><span class="line"><span class="javascript">				<span class="keyword">if</span>(xhr.readyState==<span class="number">4</span> &amp;&amp; xhr.status==<span class="number">200</span>)&#123;</span></span><br><span class="line"><span class="javascript">					<span class="keyword">var</span> msg=xhr.responseText;</span></span><br><span class="line"><span class="javascript">					<span class="built_in">document</span>.getElementById(<span class="string">"name_msg"</span>).innerHTML=msg;</span></span><br><span class="line"><span class="undefined">				&#125;</span></span><br><span class="line"><span class="undefined">			&#125;</span></span><br><span class="line"><span class="javascript">			xhr.send(<span class="string">"name="</span>+name);		</span></span><br><span class="line"><span class="javascript">			<span class="built_in">document</span>.getElementById(<span class="string">"name_msg"</span>).innerHTML=<span class="string">"正在检测.."</span>;</span></span><br><span class="line"><span class="undefined">		&#125;</span></span><br><span class="line"><span class="undefined">	</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span> <span class="attr">style</span>=<span class="string">"font-size: 30px;"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#"</span> <span class="attr">onclick</span>=<span class="string">"sendRequest();"</span>&gt;</span>查看上证指数<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">"msg"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">hr</span> /&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">table</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">td</span>&gt;</span>股市新闻<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">td</span>&gt;</span>时间<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">td</span>&gt;</span>新一代股神mitre<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">td</span>&gt;</span>2018-11-22<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">td</span>&gt;</span>股市肿么了<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">td</span>&gt;</span>2018-11-21<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">td</span>&gt;</span>大海你真美<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">td</span>&gt;</span>2018-11-21<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">id</span>=<span class="string">"username"</span> <span class="attr">onblur</span>=<span class="string">"checkName();"</span>/&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">"name_msg"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>CheckServlet.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.mitrecx;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CheckServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      Thread.sleep(<span class="number">5000</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">      e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">    request.setCharacterEncoding(<span class="string">"utf-8"</span>);</span><br><span class="line">    response.setContentType(<span class="string">"text/html;charset=utf-8"</span>);</span><br><span class="line">    PrintWriter out=response.getWriter();</span><br><span class="line">    String name=request.getParameter(<span class="string">"name"</span>);</span><br><span class="line">    System.out.println(name);</span><br><span class="line">    <span class="comment">//检查 用户名 是否可用</span></span><br><span class="line">    <span class="keyword">if</span>(<span class="string">"mitre"</span>.equals(name)) &#123;</span><br><span class="line">      out.println(<span class="string">"用户名已被占用"</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">      out.println(<span class="string">"用户名可用"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    out.flush();</span><br><span class="line">    out.close();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>web.xml<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>checkServlet<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>cn.mitrecx.CheckServlet<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>checkServlet<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/check.do<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>先测试 servlet :<br><img src="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-11/2018-11-28_224552.png" alt>  </p>
+<p>程序运行结果：<br><img src="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-11/2018-11-29_085332.png" alt>    </p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/19/JavaScript笔记2-JQuery/" rel="next" title="JavaScript笔记2-jQuery">
+                <i class="fa fa-chevron-left"></i> JavaScript笔记2-jQuery
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/23/systemctl和service/" rel="prev" title="systemctl 和 service">
+                systemctl 和 service <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png" alt="mitre">
+            
+              <p class="site-author-name" itemprop="name">mitre</p>
+              <p class="site-description motion-element" itemprop="description">Goals determine what you are going to be</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Friends
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.yanmin99.com/" title="yanmin" target="_blank">yanmin</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://whark.cn" title="大鹏" target="_blank">大鹏</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.notall.cn/" title="zkp" target="_blank">zkp</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://qiracle.cn/" title="强强" target="_blank">强强</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-普通交互模式"><span class="nav-number">1.</span> <span class="nav-text">1 普通交互模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-AJAX交互模式"><span class="nav-number">2.</span> <span class="nav-text">2 AJAX交互模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-XMLHttpRequest-对象"><span class="nav-number">3.</span> <span class="nav-text">3 XMLHttpRequest 对象</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-属性"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 属性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-readyState"><span class="nav-number">3.1.1.</span> <span class="nav-text">1 readyState</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-responseText"><span class="nav-number">3.1.2.</span> <span class="nav-text">2 responseText</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-responseXML"><span class="nav-number">3.1.3.</span> <span class="nav-text">3 responseXML</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-status"><span class="nav-number">3.1.4.</span> <span class="nav-text">4 status</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-事件句柄"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 事件句柄</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#onreadystatechange"><span class="nav-number">3.2.1.</span> <span class="nav-text">onreadystatechange</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-方法"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-open"><span class="nav-number">3.3.1.</span> <span class="nav-text">1 open()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-send"><span class="nav-number">3.3.2.</span> <span class="nav-text">2 send()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-setRequestHeader"><span class="nav-number">3.3.3.</span> <span class="nav-text">3 setRequestHeader()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-abort"><span class="nav-number">3.3.4.</span> <span class="nav-text">4 abort()</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#head4"><span class="nav-number">4.</span> <span class="nav-text">4 附例</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mitre</span>
+
+  
+</div>
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">totle: <span id="busuanzi_value_site_pv"></span> times</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">Visitors: <span id="busuanzi_value_site_uv"></span></span>
+    <span class="post-meta-divider">|</span>
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

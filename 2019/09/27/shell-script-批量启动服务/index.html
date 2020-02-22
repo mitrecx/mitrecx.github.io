@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/woAiLuo.jpg?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="shell,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="目标:写一个 shell 脚本, 启动多个 worker 服务.(worker 服务 用于处理 消息中间件 里的消息)   先了解一些基础知识, 然后利用这些基础知识 完成目标.   1 读取命令行参数   变量 含义     $0 当前脚本的文件名   $n 传递给脚本或函数的参数. 第一个参数是 $1，第二个参数是 $2   $# 传递给脚本或函数的 参数个数   $* 传递给脚本或函数的 所">
+<meta name="keywords" content="shell">
+<meta property="og:type" content="article">
+<meta property="og:title" content="shell script: 批量启动服务">
+<meta property="og:url" content="http://yoursite.com/2019/09/27/shell-script-批量启动服务/index.html">
+<meta property="og:site_name" content="MITRE">
+<meta property="og:description" content="目标:写一个 shell 脚本, 启动多个 worker 服务.(worker 服务 用于处理 消息中间件 里的消息)   先了解一些基础知识, 然后利用这些基础知识 完成目标.   1 读取命令行参数   变量 含义     $0 当前脚本的文件名   $n 传递给脚本或函数的参数. 第一个参数是 $1，第二个参数是 $2   $# 传递给脚本或函数的 参数个数   $* 传递给脚本或函数的 所">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-02-22T11:53:17.369Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="shell script: 批量启动服务">
+<meta name="twitter:description" content="目标:写一个 shell 脚本, 启动多个 worker 服务.(worker 服务 用于处理 消息中间件 里的消息)   先了解一些基础知识, 然后利用这些基础知识 完成目标.   1 读取命令行参数   变量 含义     $0 当前脚本的文件名   $n 传递给脚本或函数的参数. 第一个参数是 $1，第二个参数是 $2   $# 传递给脚本或函数的 参数个数   $* 传递给脚本或函数的 所">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/09/27/shell-script-批量启动服务/">
+
+
+
+
+
+  <title>shell script: 批量启动服务 | MITRE</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MITRE</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Goals determine what you are going to be</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/27/shell-script-批量启动服务/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mitre">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MITRE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">shell script: 批量启动服务</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-27T12:08:15+08:00">
+                2019-09-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/shell/" itemprop="url" rel="index">
+                    <span itemprop="name">shell</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>目标:<br>写一个 shell 脚本, 启动多个 worker 服务.<br>(worker 服务 用于处理 消息中间件 里的消息)  </p>
+<p>先了解一些基础知识, 然后利用这些基础知识 <a href="#multi-start">完成目标</a>.  </p>
+<h1 id="1-读取命令行参数"><a href="#1-读取命令行参数" class="headerlink" title="1 读取命令行参数"></a>1 读取命令行参数</h1><table>
+<thead>
+<tr>
+<th>变量</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$0</td>
+<td>当前脚本的文件名</td>
+</tr>
+<tr>
+<td>$n</td>
+<td>传递给脚本或函数的参数. 第一个参数是 $1，第二个参数是 $2</td>
+</tr>
+<tr>
+<td>$#</td>
+<td>传递给脚本或函数的 参数个数</td>
+</tr>
+<tr>
+<td>$*</td>
+<td>传递给脚本或函数的 <strong>所有参数</strong></td>
+</tr>
+<tr>
+<td>$@</td>
+<td>传递给脚本或函数的 <strong>所有参数</strong></td>
+</tr>
+<tr>
+<td>$?</td>
+<td>上个命令的退出状态，或函数的返回值。</td>
+</tr>
+<tr>
+<td>$$</td>
+<td>当前Shell进程ID</td>
+</tr>
+</tbody>
+</table>
+<p>注意 $* 和 $@ 的区别:<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$* 获得到的参数是 数组类型, <span class="string">"$*"</span> 获得的参数是 字符串类型</span><br><span class="line"></span><br><span class="line"><span class="variable">$@</span> 和 <span class="string">"<span class="variable">$@</span>"</span> 获得的参数 都是 数组类型</span><br></pre></td></tr></table></figure></p>
+<p>示例代码 <strong>t2.sh</strong> :<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> ---<span class="string">"print each param from \$*"</span></span><br><span class="line"><span class="keyword">for</span> var <span class="keyword">in</span> $*</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"<span class="variable">$var</span>"</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">echo</span> ---<span class="string">"print each param from \"\$*\""</span></span><br><span class="line"><span class="keyword">for</span> var <span class="keyword">in</span> <span class="string">"$*"</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"<span class="variable">$var</span>"</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> ---<span class="string">"print each param from \$@"</span></span><br><span class="line"><span class="keyword">for</span> var <span class="keyword">in</span> <span class="variable">$@</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"<span class="variable">$var</span>"</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">echo</span> ---<span class="string">"print each param from \"\$@\""</span></span><br><span class="line"><span class="keyword">for</span> var <span class="keyword">in</span> <span class="string">"<span class="variable">$@</span>"</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"<span class="variable">$var</span>"</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure></p>
+<p><code> ./t2.sh mitre cherry</code>  执行结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">---print each param from $*</span><br><span class="line">mitre</span><br><span class="line">cherry</span><br><span class="line">---print each param from &quot;$*&quot;</span><br><span class="line">mitre cherry</span><br><span class="line">---print each param from $@</span><br><span class="line">mitre</span><br><span class="line">cherry</span><br><span class="line">---print each param from &quot;$@&quot;</span><br><span class="line">mitre</span><br><span class="line">cherry</span><br></pre></td></tr></table></figure></p>
+<h1 id="2-Shell-基本运算"><a href="#2-Shell-基本运算" class="headerlink" title="2 Shell 基本运算"></a>2 Shell 基本运算</h1><p>Shell 支持多种运算符，包括：<br>1, 算数运算符<br>2, 关系运算符<br>3, 逻辑运算符<br>4, 字符串运算符(略)<br>5, 文件测试运算符(略)  </p>
+<h2 id="2-1-算数运算"><a href="#2-1-算数运算" class="headerlink" title="2.1 算数运算"></a>2.1 算数运算</h2><p>原生 bash 不支持简单的数学运算，但是可以通过其他命令来实现，比如 expr 或 awk.  </p>
+<p>expr 是一款表达式计算工具，使用它能完成表达式的求值操作.<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">val=`expr 2 + 2`</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"两数之和为 : <span class="variable">$val</span>"</span></span><br></pre></td></tr></table></figure></p>
+<p>运行结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">两数之和为 : 4</span><br></pre></td></tr></table></figure></p>
+<p><strong><font color="red">注意: </font></strong><br>1, 表达式 和 <strong><font color="#8a00e6">运算符</font></strong> 之间要有空格，例如 <strong>2<font color="#8a00e6">+</font>2</strong> 是不对的，必须写成 <strong>2 <font color="#8a00e6">+</font> 2</strong>，这与我们熟悉的大多数编程语言不一样.<br>2, 完整的 表达式 要被 ` ` 包含.  </p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>说明</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>+</td>
+<td>加</td>
+<td>`expr $a + $b` 结果为 30。</td>
+</tr>
+<tr>
+<td>-</td>
+<td>减</td>
+<td>`expr $a - $b` 结果为 -10。</td>
+</tr>
+<tr>
+<td>*</td>
+<td>乘</td>
+<td>`expr $a * $b` 结果为  200。</td>
+</tr>
+<tr>
+<td>/</td>
+<td>除</td>
+<td>`expr $b / $a` 结果为 2。</td>
+</tr>
+<tr>
+<td>%</td>
+<td>取余</td>
+<td>`expr $b % $a` 结果为 0。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-2-关系运算"><a href="#2-2-关系运算" class="headerlink" title="2.2 关系运算"></a>2.2 关系运算</h2><p><strong>关系运算符</strong> 只支持 <strong>数字</strong> ，不支持字符串，除非字符串的值是数字.  </p>
+<p>假定变量 a 为 10，变量 b 为 20:  </p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>说明</th>
+<th>举例  </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-eq</td>
+<td>equal</td>
+<td>[ $a -eq $b ] 返回 false</td>
+</tr>
+<tr>
+<td>-ne</td>
+<td>not equal</td>
+<td>[ $a -ne $b ] 返回 true</td>
+</tr>
+<tr>
+<td>-gt</td>
+<td>greater than</td>
+<td>[ $a -gt $b ] 返回 false</td>
+</tr>
+<tr>
+<td>-lt</td>
+<td>less than</td>
+<td>[ $a -lt $b ] 返回 true</td>
+</tr>
+<tr>
+<td>-ge</td>
+<td>greater than or equal</td>
+<td>[ $a -ge $b ] 返回 false</td>
+</tr>
+<tr>
+<td>-le</td>
+<td>less than or equal</td>
+<td>[ $a -le $b ] 返回 true</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-3-逻辑运算"><a href="#2-3-逻辑运算" class="headerlink" title="2.3 逻辑运算"></a>2.3 逻辑运算</h2><p>假定变量 a 为 10，变量 b 为 20:</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>说明</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&amp;&amp;</td>
+<td>与 AND</td>
+<td>[[ $a -lt 123 &amp;&amp; $b -gt 123 ]] 返回 false</td>
+</tr>
+<tr>
+<td>&#124;&#124;</td>
+<td>或 OR</td>
+<td>[[ $a -lt 123 &#124;&#124; $b -gt 123 ]] 返回 true</td>
+</tr>
+<tr>
+<td>!</td>
+<td>非</td>
+<td>见下例</td>
+</tr>
+</tbody>
+</table>
+<p>例子:<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> [[ ! 8 -eq 9 ]] ; <span class="keyword">then</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"8 not equal 9"</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"8 equal 9"</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure></p>
+<p>运行结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">8 not equal 9</span><br></pre></td></tr></table></figure></p>
+<h1 id="multi-start">3 多服务启动脚本</h1>
+
+<p>了解前面的基础知识, 写 一个启动多个服务的脚本 很简单了:  </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">java_dir=<span class="string">"/app/jdk1.8.0_191/bin/java"</span></span><br><span class="line">start_port=4242</span><br><span class="line">worker_cnt=1</span><br><span class="line">jar_name=<span class="string">"worker-0.0.1-SNAPSHOT.jar"</span></span><br><span class="line"></span><br><span class="line">usage()</span><br><span class="line">&#123;</span><br><span class="line">  (<span class="built_in">echo</span> <span class="string">"使用方法: <span class="variable">$0</span> 起始端口号 worker个数"</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">"起始端口号 必须大于 0"</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">"worke 个数必须大于 0 同时小于16"</span></span><br><span class="line">   ) 1&gt;&amp;2</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 限制参数输入</span></span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$#</span> -ne 2 ]; <span class="keyword">then</span></span><br><span class="line">  usage</span><br><span class="line">  <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 判断起始端口号是否 合法</span></span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$1</span> -gt 0 ] 2&gt;/dev/null ;<span class="keyword">then</span>  </span><br><span class="line">  start_port=<span class="variable">$1</span></span><br><span class="line"><span class="keyword">else</span>  </span><br><span class="line">  usage</span><br><span class="line">  <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span>   </span><br><span class="line"><span class="comment"># worker 个数必须是大于0的整数</span></span><br><span class="line"><span class="keyword">if</span> [[ <span class="variable">$2</span> -gt 0 &amp;&amp; <span class="variable">$2</span> -lt 16 ]] 2&gt;/dev/null ;<span class="keyword">then</span>  </span><br><span class="line">  worker_cnt=<span class="variable">$2</span></span><br><span class="line"><span class="keyword">else</span>  </span><br><span class="line">  usage</span><br><span class="line">  <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span>   </span><br><span class="line"><span class="comment"># 删除日志文件</span></span><br><span class="line">rm nohup*.out</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"正在启动..."</span></span><br><span class="line"><span class="keyword">for</span> ((i=0;i&lt;<span class="variable">$worker_cnt</span>;i++)); <span class="keyword">do</span></span><br><span class="line">  <span class="comment">#echo `expr $start_port + $i`</span></span><br><span class="line">  port=`expr <span class="variable">$start_port</span> + <span class="variable">$i</span>`</span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"nohup "</span><span class="variable">$&#123;java_dir&#125;</span><span class="string">" -Xms1024m -Xmx1024m -jar <span class="variable">$&#123;jar_name&#125;</span> --server.port=<span class="variable">$&#123;port&#125;</span> &gt; nohup<span class="variable">$&#123;port&#125;</span>.out 2&gt;&amp;1 &amp;"</span></span><br><span class="line">  nohup <span class="string">"<span class="variable">$&#123;java_dir&#125;</span>"</span> -Xms1024m -Xmx1024m -jar <span class="variable">$&#123;jar_name&#125;</span> --server.port=<span class="variable">$&#123;port&#125;</span> &gt; nohup<span class="variable">$&#123;port&#125;</span>.out 2&gt;&amp;1 &amp;  </span><br><span class="line">  sleep 4</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"启动完成!"</span></span><br></pre></td></tr></table></figure>
+<p><strong>说明:</strong><br><code>1&gt;&amp;2</code> 把 <strong>标准输出</strong> 重定向到 <strong>标准错误</strong> .<br>因为 标准输出 和 标准错误 最终都是输出到 终端.<br>所以加或不加 <code>1&gt;&amp;2</code>, 运行结果是一样的 .</p>
+<p><code>2&gt;/dev/null</code> 把 标准错误 重定向到 <strong>空设备文件</strong> 中.  </p>
+<h1 id="4-关闭多个进程"><a href="#4-关闭多个进程" class="headerlink" title="4 关闭多个进程"></a>4 关闭多个进程</h1><p>一次性启动了多个进程, 一个一个的手动 kill, 挺费事的.<br>不如 写一个脚本, 一次性关闭 所有 worker 进程:  </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">ps -ef | grep worker-0.0.1-SNAPSHOT | awk <span class="string">'&#123;print $2&#125;'</span> | xargs -I&#123;&#125;  <span class="built_in">kill</span> -9 &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>因为 ps 进程 也会产生一个 pid, kill 的 时候会提示:<br><strong>kill 27846: No such process</strong><br>这是因为 ps 进程 在 执行 kill命令前就 已经 关闭了.</p>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p>1 <a href="https://www.cnblogs.com/kingstrong/p/6026896.html" target="_blank" rel="noopener">shell 命令行参数</a><br>2 <a href="https://www.runoob.com/linux/linux-shell-basic-operators.html" target="_blank" rel="noopener">shell 基本运算符</a><br>3 <a href="https://github.com/LARG/utaustinvilla3d/blob/master/start.sh" target="_blank" rel="noopener">start.sh</a>  </p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/shell/" rel="tag"># shell</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/26/Redis-安装与配置/" rel="next" title="Redis 安装与配置">
+                <i class="fa fa-chevron-left"></i> Redis 安装与配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/22/2020-Exploring/" rel="prev" title="2020-Exploring">
+                2020-Exploring <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png" alt="mitre">
+            
+              <p class="site-author-name" itemprop="name">mitre</p>
+              <p class="site-description motion-element" itemprop="description">Goals determine what you are going to be</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                Friends
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.yanmin99.com/" title="yanmin" target="_blank">yanmin</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://whark.cn" title="大鹏" target="_blank">大鹏</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.notall.cn/" title="zkp" target="_blank">zkp</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://qiracle.cn/" title="强强" target="_blank">强强</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-读取命令行参数"><span class="nav-number">1.</span> <span class="nav-text">1 读取命令行参数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Shell-基本运算"><span class="nav-number">2.</span> <span class="nav-text">2 Shell 基本运算</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-算数运算"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 算数运算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-关系运算"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 关系运算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-逻辑运算"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 逻辑运算</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#multi-start"><span class="nav-number">3.</span> <span class="nav-text">3 多服务启动脚本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-关闭多个进程"><span class="nav-number">4.</span> <span class="nav-text">4 关闭多个进程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">5.</span> <span class="nav-text">References</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mitre</span>
+
+  
+</div>
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">totle: <span id="busuanzi_value_site_pv"></span> times</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">Visitors: <span id="busuanzi_value_site_uv"></span></span>
+    <span class="post-meta-divider">|</span>
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
