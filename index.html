@@ -294,6 +294,135 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/28/postgreSQL简单配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mitre">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MITRE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/28/postgreSQL简单配置/" itemprop="url">postgreSQL简单配置</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-28T13:17:51+08:00">
+                2020-02-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="卸载-yum-方式安装的-postgreSQL"><a href="#卸载-yum-方式安装的-postgreSQL" class="headerlink" title="卸载 yum 方式安装的 postgreSQL"></a>卸载 yum 方式安装的 postgreSQL</h1><p>用以下两个命令查看 <strong>系统信息</strong> :<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lsb_release -a</span><br><span class="line"></span><br><span class="line">uname -a</span><br></pre></td></tr></table></figure></p>
+<p>卸载 postgreSQL :<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># yum 删除软件包</span></span><br><span class="line">sudo yum remove postgresql*</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除相关目录文件：</span></span><br><span class="line">sudo rm -rf  /var/lib/pgsql</span><br><span class="line">sudo rm -rf  /usr/pgsql*</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除pg相关用户组/用户</span></span><br><span class="line">sudo userdel -r postgres</span><br><span class="line">sudo groupdel postgres</span><br></pre></td></tr></table></figure></p>
+<h1 id="源码方式安装-postgreSQL"><a href="#源码方式安装-postgreSQL" class="headerlink" title="源码方式安装 postgreSQL"></a>源码方式安装 postgreSQL</h1><p><a href="https://www.postgresql.org/download/" target="_blank" rel="noopener">postgreSQL 官网</a> 介绍的安装方式有多种.  </p>
+<p>这里简单介绍一下 编译源码 这种安装方式:<br>1, 下载源码<a href="https://www.postgresql.org/ftp/source/" target="_blank" rel="noopener">(点击下载)</a>;<br>2, 解压并进入 postgresql-version, 打开 INSTALL<br>3, 按照 INSTALL 的 指示安装:<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">su</span><br><span class="line">make install</span><br><span class="line">adduser postgres</span><br><span class="line">mkdir /usr/<span class="built_in">local</span>/pgsql/data</span><br><span class="line">chown postgres /usr/<span class="built_in">local</span>/pgsql/data</span><br><span class="line">su - postgres</span><br><span class="line"><span class="comment"># 初始化数据库</span></span><br><span class="line">/usr/<span class="built_in">local</span>/pgsql/bin/initdb -D /usr/<span class="built_in">local</span>/pgsql/data</span><br><span class="line"><span class="comment"># 启动</span></span><br><span class="line">/usr/<span class="built_in">local</span>/pgsql/bin/pg_ctl -D /usr/<span class="built_in">local</span>/pgsql/data -l logfile start</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建数据库 test</span></span><br><span class="line">/usr/<span class="built_in">local</span>/pgsql/bin/createdb <span class="built_in">test</span></span><br><span class="line"><span class="comment"># 进入 test</span></span><br><span class="line">/usr/<span class="built_in">local</span>/pgsql/bin/psql <span class="built_in">test</span></span><br></pre></td></tr></table></figure></p>
+<p>提示:<br>如果 <code>./configure</code> 提示 缺少 lib 则安装对应的 lib , 比如:<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install readline-devel -y</span><br><span class="line">sudo yum install zlib-devel.x86_64 -y</span><br></pre></td></tr></table></figure></p>
+<p>start 与 stop :<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 切到 postgres 用户, 进入 ~/.bashrc , 把 bin 添加到 PATH</span></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/usr/<span class="built_in">local</span>/pgsql/bin</span><br><span class="line"></span><br><span class="line"><span class="comment"># start</span></span><br><span class="line">pg_ctl -D /usr/<span class="built_in">local</span>/pgsql/data/ -l logfile start</span><br><span class="line"><span class="comment"># status</span></span><br><span class="line">pg_ctl -D /usr/<span class="built_in">local</span>/pgsql/data/ -l logfile status</span><br><span class="line"><span class="comment"># stop</span></span><br><span class="line">pg_ctl -D /usr/<span class="built_in">local</span>/pgsql/data/ -l logfile stop</span><br></pre></td></tr></table></figure></p>
+<h1 id="远程访问-postgreSQL"><a href="#远程访问-postgreSQL" class="headerlink" title="远程访问 postgreSQL"></a>远程访问 postgreSQL</h1><p>Client authentication is controlled by a configuration file,<br>which traditionally is named <strong>pg_hba.conf</strong> and is stored in the database cluster’s data directory.<br>(HBA stands for <strong>host-based authentication</strong>.)<br>A default pg_hba.conf file is installed when the data directory is initialized by initdb.   </p>
+<p>修改 以下两个文件 :<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1, host-based authentication 配置文件:</span></span><br><span class="line">sudo vim /usr/<span class="built_in">local</span>/pgsql/data/pg_hba.conf</span><br><span class="line"><span class="comment"># 添加一行</span></span><br><span class="line">host    all             all             0.0.0.0/0               md5</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2, 全局配置文件:</span></span><br><span class="line">sudo vim /usr/<span class="built_in">local</span>/pgsql/data/postgresql.conf</span><br><span class="line"><span class="comment"># 修改一行</span></span><br><span class="line">listen_addresses = <span class="string">'*'</span></span><br><span class="line"><span class="comment"># defaults to 'localhost'; use '*' for all</span></span><br></pre></td></tr></table></figure></p>
+<p>然后重启 postgreSQL .  </p>
+<h1 id="修改-role-密码"><a href="#修改-role-密码" class="headerlink" title="修改 role 密码"></a>修改 role 密码</h1><p>terminal 截取片段:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[postgres@shumingly ~]$ psql -h localhost -U postgres test</span><br><span class="line">psql (12.0)</span><br><span class="line">Type &quot;help&quot; for help.</span><br><span class="line"></span><br><span class="line">test=# ALTER USER postgres WITH PASSWORD &apos;国际通用密码&apos;;</span><br><span class="line">ALTER ROLE</span><br><span class="line">test=# \q</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/22/2020-Exploring/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3794,170 +3923,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/09/Linux-命令-xargs/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="mitre">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MITRE">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/09/Linux-命令-xargs/" itemprop="url">Linux 命令 xargs</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-09T14:53:40+08:00">
-                2019-01-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在 Unix 和 类Unix 系统中，<strong><font color="red">xargs</font></strong> 的作用是 <strong>把 <font color="green">标准输入</font>(standard input) 转换成 其他命令的 <font color="green">命令行参数</font>(command-line arguments)</strong>。  </p>
-<p><strong><font color="green">标准输入</font></strong>： 程序运行时从 <strong>键盘输入</strong>，或者 <strong>管道</strong> 传入的数据。<br>例如，grep 从 <strong>标准输入</strong>(管道) 中 获取数据 并查找 root 所在行：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/passwd | grep <span class="string">"root"</span></span><br></pre></td></tr></table></figure></p>
-<p><strong><font color="green">命令行参数</font></strong>： 此参数(数据) 在输入命令时就确定了。<br>例如， grep 从 <strong>命令行参数 /etc/passwd</strong> 中获取数据 并查找 root 所在行:<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep <span class="string">"root"</span> /etc/passwd</span><br></pre></td></tr></table></figure></p>
-<h1 id="1-为什么需要-xargs-做转换"><a href="#1-为什么需要-xargs-做转换" class="headerlink" title="1 为什么需要 xargs 做转换 ?"></a>1 为什么需要 xargs 做转换 ?</h1><p>上面的介绍中，grep 可以从 <strong>标准输入</strong> 获取数据，也可以从 <strong>命令行参数</strong> 获取数据。  </p>
-<p>事实上，<strong>所有 Linux 命令 都可以从 命令行参数 获取数据</strong> (如果有命令行参数的话)。<br><strong>只有一部分 命令 能够从 标准输入 中获取数据</strong>，grep 和 cat 就在这一部分命令之中。  </p>
-<p>举个例子， 文件 1.txt 内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.txt</span><br><span class="line">hello</span><br><span class="line">world</span><br></pre></td></tr></table></figure></p>
-<p>执行以下命令，观察结果 (结果是每条命令下的注释) ：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">"hello"</span></span><br><span class="line"><span class="comment"># hello</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># cat 从标准输入中获取数据</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"hello"</span> | cat</span><br><span class="line"><span class="comment"># hello</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># cat 同时标准输入和命令行参数获取数据，cat 会忽略 标准输入</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"hello"</span> | cat 1.txt</span><br><span class="line"><span class="comment"># 1.txt</span></span><br><span class="line"><span class="comment"># hello</span></span><br><span class="line"><span class="comment"># world</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># cat 同时标准输入和命令行参数获取数据，- 使 cat 不忽略 标准输入</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"hello"</span> | cat 1.txt -</span><br><span class="line"><span class="comment"># 1.txt</span></span><br><span class="line"><span class="comment"># hello</span></span><br><span class="line"><span class="comment"># world</span></span><br><span class="line"><span class="comment"># hello</span></span><br></pre></td></tr></table></figure></p>
-<p>同样的，grep 的情况如下：<br><img src="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-12/xargs-hello.png" alt>  </p>
-<p>还有一些命令不能像 grep 和 cat 这样，支持 <strong>标准输入</strong>。<br>比如 kill , rm , cp , echo 等 命令 就 <strong><font color="red">不支持 标准输入</font></strong>。<br>而往往我们会有下面这种需求：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查找进程号，通过管道传给 kill 杀死该进程</span></span><br><span class="line"><span class="comment"># 以下命令无法执行，因为 kill 不支持 标准输入</span></span><br><span class="line">ps -ef | grep <span class="string">"weblogic.Server"</span> | awk <span class="string">'&#123;print $2&#125;'</span> | <span class="built_in">kill</span> -9</span><br></pre></td></tr></table></figure></p>
-<p>这些 不支持标准输入的命令 想要 从标准输入中获取数据，就需要 <strong>xargs</strong> 命令做转换：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 以下命令可以正常执行</span></span><br><span class="line">ps -ef | grep <span class="string">"weblogic.Server"</span> | awk <span class="string">'&#123;print $2&#125;'</span> | xargs -I &#123;&#125; <span class="built_in">kill</span> -9 &#123;&#125;</span><br></pre></td></tr></table></figure></p>
-<h1 id="2-xargs-常用选项"><a href="#2-xargs-常用选项" class="headerlink" title="2 xargs 常用选项"></a>2 xargs 常用选项</h1><h2 id="I-选项-小写的-i"><a href="#I-选项-小写的-i" class="headerlink" title="-I 选项 (小写的 i)"></a>-I 选项 (小写的 i)</h2><p>用法：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xargs -I &#123;&#125; commandX &#123;&#125;</span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">xargs -I&#123;&#125; commandX &#123;&#125;</span><br></pre></td></tr></table></figure></p>
-<p><strong>{}</strong> 表示从 标准输入 传入的数据，也可以换成别的字符， 如 %，a，b，c 等等。   </p>
-<p>举例，获取 1.txt 文件的最后两行，并以 <code>行内容.txt</code> 为文件名 创建两个文件：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail  -2  1.txt | xargs -I&#123;&#125; touch &#123;&#125;.txt</span><br></pre></td></tr></table></figure></p>
-<h2 id="p-选项"><a href="#p-选项" class="headerlink" title="-p 选项"></a>-p 选项</h2><p>p 的含义 是 prompt 。<br>执行命令前会输出 命令，并需要确认才能执行(输入y执行，输入其他字符不执行)。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tail  -2  1.txt | xargs -p -I&#123;&#125; touch &#123;&#125;.txt</span><br><span class="line"><span class="comment"># touch hello.txt ?...n</span></span><br><span class="line"><span class="comment"># touch world.txt ?...n</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="d-选项"><a href="#d-选项" class="headerlink" title="-d 选项"></a>-d 选项</h2><p>d 的含义 是 delimiter(分隔符) 。<br>xargs 命令 默认的 分隔符是 空白字符(空格，tab，换行)， 可以用 -d 选项自定义分隔符。  </p>
-<p>例如：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">"aa|bb|cc|dd"</span> | xargs <span class="built_in">echo</span></span><br><span class="line"><span class="comment"># aa|bb|cc|dd</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"aa|bb|cc|dd"</span> | xargs -d<span class="string">"|"</span> <span class="built_in">echo</span></span><br><span class="line"><span class="comment"># aa bb cc dd</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># -n1 选项的含义是 每个字段作为 一行处理</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"aa|bb|cc|dd"</span> | xargs -d<span class="string">"|"</span> -n1 <span class="built_in">echo</span></span><br><span class="line"><span class="comment"># aa</span></span><br><span class="line"><span class="comment"># bb</span></span><br><span class="line"><span class="comment"># cc</span></span><br><span class="line"><span class="comment"># dd</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="n-选项"><a href="#n-选项" class="headerlink" title="-n 选项"></a>-n 选项</h2><p>用法：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xargs -n数字 commandX</span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">xargs -n 数字 commandX</span><br></pre></td></tr></table></figure></p>
-<p>-n1 选项的含义是 每个字段作为 一行处理，<br>-n2 选项的含义是 每2个字段作为 一行处理，<br>-n3 选项的含义是 每3个字段作为 一行处理，<br>…  </p>
-<p>看一个例子：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">cat abc</span><br><span class="line"><span class="comment"># aa</span></span><br><span class="line"><span class="comment"># bb</span></span><br><span class="line"><span class="comment"># cc dd</span></span><br><span class="line"><span class="comment"># ee ff gg</span></span><br><span class="line"></span><br><span class="line">cat abc | xargs <span class="built_in">echo</span></span><br><span class="line"><span class="comment"># aa bb cc dd ee ff gg</span></span><br><span class="line"></span><br><span class="line">cat abc | xargs -I&#123;&#125; <span class="built_in">echo</span> &#123;&#125;</span><br><span class="line"><span class="comment"># aa</span></span><br><span class="line"><span class="comment"># bb</span></span><br><span class="line"><span class="comment"># cc dd</span></span><br><span class="line"><span class="comment"># ee ff gg</span></span><br><span class="line"></span><br><span class="line">cat abc | xargs -n1 <span class="built_in">echo</span></span><br><span class="line"><span class="comment"># aa</span></span><br><span class="line"><span class="comment"># bb</span></span><br><span class="line"><span class="comment"># cc</span></span><br><span class="line"><span class="comment"># dd</span></span><br><span class="line"><span class="comment"># ee</span></span><br><span class="line"><span class="comment"># ff</span></span><br><span class="line"><span class="comment"># gg</span></span><br><span class="line"></span><br><span class="line">cat abc | xargs -n2 <span class="built_in">echo</span></span><br><span class="line"><span class="comment"># aa bb</span></span><br><span class="line"><span class="comment"># cc dd</span></span><br><span class="line"><span class="comment"># ee ff</span></span><br><span class="line"><span class="comment"># gg</span></span><br><span class="line"></span><br><span class="line">cat abc | xargs -n3 <span class="built_in">echo</span></span><br><span class="line"><span class="comment"># aa bb cc</span></span><br><span class="line"><span class="comment"># dd ee ff</span></span><br><span class="line"><span class="comment"># gg</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># -n 选项 和 -I 选项一起用，-n 选项会失效</span></span><br><span class="line">cat abc | xargs -n1 -I&#123;&#125;  <span class="built_in">echo</span> &#123;&#125;</span><br><span class="line"><span class="comment"># aa</span></span><br><span class="line"><span class="comment"># bb</span></span><br><span class="line"><span class="comment"># cc dd</span></span><br><span class="line"><span class="comment"># ee ff gg</span></span><br></pre></td></tr></table></figure></p>
-<p>注意： <strong><code>-n 选项</code> 和 <code>-I 选项</code> 一起用，-n 选项会失效</strong>。  </p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>1、 <a href="https://en.wikipedia.org/wiki/Xargs" target="_blank" rel="noopener">xargs-wiki</a>  </p>
-<p>2、 <a href="https://www.cnblogs.com/wangqiguo/p/6464234.html" target="_blank" rel="noopener">xargs命令详解，xargs与管道的区别</a>  </p>
-<p>3、<a href="https://shapeshed.com/unix-xargs/" target="_blank" rel="noopener">Linux and Unix xargs command tutorial</a>  </p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -4010,7 +3975,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-count">103</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

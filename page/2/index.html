@@ -294,6 +294,170 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/09/Linux-命令-xargs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mitre">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MITRE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/09/Linux-命令-xargs/" itemprop="url">Linux 命令 xargs</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-09T14:53:40+08:00">
+                2019-01-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在 Unix 和 类Unix 系统中，<strong><font color="red">xargs</font></strong> 的作用是 <strong>把 <font color="green">标准输入</font>(standard input) 转换成 其他命令的 <font color="green">命令行参数</font>(command-line arguments)</strong>。  </p>
+<p><strong><font color="green">标准输入</font></strong>： 程序运行时从 <strong>键盘输入</strong>，或者 <strong>管道</strong> 传入的数据。<br>例如，grep 从 <strong>标准输入</strong>(管道) 中 获取数据 并查找 root 所在行：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/passwd | grep <span class="string">"root"</span></span><br></pre></td></tr></table></figure></p>
+<p><strong><font color="green">命令行参数</font></strong>： 此参数(数据) 在输入命令时就确定了。<br>例如， grep 从 <strong>命令行参数 /etc/passwd</strong> 中获取数据 并查找 root 所在行:<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep <span class="string">"root"</span> /etc/passwd</span><br></pre></td></tr></table></figure></p>
+<h1 id="1-为什么需要-xargs-做转换"><a href="#1-为什么需要-xargs-做转换" class="headerlink" title="1 为什么需要 xargs 做转换 ?"></a>1 为什么需要 xargs 做转换 ?</h1><p>上面的介绍中，grep 可以从 <strong>标准输入</strong> 获取数据，也可以从 <strong>命令行参数</strong> 获取数据。  </p>
+<p>事实上，<strong>所有 Linux 命令 都可以从 命令行参数 获取数据</strong> (如果有命令行参数的话)。<br><strong>只有一部分 命令 能够从 标准输入 中获取数据</strong>，grep 和 cat 就在这一部分命令之中。  </p>
+<p>举个例子， 文件 1.txt 内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.txt</span><br><span class="line">hello</span><br><span class="line">world</span><br></pre></td></tr></table></figure></p>
+<p>执行以下命令，观察结果 (结果是每条命令下的注释) ：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">"hello"</span></span><br><span class="line"><span class="comment"># hello</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># cat 从标准输入中获取数据</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"hello"</span> | cat</span><br><span class="line"><span class="comment"># hello</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># cat 同时标准输入和命令行参数获取数据，cat 会忽略 标准输入</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"hello"</span> | cat 1.txt</span><br><span class="line"><span class="comment"># 1.txt</span></span><br><span class="line"><span class="comment"># hello</span></span><br><span class="line"><span class="comment"># world</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># cat 同时标准输入和命令行参数获取数据，- 使 cat 不忽略 标准输入</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"hello"</span> | cat 1.txt -</span><br><span class="line"><span class="comment"># 1.txt</span></span><br><span class="line"><span class="comment"># hello</span></span><br><span class="line"><span class="comment"># world</span></span><br><span class="line"><span class="comment"># hello</span></span><br></pre></td></tr></table></figure></p>
+<p>同样的，grep 的情况如下：<br><img src="https://mitre.oss-cn-hangzhou.aliyuncs.com/blog-2018-12/xargs-hello.png" alt>  </p>
+<p>还有一些命令不能像 grep 和 cat 这样，支持 <strong>标准输入</strong>。<br>比如 kill , rm , cp , echo 等 命令 就 <strong><font color="red">不支持 标准输入</font></strong>。<br>而往往我们会有下面这种需求：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查找进程号，通过管道传给 kill 杀死该进程</span></span><br><span class="line"><span class="comment"># 以下命令无法执行，因为 kill 不支持 标准输入</span></span><br><span class="line">ps -ef | grep <span class="string">"weblogic.Server"</span> | awk <span class="string">'&#123;print $2&#125;'</span> | <span class="built_in">kill</span> -9</span><br></pre></td></tr></table></figure></p>
+<p>这些 不支持标准输入的命令 想要 从标准输入中获取数据，就需要 <strong>xargs</strong> 命令做转换：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 以下命令可以正常执行</span></span><br><span class="line">ps -ef | grep <span class="string">"weblogic.Server"</span> | awk <span class="string">'&#123;print $2&#125;'</span> | xargs -I &#123;&#125; <span class="built_in">kill</span> -9 &#123;&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="2-xargs-常用选项"><a href="#2-xargs-常用选项" class="headerlink" title="2 xargs 常用选项"></a>2 xargs 常用选项</h1><h2 id="I-选项-小写的-i"><a href="#I-选项-小写的-i" class="headerlink" title="-I 选项 (小写的 i)"></a>-I 选项 (小写的 i)</h2><p>用法：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xargs -I &#123;&#125; commandX &#123;&#125;</span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">xargs -I&#123;&#125; commandX &#123;&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>{}</strong> 表示从 标准输入 传入的数据，也可以换成别的字符， 如 %，a，b，c 等等。   </p>
+<p>举例，获取 1.txt 文件的最后两行，并以 <code>行内容.txt</code> 为文件名 创建两个文件：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail  -2  1.txt | xargs -I&#123;&#125; touch &#123;&#125;.txt</span><br></pre></td></tr></table></figure></p>
+<h2 id="p-选项"><a href="#p-选项" class="headerlink" title="-p 选项"></a>-p 选项</h2><p>p 的含义 是 prompt 。<br>执行命令前会输出 命令，并需要确认才能执行(输入y执行，输入其他字符不执行)。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tail  -2  1.txt | xargs -p -I&#123;&#125; touch &#123;&#125;.txt</span><br><span class="line"><span class="comment"># touch hello.txt ?...n</span></span><br><span class="line"><span class="comment"># touch world.txt ?...n</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="d-选项"><a href="#d-选项" class="headerlink" title="-d 选项"></a>-d 选项</h2><p>d 的含义 是 delimiter(分隔符) 。<br>xargs 命令 默认的 分隔符是 空白字符(空格，tab，换行)， 可以用 -d 选项自定义分隔符。  </p>
+<p>例如：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">"aa|bb|cc|dd"</span> | xargs <span class="built_in">echo</span></span><br><span class="line"><span class="comment"># aa|bb|cc|dd</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"aa|bb|cc|dd"</span> | xargs -d<span class="string">"|"</span> <span class="built_in">echo</span></span><br><span class="line"><span class="comment"># aa bb cc dd</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># -n1 选项的含义是 每个字段作为 一行处理</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"aa|bb|cc|dd"</span> | xargs -d<span class="string">"|"</span> -n1 <span class="built_in">echo</span></span><br><span class="line"><span class="comment"># aa</span></span><br><span class="line"><span class="comment"># bb</span></span><br><span class="line"><span class="comment"># cc</span></span><br><span class="line"><span class="comment"># dd</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="n-选项"><a href="#n-选项" class="headerlink" title="-n 选项"></a>-n 选项</h2><p>用法：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xargs -n数字 commandX</span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">xargs -n 数字 commandX</span><br></pre></td></tr></table></figure></p>
+<p>-n1 选项的含义是 每个字段作为 一行处理，<br>-n2 选项的含义是 每2个字段作为 一行处理，<br>-n3 选项的含义是 每3个字段作为 一行处理，<br>…  </p>
+<p>看一个例子：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">cat abc</span><br><span class="line"><span class="comment"># aa</span></span><br><span class="line"><span class="comment"># bb</span></span><br><span class="line"><span class="comment"># cc dd</span></span><br><span class="line"><span class="comment"># ee ff gg</span></span><br><span class="line"></span><br><span class="line">cat abc | xargs <span class="built_in">echo</span></span><br><span class="line"><span class="comment"># aa bb cc dd ee ff gg</span></span><br><span class="line"></span><br><span class="line">cat abc | xargs -I&#123;&#125; <span class="built_in">echo</span> &#123;&#125;</span><br><span class="line"><span class="comment"># aa</span></span><br><span class="line"><span class="comment"># bb</span></span><br><span class="line"><span class="comment"># cc dd</span></span><br><span class="line"><span class="comment"># ee ff gg</span></span><br><span class="line"></span><br><span class="line">cat abc | xargs -n1 <span class="built_in">echo</span></span><br><span class="line"><span class="comment"># aa</span></span><br><span class="line"><span class="comment"># bb</span></span><br><span class="line"><span class="comment"># cc</span></span><br><span class="line"><span class="comment"># dd</span></span><br><span class="line"><span class="comment"># ee</span></span><br><span class="line"><span class="comment"># ff</span></span><br><span class="line"><span class="comment"># gg</span></span><br><span class="line"></span><br><span class="line">cat abc | xargs -n2 <span class="built_in">echo</span></span><br><span class="line"><span class="comment"># aa bb</span></span><br><span class="line"><span class="comment"># cc dd</span></span><br><span class="line"><span class="comment"># ee ff</span></span><br><span class="line"><span class="comment"># gg</span></span><br><span class="line"></span><br><span class="line">cat abc | xargs -n3 <span class="built_in">echo</span></span><br><span class="line"><span class="comment"># aa bb cc</span></span><br><span class="line"><span class="comment"># dd ee ff</span></span><br><span class="line"><span class="comment"># gg</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># -n 选项 和 -I 选项一起用，-n 选项会失效</span></span><br><span class="line">cat abc | xargs -n1 -I&#123;&#125;  <span class="built_in">echo</span> &#123;&#125;</span><br><span class="line"><span class="comment"># aa</span></span><br><span class="line"><span class="comment"># bb</span></span><br><span class="line"><span class="comment"># cc dd</span></span><br><span class="line"><span class="comment"># ee ff gg</span></span><br></pre></td></tr></table></figure></p>
+<p>注意： <strong><code>-n 选项</code> 和 <code>-I 选项</code> 一起用，-n 选项会失效</strong>。  </p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>1、 <a href="https://en.wikipedia.org/wiki/Xargs" target="_blank" rel="noopener">xargs-wiki</a>  </p>
+<p>2、 <a href="https://www.cnblogs.com/wangqiguo/p/6464234.html" target="_blank" rel="noopener">xargs命令详解，xargs与管道的区别</a>  </p>
+<p>3、<a href="https://shapeshed.com/unix-xargs/" target="_blank" rel="noopener">Linux and Unix xargs command tutorial</a>  </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/08/Linux-解析文件并插入-Oracle-数据库/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3722,225 +3886,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/07/Oracle学习2-字符串操作和时间操作/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="mitre">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MITRE">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/07/Oracle学习2-字符串操作和时间操作/" itemprop="url">Oracle-学习2-字符串操作和时间操作</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-07T10:18:49+08:00">
-                2018-11-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="1-Oracle-字符串类型"><a href="#1-Oracle-字符串类型" class="headerlink" title="1 Oracle 字符串类型"></a>1 Oracle 字符串类型</h1><p>字符串类型的数据可依 <strong>编码方式</strong> 分成 <strong>数据库字符集</strong> (CHAR/VARCHAR2/CLOB/LONG)和 <strong>国际字符集(以 <font color="red">N</font> 开头)</strong> (NCHAR/NVARCHAR2/NCLOB)两种。<br>数据库中的字符串数据都通过字符集将字符转换为二进制，才存储到数据块中。<br>通过不同的编码集转换，即便是相同的字符，也可能会转换成不同的二进制编码。这也是产生乱码的原因。<br>数据库的编码格式一般是在创建数据库时指定的。也可以在数据库建立之后修改其编码。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--字符集查询</span></span><br><span class="line"><span class="keyword">select</span> userenv(<span class="string">'language'</span>) <span class="keyword">from</span> dual;</span><br></pre></td></tr></table></figure></p>
-<p>字符串类型 依据 <strong>存储方式</strong> 分为 <strong>固定长度类型</strong>（CHAR/NCHAR) 和 <strong>可变长度类型</strong>（VARCHAR2/NVARCHAR2)两种.</p>
-<ol>
-<li><p><strong><font color="red">固定长度</font></strong> ：是指虽然输入的字段值小于该字段的限制长度，但是实际存储数据时，会先自动 <strong>在右端补足空格</strong> 后，才将字段值的内容存储到数据块中。(浪费空间，但是存储效率较可变长度类型要好)<br>例：char的长度是固定的，比如，定义了char(20),即使插入abc，不足二十个字节，数据库也会在abc后面自动加上17个空格，以补足二十个字节。  </p>
-</li>
-<li><p><strong><font color="red">可变长度</font></strong>：当输入的字段值小于该字段的限制长度时，直接将字段值的内容存储到数据块中，而不会补上空格。(节省数据块空间)  </p>
-</li>
-</ol>
-<p>Oracle 字符串类型：    </p>
-<ol>
-<li>char(size) / nchar(size) ：定长，字节/字符。最长2000字节。  </li>
-<li>varchar(size) / <strong><font color="red">varchar2(size)</font></strong> ：不定长（变长），字节。最长4000字节。  </li>
-<li>nvarchar(size) / nvarchar2(size) ：不定长，字符  </li>
-<li>long 和 clob ：不定长。long 2GB，clob 4 GB。  </li>
-</ol>
-<h1 id="2-Oracle-字符串处理函数"><a href="#2-Oracle-字符串处理函数" class="headerlink" title="2 Oracle 字符串处理函数"></a>2 Oracle 字符串处理函数</h1><ol>
-<li>concat 和 ||，拼接字符串</li>
-<li>length</li>
-<li><p>upper，lower，和 initcap(各个单词首字母大写)</p>
-</li>
-<li><p>substr</p>
-</li>
-<li>trim，ltrim，rtrim</li>
-<li>instr  </li>
-<li>lpad，rpad</li>
-</ol>
-<p>介绍一下 4,5,6,7 ：  </p>
-<p><strong>substr</strong> 选取子串的起始位置是 1，不是 0。（但是，写0的效果和1相同，都会从起始位置选取）<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--substr('xxx',start,size)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">substr</span>(<span class="string">'hello world'</span>,<span class="number">1</span>,<span class="number">4</span>) <span class="keyword">from</span> dual ;</span><br><span class="line"><span class="comment">--结果： 'hell'</span></span><br></pre></td></tr></table></figure></p>
-<p><strong>trim</strong> 只对 <strong>两端</strong> 有效，去除两端空白，或者去除两端某一个指定字符。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--去除 两端 空白</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">trim</span>(<span class="string">'   mitre  cx   '</span>) <span class="keyword">from</span> dual;</span><br><span class="line"></span><br><span class="line"><span class="comment">--去除 左端 空白</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">ltrim</span>(<span class="string">'   mitre  cx   '</span>) <span class="keyword">from</span> dual;</span><br><span class="line"></span><br><span class="line"><span class="comment">--去除 右端 空白</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">rtrim</span>(<span class="string">'   mitre  cx   '</span>) <span class="keyword">from</span> dual;</span><br><span class="line"></span><br><span class="line"><span class="comment">--去除 两端  字符e</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">trim</span>(<span class="string">'e'</span> <span class="keyword">from</span> <span class="string">'eeemitre  eeecxee'</span>) <span class="keyword">from</span> dual;</span><br></pre></td></tr></table></figure></p>
-<p><strong>instr</strong> (index string的缩写) 字符查找函数，查找到指定字符串，返回指定子串的下标(注意从1开始)，未找到返回0。  </p>
-<p>格式一：instr(源字符串, 目标字符串)<br>格式二： instr(源字符串, 目标字符串[, 起始位置[, 匹配序号]])  </p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">instr</span>(<span class="string">'helloworld'</span>,<span class="string">'wo'</span>) <span class="keyword">from</span> dual;</span><br><span class="line"><span class="comment">--返回结果：'6'    </span></span><br><span class="line"><span class="comment">--即“w”开始出现的位置</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">instr</span>(<span class="string">'helloworld'</span>,<span class="string">'o'</span>,<span class="number">1</span>,<span class="number">2</span>) <span class="keyword">from</span> dual;</span><br><span class="line"><span class="comment">--结果：'7'</span></span><br><span class="line"><span class="comment">--从起始位置 1 开始查找，找第 2 个 ‘o’ 出现的位置</span></span><br></pre></td></tr></table></figure>
-<p>lpad 在 字符串的左边补位。<br>rpad 在 字符串的右边补位。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span>  <span class="keyword">lpad</span>(<span class="string">'world'</span>,<span class="number">13</span>,<span class="string">'000 '</span>) <span class="keyword">from</span> dual;  </span><br><span class="line"><span class="comment">--结果：'000 000 world'</span></span><br><span class="line"><span class="comment">--在 'world' 的左边补位 '000 ', 补满 13位</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span>  <span class="keyword">lpad</span>(<span class="string">'world'</span>,<span class="number">3</span>,<span class="string">'000 '</span>) <span class="keyword">from</span> dual;</span><br><span class="line"><span class="comment">--结果：'wor'</span></span><br><span class="line"><span class="comment">--总位数少于原始字符串位数，则保留左侧(rpad也是保留左侧)</span></span><br></pre></td></tr></table></figure></p>
-<h1 id="3-时间类型-date"><a href="#3-时间类型-date" class="headerlink" title="3 时间类型 date"></a>3 时间类型 date</h1><p>获取当前系统时间：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">sysdate</span> <span class="keyword">from</span> dual;</span><br><span class="line"><span class="comment">--结果：'2018/11/22 9:28:20'</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="3-1-时间和字符串"><a href="#3-1-时间和字符串" class="headerlink" title="3.1 时间和字符串"></a>3.1 时间和字符串</h2><p><strong>时间转字符串 to_char(timestamp, timeFormat)</strong>：<br>YYYY    年<br>MM    月份 (01-12)<br>DD    一个月里的日子(01-31)<br>D    一周里的日子(1-7；SUN=1)<br>day 星期几  </p>
-<p>HH    一天的小时数 (01-12)<br>HH12    一天的小时数 (01-12)<br>HH24    一天的小时数 (00-23)<br>MI    分钟 (00-59)<br>SS    秒 (00-59)<br><a href="https://www.cnblogs.com/aipan/p/7941917.html" target="_blank" rel="noopener">更多格式.</a>  </p>
-<p>例：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> to_char(<span class="keyword">sysdate</span>,<span class="string">'yyyy-mm-dd hh24:mi:ss , day'</span>) <span class="keyword">from</span> dual;</span><br><span class="line"><span class="comment">--结果：'2018-11-22 10:13:04 , 星期四'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 本月的天数</span></span><br><span class="line"><span class="keyword">SELECT</span> to_char(<span class="keyword">last_day</span>(<span class="keyword">SYSDATE</span>),<span class="string">'dd'</span>) <span class="keyword">days</span> <span class="keyword">FROM</span> dual;</span><br><span class="line"><span class="comment">--结果：'30'</span></span><br><span class="line"><span class="comment">--注：last_day(time):返回指定日期所在月份的最后一天</span></span><br></pre></td></tr></table></figure></p>
-<p><strong>字符串转时间 to_date(charType, timeFormat)</strong>:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">to_date</span>(<span class="string">'2018-11-22'</span>,<span class="string">'yyyy-mm-dd'</span>) <span class="keyword">from</span> dual;</span><br><span class="line"><span class="comment">--结果：'2018/11/22'</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="3-2-时间的操作"><a href="#3-2-时间的操作" class="headerlink" title="3.2 时间的操作"></a>3.2 时间的操作</h2><p><strong>在介绍时间操作前，先了解 3 个函数</strong>：  </p>
-<ol>
-<li>round(num [,decimal_scale]) 函数: 四舍五入。     </li>
-<li>floor(num) 函数 : 地板，取小于等于数值 num 的最大整数。  </li>
-<li>ceil(num) 函数 ：天花板，取大于等于数值 num 的最小整数。  </li>
-</ol>
-<p>示例：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">round</span>(<span class="number">123.456</span>,<span class="number">2</span>) <span class="keyword">from</span> dual; <span class="comment">-- '123.46'</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">round</span>(<span class="number">123.456</span>) <span class="keyword">from</span> dual; <span class="comment">-- '123'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">floor</span>(<span class="number">123.456</span>) <span class="keyword">from</span> dual; <span class="comment">-- '123'</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">ceil</span>(<span class="number">123.456</span>) <span class="keyword">from</span> dual; <span class="comment">-- '124'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">floor</span>(<span class="number">-1.2</span>) <span class="keyword">from</span> dual; <span class="comment">-- '-2'</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">ceil</span>(<span class="number">-1.2</span>) <span class="keyword">from</span> dual; <span class="comment">-- '-1'</span></span><br></pre></td></tr></table></figure></p>
-<p><strong>计算时间差：<font color="red">时间相减</font></strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--两个日期间的天数</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">sysdate</span> - <span class="keyword">to_date</span>(<span class="string">'2018-10-23'</span>,<span class="string">'yyyy-mm-dd'</span>) <span class="keyword">from</span> dual; <span class="comment">-- '30.4204282407407'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">floor</span>(<span class="keyword">sysdate</span> - <span class="keyword">to_date</span>(<span class="string">'2018-10-23'</span>,<span class="string">'yyyy-mm-dd'</span>)) <span class="keyword">from</span> dual; <span class="comment">-- '30'</span></span><br></pre></td></tr></table></figure></p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--求某天是星期几</span></span><br><span class="line"><span class="keyword">select</span> to_char(<span class="keyword">to_date</span>(<span class="string">'2018-11-22'</span>,<span class="string">'yyyy-mm-dd'</span>), <span class="string">'day'</span>) <span class="keyword">from</span> dual;  <span class="comment">-- '星期四'</span></span><br></pre></td></tr></table></figure>
-<p><strong>trunc 函数 –截取函数</strong><br>truncate, 截短，删节。</p>
-<p>trunc函数有两种形式：  </p>
-<ol>
-<li><p>trunc(number [,decimal_scale]) ，<br>截取数字 , decimal_scale 保留小数点后面的位数。忽略它则截去所有的小数部分。<br>若 decimal_scale 为负，则向整数位截取补零。</p>
-</li>
-<li><p>trunc(datestamp [,time_scale]) ，<br>截取时间 , timeFormat 截取时间保留的位数。忽略默认截取到日。<br>截取的结果是日期：年/月/日。</p>
-</li>
-</ol>
-<p>trunc 函数 示例：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> trunc(<span class="number">123.456</span>,<span class="number">2</span>)<span class="keyword">from</span> dual; <span class="comment">-- '123.45'</span></span><br><span class="line"><span class="keyword">select</span> trunc(<span class="number">123.456</span>,<span class="number">1</span>)<span class="keyword">from</span> dual; <span class="comment">-- '123.4'</span></span><br><span class="line"><span class="keyword">select</span> trunc(<span class="number">123.456</span>)<span class="keyword">from</span> dual; <span class="comment">-- '123'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--decimal_scale为负，向整数位截取补零</span></span><br><span class="line"><span class="keyword">select</span> trunc(<span class="number">123.456</span>,<span class="number">-1</span>)<span class="keyword">from</span> dual; <span class="comment">-- '120'</span></span><br><span class="line"><span class="keyword">select</span> trunc(<span class="number">123.456</span>,<span class="number">-2</span>)<span class="keyword">from</span> dual; <span class="comment">-- '100'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--截取时间</span></span><br><span class="line"><span class="comment">--默认截取，等价于 trunc(sysdate, 'dd')</span></span><br><span class="line"><span class="keyword">select</span> trunc(<span class="keyword">sysdate</span>) <span class="keyword">from</span> dual; <span class="comment">--结果：'2018/11/22'</span></span><br><span class="line"><span class="comment">--返回当年第一天</span></span><br><span class="line"><span class="keyword">select</span> trunc(<span class="keyword">sysdate</span>,<span class="string">'YYYY'</span>)<span class="keyword">from</span> dual; <span class="comment">--结果：'2018/1/1'</span></span><br><span class="line"><span class="comment">--返回当月第一天</span></span><br><span class="line"><span class="keyword">select</span> trunc(<span class="keyword">sysdate</span>,<span class="string">'MM'</span>)<span class="keyword">from</span> dual; <span class="comment">--结果：'2018/11/1'</span></span><br><span class="line"><span class="comment">--返回当前星期的第一天(星期天)</span></span><br><span class="line"><span class="keyword">select</span> trunc(<span class="keyword">sysdate</span>,<span class="string">'D'</span>)<span class="keyword">from</span> dual; <span class="comment">--结果：'2018/11/18'</span></span><br></pre></td></tr></table></figure></p>
-<p>Oracle其他 有关时间的方法：  </p>
-<pre><code class="sql"><span class="comment">--在系统时间基础上延迟5月</span>
-<span class="keyword">select</span> add_months(<span class="keyword">sysdate</span>,<span class="number">-5</span>) <span class="keyword">from</span> dual t; <span class="comment">--结果：'2018/6/22 11:09:36'</span>
-
-<span class="comment">--下个星期一的日期</span>
-<span class="keyword">select</span> next_day(<span class="keyword">SYSDATE</span>,<span class="number">2</span>) <span class="keyword">from</span> dual <span class="comment">--结果：'2018/11/26 11:11:50'</span>
-<span class="comment">-- 1  2  3  4  5  6  7</span>
-<span class="comment">--日 一 二 三 四 五 六</span>
-
- <span class="comment">--减1月</span>
-<span class="keyword">select</span> <span class="keyword">sysdate</span>, add_months(<span class="keyword">sysdate</span>,<span class="number">-1</span>) <span class="keyword">from</span> dual;        
- <span class="comment">--减 1星期 </span>
-<span class="keyword">select</span> <span class="keyword">sysdate</span>, to_char(<span class="keyword">sysdate</span><span class="number">-7</span>,<span class="string">'yyyy-mm-dd HH24:MI:SS'</span>) <span class="keyword">from</span> dual; 
- <span class="comment">--加 1天 </span>
-<span class="keyword">select</span> <span class="keyword">sysdate</span>, to_char(<span class="keyword">sysdate</span>+<span class="number">1</span>,<span class="string">'yyyy-mm-dd HH24:MI:SS'</span>) <span class="keyword">from</span> dual; 
-<span class="comment">--减1小时 </span>
-<span class="keyword">select</span> <span class="keyword">sysdate</span>, to_char(<span class="keyword">sysdate</span><span class="number">-1</span>/<span class="number">24</span>,<span class="string">'yyyy-mm-dd HH24:MI:SS'</span>) <span class="keyword">from</span> dual; 
-<span class="comment">--减1分钟 </span>
-<span class="keyword">select</span> <span class="keyword">sysdate</span>, to_char(<span class="keyword">sysdate</span><span class="number">-1</span>/<span class="number">24</span>/<span class="number">60</span>,<span class="string">'yyyy-mm-dd HH24:MI:SS'</span>) <span class="keyword">from</span> dual; 
-<span class="comment">--减1秒</span>
-<span class="keyword">select</span> <span class="keyword">sysdate</span>, to_char(<span class="keyword">sysdate</span><span class="number">-1</span>/<span class="number">24</span>/<span class="number">60</span>/<span class="number">60</span>,<span class="string">'yyyy-mm-dd HH24:MI:SS'</span>) <span class="keyword">from</span> dual;
-</code></pre>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3993,7 +3938,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-count">103</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

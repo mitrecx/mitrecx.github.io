@@ -294,6 +294,225 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/07/Oracle学习2-字符串操作和时间操作/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mitre">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MITRE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/07/Oracle学习2-字符串操作和时间操作/" itemprop="url">Oracle-学习2-字符串操作和时间操作</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-07T10:18:49+08:00">
+                2018-11-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="1-Oracle-字符串类型"><a href="#1-Oracle-字符串类型" class="headerlink" title="1 Oracle 字符串类型"></a>1 Oracle 字符串类型</h1><p>字符串类型的数据可依 <strong>编码方式</strong> 分成 <strong>数据库字符集</strong> (CHAR/VARCHAR2/CLOB/LONG)和 <strong>国际字符集(以 <font color="red">N</font> 开头)</strong> (NCHAR/NVARCHAR2/NCLOB)两种。<br>数据库中的字符串数据都通过字符集将字符转换为二进制，才存储到数据块中。<br>通过不同的编码集转换，即便是相同的字符，也可能会转换成不同的二进制编码。这也是产生乱码的原因。<br>数据库的编码格式一般是在创建数据库时指定的。也可以在数据库建立之后修改其编码。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--字符集查询</span></span><br><span class="line"><span class="keyword">select</span> userenv(<span class="string">'language'</span>) <span class="keyword">from</span> dual;</span><br></pre></td></tr></table></figure></p>
+<p>字符串类型 依据 <strong>存储方式</strong> 分为 <strong>固定长度类型</strong>（CHAR/NCHAR) 和 <strong>可变长度类型</strong>（VARCHAR2/NVARCHAR2)两种.</p>
+<ol>
+<li><p><strong><font color="red">固定长度</font></strong> ：是指虽然输入的字段值小于该字段的限制长度，但是实际存储数据时，会先自动 <strong>在右端补足空格</strong> 后，才将字段值的内容存储到数据块中。(浪费空间，但是存储效率较可变长度类型要好)<br>例：char的长度是固定的，比如，定义了char(20),即使插入abc，不足二十个字节，数据库也会在abc后面自动加上17个空格，以补足二十个字节。  </p>
+</li>
+<li><p><strong><font color="red">可变长度</font></strong>：当输入的字段值小于该字段的限制长度时，直接将字段值的内容存储到数据块中，而不会补上空格。(节省数据块空间)  </p>
+</li>
+</ol>
+<p>Oracle 字符串类型：    </p>
+<ol>
+<li>char(size) / nchar(size) ：定长，字节/字符。最长2000字节。  </li>
+<li>varchar(size) / <strong><font color="red">varchar2(size)</font></strong> ：不定长（变长），字节。最长4000字节。  </li>
+<li>nvarchar(size) / nvarchar2(size) ：不定长，字符  </li>
+<li>long 和 clob ：不定长。long 2GB，clob 4 GB。  </li>
+</ol>
+<h1 id="2-Oracle-字符串处理函数"><a href="#2-Oracle-字符串处理函数" class="headerlink" title="2 Oracle 字符串处理函数"></a>2 Oracle 字符串处理函数</h1><ol>
+<li>concat 和 ||，拼接字符串</li>
+<li>length</li>
+<li><p>upper，lower，和 initcap(各个单词首字母大写)</p>
+</li>
+<li><p>substr</p>
+</li>
+<li>trim，ltrim，rtrim</li>
+<li>instr  </li>
+<li>lpad，rpad</li>
+</ol>
+<p>介绍一下 4,5,6,7 ：  </p>
+<p><strong>substr</strong> 选取子串的起始位置是 1，不是 0。（但是，写0的效果和1相同，都会从起始位置选取）<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--substr('xxx',start,size)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">substr</span>(<span class="string">'hello world'</span>,<span class="number">1</span>,<span class="number">4</span>) <span class="keyword">from</span> dual ;</span><br><span class="line"><span class="comment">--结果： 'hell'</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>trim</strong> 只对 <strong>两端</strong> 有效，去除两端空白，或者去除两端某一个指定字符。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--去除 两端 空白</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">trim</span>(<span class="string">'   mitre  cx   '</span>) <span class="keyword">from</span> dual;</span><br><span class="line"></span><br><span class="line"><span class="comment">--去除 左端 空白</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">ltrim</span>(<span class="string">'   mitre  cx   '</span>) <span class="keyword">from</span> dual;</span><br><span class="line"></span><br><span class="line"><span class="comment">--去除 右端 空白</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">rtrim</span>(<span class="string">'   mitre  cx   '</span>) <span class="keyword">from</span> dual;</span><br><span class="line"></span><br><span class="line"><span class="comment">--去除 两端  字符e</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">trim</span>(<span class="string">'e'</span> <span class="keyword">from</span> <span class="string">'eeemitre  eeecxee'</span>) <span class="keyword">from</span> dual;</span><br></pre></td></tr></table></figure></p>
+<p><strong>instr</strong> (index string的缩写) 字符查找函数，查找到指定字符串，返回指定子串的下标(注意从1开始)，未找到返回0。  </p>
+<p>格式一：instr(源字符串, 目标字符串)<br>格式二： instr(源字符串, 目标字符串[, 起始位置[, 匹配序号]])  </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">instr</span>(<span class="string">'helloworld'</span>,<span class="string">'wo'</span>) <span class="keyword">from</span> dual;</span><br><span class="line"><span class="comment">--返回结果：'6'    </span></span><br><span class="line"><span class="comment">--即“w”开始出现的位置</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">instr</span>(<span class="string">'helloworld'</span>,<span class="string">'o'</span>,<span class="number">1</span>,<span class="number">2</span>) <span class="keyword">from</span> dual;</span><br><span class="line"><span class="comment">--结果：'7'</span></span><br><span class="line"><span class="comment">--从起始位置 1 开始查找，找第 2 个 ‘o’ 出现的位置</span></span><br></pre></td></tr></table></figure>
+<p>lpad 在 字符串的左边补位。<br>rpad 在 字符串的右边补位。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span>  <span class="keyword">lpad</span>(<span class="string">'world'</span>,<span class="number">13</span>,<span class="string">'000 '</span>) <span class="keyword">from</span> dual;  </span><br><span class="line"><span class="comment">--结果：'000 000 world'</span></span><br><span class="line"><span class="comment">--在 'world' 的左边补位 '000 ', 补满 13位</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span>  <span class="keyword">lpad</span>(<span class="string">'world'</span>,<span class="number">3</span>,<span class="string">'000 '</span>) <span class="keyword">from</span> dual;</span><br><span class="line"><span class="comment">--结果：'wor'</span></span><br><span class="line"><span class="comment">--总位数少于原始字符串位数，则保留左侧(rpad也是保留左侧)</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="3-时间类型-date"><a href="#3-时间类型-date" class="headerlink" title="3 时间类型 date"></a>3 时间类型 date</h1><p>获取当前系统时间：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">sysdate</span> <span class="keyword">from</span> dual;</span><br><span class="line"><span class="comment">--结果：'2018/11/22 9:28:20'</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="3-1-时间和字符串"><a href="#3-1-时间和字符串" class="headerlink" title="3.1 时间和字符串"></a>3.1 时间和字符串</h2><p><strong>时间转字符串 to_char(timestamp, timeFormat)</strong>：<br>YYYY    年<br>MM    月份 (01-12)<br>DD    一个月里的日子(01-31)<br>D    一周里的日子(1-7；SUN=1)<br>day 星期几  </p>
+<p>HH    一天的小时数 (01-12)<br>HH12    一天的小时数 (01-12)<br>HH24    一天的小时数 (00-23)<br>MI    分钟 (00-59)<br>SS    秒 (00-59)<br><a href="https://www.cnblogs.com/aipan/p/7941917.html" target="_blank" rel="noopener">更多格式.</a>  </p>
+<p>例：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> to_char(<span class="keyword">sysdate</span>,<span class="string">'yyyy-mm-dd hh24:mi:ss , day'</span>) <span class="keyword">from</span> dual;</span><br><span class="line"><span class="comment">--结果：'2018-11-22 10:13:04 , 星期四'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 本月的天数</span></span><br><span class="line"><span class="keyword">SELECT</span> to_char(<span class="keyword">last_day</span>(<span class="keyword">SYSDATE</span>),<span class="string">'dd'</span>) <span class="keyword">days</span> <span class="keyword">FROM</span> dual;</span><br><span class="line"><span class="comment">--结果：'30'</span></span><br><span class="line"><span class="comment">--注：last_day(time):返回指定日期所在月份的最后一天</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>字符串转时间 to_date(charType, timeFormat)</strong>:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">to_date</span>(<span class="string">'2018-11-22'</span>,<span class="string">'yyyy-mm-dd'</span>) <span class="keyword">from</span> dual;</span><br><span class="line"><span class="comment">--结果：'2018/11/22'</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="3-2-时间的操作"><a href="#3-2-时间的操作" class="headerlink" title="3.2 时间的操作"></a>3.2 时间的操作</h2><p><strong>在介绍时间操作前，先了解 3 个函数</strong>：  </p>
+<ol>
+<li>round(num [,decimal_scale]) 函数: 四舍五入。     </li>
+<li>floor(num) 函数 : 地板，取小于等于数值 num 的最大整数。  </li>
+<li>ceil(num) 函数 ：天花板，取大于等于数值 num 的最小整数。  </li>
+</ol>
+<p>示例：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">round</span>(<span class="number">123.456</span>,<span class="number">2</span>) <span class="keyword">from</span> dual; <span class="comment">-- '123.46'</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">round</span>(<span class="number">123.456</span>) <span class="keyword">from</span> dual; <span class="comment">-- '123'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">floor</span>(<span class="number">123.456</span>) <span class="keyword">from</span> dual; <span class="comment">-- '123'</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">ceil</span>(<span class="number">123.456</span>) <span class="keyword">from</span> dual; <span class="comment">-- '124'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">floor</span>(<span class="number">-1.2</span>) <span class="keyword">from</span> dual; <span class="comment">-- '-2'</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">ceil</span>(<span class="number">-1.2</span>) <span class="keyword">from</span> dual; <span class="comment">-- '-1'</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>计算时间差：<font color="red">时间相减</font></strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--两个日期间的天数</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">sysdate</span> - <span class="keyword">to_date</span>(<span class="string">'2018-10-23'</span>,<span class="string">'yyyy-mm-dd'</span>) <span class="keyword">from</span> dual; <span class="comment">-- '30.4204282407407'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">floor</span>(<span class="keyword">sysdate</span> - <span class="keyword">to_date</span>(<span class="string">'2018-10-23'</span>,<span class="string">'yyyy-mm-dd'</span>)) <span class="keyword">from</span> dual; <span class="comment">-- '30'</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--求某天是星期几</span></span><br><span class="line"><span class="keyword">select</span> to_char(<span class="keyword">to_date</span>(<span class="string">'2018-11-22'</span>,<span class="string">'yyyy-mm-dd'</span>), <span class="string">'day'</span>) <span class="keyword">from</span> dual;  <span class="comment">-- '星期四'</span></span><br></pre></td></tr></table></figure>
+<p><strong>trunc 函数 –截取函数</strong><br>truncate, 截短，删节。</p>
+<p>trunc函数有两种形式：  </p>
+<ol>
+<li><p>trunc(number [,decimal_scale]) ，<br>截取数字 , decimal_scale 保留小数点后面的位数。忽略它则截去所有的小数部分。<br>若 decimal_scale 为负，则向整数位截取补零。</p>
+</li>
+<li><p>trunc(datestamp [,time_scale]) ，<br>截取时间 , timeFormat 截取时间保留的位数。忽略默认截取到日。<br>截取的结果是日期：年/月/日。</p>
+</li>
+</ol>
+<p>trunc 函数 示例：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> trunc(<span class="number">123.456</span>,<span class="number">2</span>)<span class="keyword">from</span> dual; <span class="comment">-- '123.45'</span></span><br><span class="line"><span class="keyword">select</span> trunc(<span class="number">123.456</span>,<span class="number">1</span>)<span class="keyword">from</span> dual; <span class="comment">-- '123.4'</span></span><br><span class="line"><span class="keyword">select</span> trunc(<span class="number">123.456</span>)<span class="keyword">from</span> dual; <span class="comment">-- '123'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--decimal_scale为负，向整数位截取补零</span></span><br><span class="line"><span class="keyword">select</span> trunc(<span class="number">123.456</span>,<span class="number">-1</span>)<span class="keyword">from</span> dual; <span class="comment">-- '120'</span></span><br><span class="line"><span class="keyword">select</span> trunc(<span class="number">123.456</span>,<span class="number">-2</span>)<span class="keyword">from</span> dual; <span class="comment">-- '100'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--截取时间</span></span><br><span class="line"><span class="comment">--默认截取，等价于 trunc(sysdate, 'dd')</span></span><br><span class="line"><span class="keyword">select</span> trunc(<span class="keyword">sysdate</span>) <span class="keyword">from</span> dual; <span class="comment">--结果：'2018/11/22'</span></span><br><span class="line"><span class="comment">--返回当年第一天</span></span><br><span class="line"><span class="keyword">select</span> trunc(<span class="keyword">sysdate</span>,<span class="string">'YYYY'</span>)<span class="keyword">from</span> dual; <span class="comment">--结果：'2018/1/1'</span></span><br><span class="line"><span class="comment">--返回当月第一天</span></span><br><span class="line"><span class="keyword">select</span> trunc(<span class="keyword">sysdate</span>,<span class="string">'MM'</span>)<span class="keyword">from</span> dual; <span class="comment">--结果：'2018/11/1'</span></span><br><span class="line"><span class="comment">--返回当前星期的第一天(星期天)</span></span><br><span class="line"><span class="keyword">select</span> trunc(<span class="keyword">sysdate</span>,<span class="string">'D'</span>)<span class="keyword">from</span> dual; <span class="comment">--结果：'2018/11/18'</span></span><br></pre></td></tr></table></figure></p>
+<p>Oracle其他 有关时间的方法：  </p>
+<pre><code class="sql"><span class="comment">--在系统时间基础上延迟5月</span>
+<span class="keyword">select</span> add_months(<span class="keyword">sysdate</span>,<span class="number">-5</span>) <span class="keyword">from</span> dual t; <span class="comment">--结果：'2018/6/22 11:09:36'</span>
+
+<span class="comment">--下个星期一的日期</span>
+<span class="keyword">select</span> next_day(<span class="keyword">SYSDATE</span>,<span class="number">2</span>) <span class="keyword">from</span> dual <span class="comment">--结果：'2018/11/26 11:11:50'</span>
+<span class="comment">-- 1  2  3  4  5  6  7</span>
+<span class="comment">--日 一 二 三 四 五 六</span>
+
+ <span class="comment">--减1月</span>
+<span class="keyword">select</span> <span class="keyword">sysdate</span>, add_months(<span class="keyword">sysdate</span>,<span class="number">-1</span>) <span class="keyword">from</span> dual;        
+ <span class="comment">--减 1星期 </span>
+<span class="keyword">select</span> <span class="keyword">sysdate</span>, to_char(<span class="keyword">sysdate</span><span class="number">-7</span>,<span class="string">'yyyy-mm-dd HH24:MI:SS'</span>) <span class="keyword">from</span> dual; 
+ <span class="comment">--加 1天 </span>
+<span class="keyword">select</span> <span class="keyword">sysdate</span>, to_char(<span class="keyword">sysdate</span>+<span class="number">1</span>,<span class="string">'yyyy-mm-dd HH24:MI:SS'</span>) <span class="keyword">from</span> dual; 
+<span class="comment">--减1小时 </span>
+<span class="keyword">select</span> <span class="keyword">sysdate</span>, to_char(<span class="keyword">sysdate</span><span class="number">-1</span>/<span class="number">24</span>,<span class="string">'yyyy-mm-dd HH24:MI:SS'</span>) <span class="keyword">from</span> dual; 
+<span class="comment">--减1分钟 </span>
+<span class="keyword">select</span> <span class="keyword">sysdate</span>, to_char(<span class="keyword">sysdate</span><span class="number">-1</span>/<span class="number">24</span>/<span class="number">60</span>,<span class="string">'yyyy-mm-dd HH24:MI:SS'</span>) <span class="keyword">from</span> dual; 
+<span class="comment">--减1秒</span>
+<span class="keyword">select</span> <span class="keyword">sysdate</span>, to_char(<span class="keyword">sysdate</span><span class="number">-1</span>/<span class="number">24</span>/<span class="number">60</span>/<span class="number">60</span>,<span class="string">'yyyy-mm-dd HH24:MI:SS'</span>) <span class="keyword">from</span> dual;
+</code></pre>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/06/Oracle学习1-SQL语言基础/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3548,163 +3767,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/21/servlet过滤器/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="mitre">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MITRE">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/09/21/servlet过滤器/" itemprop="url">servlet过滤器</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-21T09:25:24+08:00">
-                2018-09-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/servlet/" itemprop="url" rel="index">
-                    <span itemprop="name">servlet</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="过滤器"><a href="#过滤器" class="headerlink" title="过滤器"></a>过滤器</h1><p>servlet 规范中 定义的一种特殊的组件，用来拦截容器的调用过程。  </p>
-<p>容器收到请求后，通常情况下会调用servlet 的 service 方法来处理请求，<br>如果有过滤器，则 <strong>容器先调用过滤器的方法</strong>。  </p>
-<p><strong>注：</strong>  容器一启动，就会创建过滤器。  </p>
-<h2 id="写一个-过滤器"><a href="#写一个-过滤器" class="headerlink" title="写一个 过滤器"></a>写一个 过滤器</h2><p>1、 写一个 java类，实现 <strong>Filter 接口</strong>。  </p>
-<p>2、 在 <strong>doFilter方法</strong> 里，编写拦截处理逻辑。  </p>
-<p>3、 配置 过滤器 ( web.xml )。  </p>
-<p>实例：<br>写一个评论页面，在评论框中输入评论，<br>如果评论包含“敏感字”就不显示评论，<br>如果不包含就显示评论。  </p>
-<p>1、 在根目录webContent下，写一个 <strong>comment.jsp</strong> 页面：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">%@page</span> <span class="attr">contentType</span>=<span class="string">"text/html; charset=utf-8"</span> <span class="attr">pageEncoding</span>=<span class="string">"utf-8"</span> %&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"comment"</span> <span class="attr">method</span>=<span class="string">"post"</span>&gt;</span></span><br><span class="line">			评论: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"content"</span>/&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"提交"</span>/&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>2、 写一个 CommentServlet.java， 先不考虑过滤：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> comment;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.PrintWriter;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServlet;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CommentServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">		response.setContentType(<span class="string">"text/html;charset=utf-8"</span>);</span><br><span class="line">		request.setCharacterEncoding(<span class="string">"utf-8"</span>);</span><br><span class="line">		PrintWriter out = response.getWriter();</span><br><span class="line">		String comment = request.getParameter(<span class="string">"content"</span>);</span><br><span class="line">		out.println(<span class="string">"&lt;h1&gt;你的评论是: "</span> + comment + <span class="string">"&lt;/h1&gt;"</span>);</span><br><span class="line">		out.close();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>配置一下 <strong>web.xml</strong> ，然后 Tomcat部署，debug ,可以正常访问，下面加入过滤器。  </p>
-<p>3、写一个过滤器 <strong>CommentFilterA.java</strong>，屏蔽敏感字”傻” ：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> web;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.PrintWriter;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.Filter;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.FilterChain;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.FilterConfig;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletResponse;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CommentFilterA</span> <span class="keyword">implements</span> <span class="title">Filter</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 容器启动后，会创建过滤器对象 只会创建一个</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">CommentFilterA</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"FilterA 的构造 方法"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 容器在创建好 过滤器对象 之后， 接下来会调用对象的init 方法 init 方法只会执行一次 注： 可以在web.xml 中配置</span></span><br><span class="line"><span class="comment">	 * &lt;init-param&gt;提供初始化参数 由 FilterConfig arg 来读取</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(FilterConfig arg0)</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">		<span class="comment">//可以定义一个属性，来保存 容器(web.xml,init-param)传过来的FilterConfig对象</span></span><br><span class="line">		<span class="comment">//config=arg0</span></span><br><span class="line">    <span class="comment">//在别处 就可以 读初始化参数:</span></span><br><span class="line">    <span class="comment">//String ils = config.getParameter("illegalString");</span></span><br><span class="line">		System.out.println(<span class="string">"FilterA init方法。。"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 容器调用 doFilter方法来处理请求。</span></span><br><span class="line"><span class="comment">	 *</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> ServletRequest</span></span><br><span class="line"><span class="comment">	 *            arg0 请求对象</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> ServletResponse</span></span><br><span class="line"><span class="comment">	 *            arg1 响应对象</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> FilterChain</span></span><br><span class="line"><span class="comment">	 *            arg2 过滤器链 如果调用 过滤器链 的 doFilter方法 则容器会继续向后调用</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doFilter</span><span class="params">(ServletRequest arg0, ServletResponse arg1, FilterChain arg2)</span> <span class="keyword">throws</span> IOException, ServletException </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"FilterA 的 doFilter 方法 开始执行！"</span>);</span><br><span class="line">		<span class="comment">// 强转，因为要调用的方法是 HttpServletRequest子类的方法</span></span><br><span class="line">		HttpServletRequest request = (HttpServletRequest) arg0;</span><br><span class="line">		HttpServletResponse response = (HttpServletResponse) arg1;</span><br><span class="line">		<span class="comment">// 先执行过滤器，对请求报文 utf-8 编码处理</span></span><br><span class="line">		request.setCharacterEncoding(<span class="string">"utf-8"</span>);</span><br><span class="line">		response.setContentType(<span class="string">"text/html;charset=utf-8"</span>);</span><br><span class="line">		PrintWriter out = response.getWriter();</span><br><span class="line"></span><br><span class="line">		String content = request.getParameter(<span class="string">"content"</span>);</span><br><span class="line">		<span class="keyword">if</span> (content.indexOf(<span class="string">"傻"</span>) != -<span class="number">1</span>) &#123;</span><br><span class="line">			<span class="comment">// 包含了敏感字</span></span><br><span class="line">			out.println(<span class="string">"&lt;h1&gt;评论包含了敏感字--傻&lt;/h1&gt;"</span>);</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="comment">// 没有包含敏感字，继续向后调用</span></span><br><span class="line">			arg2.doFilter(arg0, arg1);</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println(<span class="string">"FilterA 的 doFilter 方法 执行完毕！"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>4、配置 <strong>web.xml</strong> , 添加 过滤器配置：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">web-app</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="attr">xmlns</span>=<span class="string">"http://xmlns.jcp.org/xml/ns/javaee"</span> <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"</span> <span class="attr">id</span>=<span class="string">"WebApp_ID"</span> <span class="attr">version</span>=<span class="string">"3.1"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">display-name</span>&gt;</span>web05-Filter<span class="tag">&lt;/<span class="name">display-name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">filter</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>filterA<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">filter-class</span>&gt;</span>web.CommentFilterA<span class="tag">&lt;/<span class="name">filter-class</span>&gt;</span></span><br><span class="line">  	<span class="comment">&lt;!-- 初始化参数，非必须，通过FilterConfig对象读取 --&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">init-param</span>&gt;</span></span><br><span class="line">  		<span class="tag">&lt;<span class="name">param-name</span>&gt;</span>illegalString<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">  		<span class="tag">&lt;<span class="name">param-value</span>&gt;</span>猪<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;/<span class="name">init-param</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">filter-mapping</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>filterA<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/comment<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">filter-mapping</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>comt<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>comment.CommentServlet<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>comt<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/comment<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>5、部署，测试可以实现过滤 “傻” 字。 第一个 <strong>java过滤器</strong> 完成。  </p>
-<p><strong>注：</strong><br>当有多个过滤器时，<br>容器会依据 <strong><filter-mapping\></filter-mapping\></strong> 在web.xml 中的先后顺序 来调用。在前面的先调用。   </p>
-<h2 id="java过滤器的优点"><a href="#java过滤器的优点" class="headerlink" title="java过滤器的优点"></a>java过滤器的优点</h2><p>1、 在不修改源程序的基础上，为程序增加一些过滤条件（过滤器独立于已存在的servlet程序）。   </p>
-<p>2、 将多个组件相同的处理逻辑集中写在过滤器里面，方面代码维护。<br>比如，request.getSession 做登录验证。  </p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3757,7 +3819,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-count">103</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

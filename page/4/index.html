@@ -294,6 +294,163 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/21/servlet过滤器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mitre">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MITRE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/21/servlet过滤器/" itemprop="url">servlet过滤器</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-21T09:25:24+08:00">
+                2018-09-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/servlet/" itemprop="url" rel="index">
+                    <span itemprop="name">servlet</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="过滤器"><a href="#过滤器" class="headerlink" title="过滤器"></a>过滤器</h1><p>servlet 规范中 定义的一种特殊的组件，用来拦截容器的调用过程。  </p>
+<p>容器收到请求后，通常情况下会调用servlet 的 service 方法来处理请求，<br>如果有过滤器，则 <strong>容器先调用过滤器的方法</strong>。  </p>
+<p><strong>注：</strong>  容器一启动，就会创建过滤器。  </p>
+<h2 id="写一个-过滤器"><a href="#写一个-过滤器" class="headerlink" title="写一个 过滤器"></a>写一个 过滤器</h2><p>1、 写一个 java类，实现 <strong>Filter 接口</strong>。  </p>
+<p>2、 在 <strong>doFilter方法</strong> 里，编写拦截处理逻辑。  </p>
+<p>3、 配置 过滤器 ( web.xml )。  </p>
+<p>实例：<br>写一个评论页面，在评论框中输入评论，<br>如果评论包含“敏感字”就不显示评论，<br>如果不包含就显示评论。  </p>
+<p>1、 在根目录webContent下，写一个 <strong>comment.jsp</strong> 页面：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">%@page</span> <span class="attr">contentType</span>=<span class="string">"text/html; charset=utf-8"</span> <span class="attr">pageEncoding</span>=<span class="string">"utf-8"</span> %&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"comment"</span> <span class="attr">method</span>=<span class="string">"post"</span>&gt;</span></span><br><span class="line">			评论: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"content"</span>/&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"提交"</span>/&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>2、 写一个 CommentServlet.java， 先不考虑过滤：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> comment;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.PrintWriter;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServlet;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CommentServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">		response.setContentType(<span class="string">"text/html;charset=utf-8"</span>);</span><br><span class="line">		request.setCharacterEncoding(<span class="string">"utf-8"</span>);</span><br><span class="line">		PrintWriter out = response.getWriter();</span><br><span class="line">		String comment = request.getParameter(<span class="string">"content"</span>);</span><br><span class="line">		out.println(<span class="string">"&lt;h1&gt;你的评论是: "</span> + comment + <span class="string">"&lt;/h1&gt;"</span>);</span><br><span class="line">		out.close();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>配置一下 <strong>web.xml</strong> ，然后 Tomcat部署，debug ,可以正常访问，下面加入过滤器。  </p>
+<p>3、写一个过滤器 <strong>CommentFilterA.java</strong>，屏蔽敏感字”傻” ：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> web;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.PrintWriter;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.Filter;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.FilterChain;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.FilterConfig;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletResponse;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CommentFilterA</span> <span class="keyword">implements</span> <span class="title">Filter</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 容器启动后，会创建过滤器对象 只会创建一个</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">CommentFilterA</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"FilterA 的构造 方法"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 容器在创建好 过滤器对象 之后， 接下来会调用对象的init 方法 init 方法只会执行一次 注： 可以在web.xml 中配置</span></span><br><span class="line"><span class="comment">	 * &lt;init-param&gt;提供初始化参数 由 FilterConfig arg 来读取</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(FilterConfig arg0)</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">		<span class="comment">//可以定义一个属性，来保存 容器(web.xml,init-param)传过来的FilterConfig对象</span></span><br><span class="line">		<span class="comment">//config=arg0</span></span><br><span class="line">    <span class="comment">//在别处 就可以 读初始化参数:</span></span><br><span class="line">    <span class="comment">//String ils = config.getParameter("illegalString");</span></span><br><span class="line">		System.out.println(<span class="string">"FilterA init方法。。"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 容器调用 doFilter方法来处理请求。</span></span><br><span class="line"><span class="comment">	 *</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> ServletRequest</span></span><br><span class="line"><span class="comment">	 *            arg0 请求对象</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> ServletResponse</span></span><br><span class="line"><span class="comment">	 *            arg1 响应对象</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> FilterChain</span></span><br><span class="line"><span class="comment">	 *            arg2 过滤器链 如果调用 过滤器链 的 doFilter方法 则容器会继续向后调用</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doFilter</span><span class="params">(ServletRequest arg0, ServletResponse arg1, FilterChain arg2)</span> <span class="keyword">throws</span> IOException, ServletException </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"FilterA 的 doFilter 方法 开始执行！"</span>);</span><br><span class="line">		<span class="comment">// 强转，因为要调用的方法是 HttpServletRequest子类的方法</span></span><br><span class="line">		HttpServletRequest request = (HttpServletRequest) arg0;</span><br><span class="line">		HttpServletResponse response = (HttpServletResponse) arg1;</span><br><span class="line">		<span class="comment">// 先执行过滤器，对请求报文 utf-8 编码处理</span></span><br><span class="line">		request.setCharacterEncoding(<span class="string">"utf-8"</span>);</span><br><span class="line">		response.setContentType(<span class="string">"text/html;charset=utf-8"</span>);</span><br><span class="line">		PrintWriter out = response.getWriter();</span><br><span class="line"></span><br><span class="line">		String content = request.getParameter(<span class="string">"content"</span>);</span><br><span class="line">		<span class="keyword">if</span> (content.indexOf(<span class="string">"傻"</span>) != -<span class="number">1</span>) &#123;</span><br><span class="line">			<span class="comment">// 包含了敏感字</span></span><br><span class="line">			out.println(<span class="string">"&lt;h1&gt;评论包含了敏感字--傻&lt;/h1&gt;"</span>);</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="comment">// 没有包含敏感字，继续向后调用</span></span><br><span class="line">			arg2.doFilter(arg0, arg1);</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println(<span class="string">"FilterA 的 doFilter 方法 执行完毕！"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>4、配置 <strong>web.xml</strong> , 添加 过滤器配置：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">web-app</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="attr">xmlns</span>=<span class="string">"http://xmlns.jcp.org/xml/ns/javaee"</span> <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"</span> <span class="attr">id</span>=<span class="string">"WebApp_ID"</span> <span class="attr">version</span>=<span class="string">"3.1"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">display-name</span>&gt;</span>web05-Filter<span class="tag">&lt;/<span class="name">display-name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">filter</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>filterA<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">filter-class</span>&gt;</span>web.CommentFilterA<span class="tag">&lt;/<span class="name">filter-class</span>&gt;</span></span><br><span class="line">  	<span class="comment">&lt;!-- 初始化参数，非必须，通过FilterConfig对象读取 --&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">init-param</span>&gt;</span></span><br><span class="line">  		<span class="tag">&lt;<span class="name">param-name</span>&gt;</span>illegalString<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">  		<span class="tag">&lt;<span class="name">param-value</span>&gt;</span>猪<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;/<span class="name">init-param</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">filter-mapping</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>filterA<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/comment<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">filter-mapping</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>comt<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>comment.CommentServlet<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>comt<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/comment<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>5、部署，测试可以实现过滤 “傻” 字。 第一个 <strong>java过滤器</strong> 完成。  </p>
+<p><strong>注：</strong><br>当有多个过滤器时，<br>容器会依据 <strong><filter-mapping\></filter-mapping\></strong> 在web.xml 中的先后顺序 来调用。在前面的先调用。   </p>
+<h2 id="java过滤器的优点"><a href="#java过滤器的优点" class="headerlink" title="java过滤器的优点"></a>java过滤器的优点</h2><p>1、 在不修改源程序的基础上，为程序增加一些过滤条件（过滤器独立于已存在的servlet程序）。   </p>
+<p>2、 将多个组件相同的处理逻辑集中写在过滤器里面，方面代码维护。<br>比如，request.getSession 做登录验证。  </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/20/tomcat启动错误/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3666,168 +3823,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/31/2017-成长/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="mitre">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MITRE">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/31/2017-成长/" itemprop="url">2017-成长</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-31T20:23:23+08:00">
-                2017-12-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/总结/" itemprop="url" rel="index">
-                    <span itemprop="name">总结</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <font color="orange">以中有足乐者, 不知口体之奉不若人也, 盖余之勤切艰若此.       –宋濂</font>  
-
-<p>刚刚我看了 17 年的计划. <strong>不忘初心, 坚持可贵</strong>.<br>最终还是两者都放弃了, 不放弃不一定能有好结果, 但放弃的确 使我很狼狈. 2017 年最终还是走错了一大步.  </p>
-<hr>
-<p>2017年快要过完了, 90后全部都成年了. 属于90后的青少年的时代已经过去了.<br>不得不承认时间过得太快. 我 18岁 的时候是2013年, 当时上高二. 当时的生活无忧无虑, 喜欢足球, 地下城与勇士, 没有别的想法.   </p>
-<p>今年大四, 22岁, 2018 年 7 月份就要毕业了.<br>人生已经到了这个尴尬的年纪, 胸怀理想, 一无所有.  </p>
-<hr>
-<p>2017年我做了哪些事：<br>1, 写了2017年robocup的TDP, 虽然是生搬硬套的, 虽然很蹩脚, 但是通过了TC的认证, 还是挺开心的.    </p>
-<p>2, 准备了6个多月考研, 在8月23号决定放弃了. 这件错误的决定, 从开始就是错误的. 在我准备考研的这段时间, 大鹏拿了物联网大赛的一等奖, 邓勇拿了Robocup 2D技术挑战赛的冠军. 现在大鹏和肖忘生在上海工作, 邓勇在北京. 只有我还在学校.   </p>
-<p>3, 谈了一场不靠谱的恋爱.   </p>
-<p>4, 在上海找了一个多月的工作. 那些笔试题我应该可以过的.   </p>
-<p>5, 毕业设计的题目选了 RoboCup 3D 方向.   </p>
-<p>6, 把《c++ primer》(5), 《effective c++》看了一遍, 用 Python 写了两个爬虫.   </p>
-<p>一些没有实现的目标：<br>一天一篇博客, 太难实现了. 一个星期一篇或许比较合理.<br>每天两个小时的英语…</p>
-<p>找工作失败总结：<br>1, 不知道自己能做什么<br>2, 会的东西太少, 而且不精通<br>3, 不知道 c++ 能做什么<br>4, 基础太菜–只是略懂 c++ , 代码量太少<br>5, <strong><font color="red">归根结底, 实践少, 理论差</font>.</strong>  </p>
-<hr>
-<p>首先,  现在我在人生的低谷中, 我必须相信一件事, 现在对我个人没有什么可怕的, 所有的不好的结果我都接受了.   </p>
-<p>不论生活是多么的糟糕, 还是要为 2018 做一个计划.<br>1, Java<br>2, MySQL<br>3, 掌握网络编程<br>4, 每周至少一篇博客, 每天至少1小时英语<br>5, 找一份工作, 赚点钱, 还mi pro借的钱  </p>
-<font color="orange">勿以往之不谏, 知来者之可追. </font>   
-
-<p>既然不喜欢, 那就努力改变.<br>多一点客观, 少点主观.<br>人生短暂, 认准目标, 坚定的走下去就好了.<br>三年, 一个梦想, 别的都不想.   </p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3880,7 +3875,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-count">103</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
