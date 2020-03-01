@@ -294,6 +294,161 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/22/vim-tutor/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mitre">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MITRE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/22/vim-tutor/" itemprop="url">vim tutor</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-22T19:14:18+08:00">
+                2018-01-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程工具/" itemprop="url" rel="index">
+                    <span itemprop="name">编程工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="vim-tutor"><a href="#vim-tutor" class="headerlink" title="vim tutor"></a>vim tutor</h1><p>今天man vim 把vim使用手册祥读了一番，有一些新的发现。<br><img src="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/man-vim.png" alt><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">man vimtutor</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/man-vimtutor.png" alt><br>发现一个tutor文件  </p>
+<p>用vim打开这个文件<br><img src="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/vim-vimtutor.png" alt>  </p>
+<p>这个tutor概括了一些vim使用方法，概括的简洁明了，很好。  </p>
+<p><img src="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/vim-tutor-lesson2.png" alt><br><img src="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/vim-tutor-lesson4.png" alt><br><img src="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/vim-tutor-lesson5.png" alt><br><img src="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic5/vim-tutor-lesson6.png" alt>  </p>
+<h1 id="tutor-之外"><a href="#tutor-之外" class="headerlink" title="tutor 之外"></a>tutor 之外</h1><p>“ . “是一个重复命令。<br>“ . “用于重复<font color="orange">输入模式</font>或<font color="orange">命令模式</font>中的命令。<br>例如：<br>4dd删除4行，然后按” . “会继续删除4行；<br>/(查找) , n(查找下一个) , .(重复上一个编辑命令)这三个命令构成了奇妙的三重唱，如：/int(查找int)，用cw替换int输入double，然后按n(查找下一个),再按. ，下一个int直接变成double，不用再用键盘输入double了。</p>
+<hr>
+<p>ps.<br>vim里有3个操作符(operator)： c(change)，d(delete)，y(yank,copy)<br>操作符常与其他命令(motion)组合使用，常用的motions：<br>$(行末)<br>G(文件末) – d30G删除光标到第30行的内容<br>w(操作一个词)<br>e(end of word,和w差不多)<br>/(操作到第一次匹配到的内容那一行（不包括）) – ?反向  </p>
+<p>一个操作符自身重复时（cc，dd，yy），仅对当前行起作用。可prepend数字，以操作多行。  </p>
+<hr>
+<p>:e FILENAME – （需要保存当前文件，）自动退出文件，打开名为FILENAME的文件  </p>
+<p>：r FILENAME – retrieving and mering，可以配合!(ex模式下的exclamation point)，如： “:r !ls -al”  </p>
+<p><strong>配置vimrc</strong>：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.vimrc</span><br></pre></td></tr></table></figure></p>
+<p>添加以下内容：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#显示行号</span></span><br><span class="line"><span class="built_in">set</span> nu</span><br><span class="line"><span class="comment">#自动语法高亮</span></span><br><span class="line">syntax on</span><br><span class="line"><span class="comment"># 缩进</span></span><br><span class="line"><span class="built_in">set</span> autoindent</span><br><span class="line"><span class="built_in">set</span> smartindent</span><br><span class="line"></span><br><span class="line"><span class="comment">#匹配高亮</span></span><br><span class="line"><span class="built_in">set</span> hlsearch</span><br><span class="line"><span class="comment"># 默认缩进4个空格</span></span><br><span class="line"><span class="built_in">set</span> shiftwidth=4</span><br><span class="line"><span class="comment">#使用tab时 tab空格数</span></span><br><span class="line"><span class="built_in">set</span> softtabstop=4</span><br><span class="line"><span class="comment">#tab 代表4个空格</span></span><br><span class="line"><span class="built_in">set</span> tabstop=4</span><br><span class="line"><span class="comment">#使用空格替换tab</span></span><br><span class="line"><span class="built_in">set</span> expandtab</span><br><span class="line"><span class="comment"># 根据 /usr/share/vim/vim74/colors，更改配色方案，例如：</span></span><br><span class="line">color murphy</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/31/2017-成长/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3325,165 +3480,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/27/github遇到的坑/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="mitre">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MITRE">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/27/github遇到的坑/" itemprop="url">github遇到的坑</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-27T00:34:53+08:00">
-                2017-11-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/git/" itemprop="url" rel="index">
-                    <span itemprop="name">git</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>部署博客时（hexo d）</p>
-<p>遇到错误   </p>
-<font color="orange">Error: EACCES: permission denied, unlink ‘/home/mitrecx/blog/.deploy_git/about/index.html’</font>
-
-<p>遇到这样的权限问题，理所当然的想到<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod -R 777 .</span><br></pre></td></tr></table></figure></p>
-<p>简单粗暴，解决问题。</p>
-<p><strong>但是，我没有这么做！</strong></p>
-<p>我直接<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo hexo d</span><br></pre></td></tr></table></figure></p>
-<p>新问题来了</p>
-<font color="orange"><br>ssh: connect to host my.github.com port 22: Connection timed out　　　　<br>fatal: Could not read from remote repository.　　<br>Please make sure you have the correct access rights<br>and the repository exists.　　<br>FATAL Something’s wrong. Maybe you can find the solution here: <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">http://hexo.io/docs/troubleshooting.html</a><br><br></font>
-
-<p><strong>为什么会ssh　github　会有问题？</strong>　　　</p>
-<p>我试了一下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure></p>
-<p><a href>两个帐号都可以连接到github</a></p>
-<p>但是 用sudo就不行<br><a href>sudo ssh连接github提示publickey不行</a></p>
-<p>原因很明显了：<br><strong>我用的 sshkey　是 mitrecx 用户生成的。sudo执行 命令时，用的是 root 用户的 sshkey，所以github会拒绝接受git请求。</strong><br>sshkey在 <strong>~./ssh</strong> 目录下，root 可以复制，查看 mitrecx 的 sshkey, 感觉有点不安全.<br>但是, root 用户 连 mitrecx 的 登录密码 都能改,  还说啥安全不安全的…..</p>
-<p>github权限的坑踩完了。  </p>
-<p>为什么最初我在 <code>hexo d</code> 会出出错呢？<br><strong>原因是我在 <code>hexo d</code> 执行前，执行的是 <code>sudo hexo g</code> ，而不是 <code>hexo g</code></strong> 。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3536,7 +3532,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">103</span>
+                  <span class="site-state-item-count">104</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3558,7 +3554,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">33</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

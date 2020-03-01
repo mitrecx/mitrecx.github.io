@@ -294,6 +294,165 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/27/github遇到的坑/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mitre">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MITRE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/27/github遇到的坑/" itemprop="url">github遇到的坑</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-27T00:34:53+08:00">
+                2017-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/git/" itemprop="url" rel="index">
+                    <span itemprop="name">git</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>部署博客时（hexo d）</p>
+<p>遇到错误   </p>
+<font color="orange">Error: EACCES: permission denied, unlink ‘/home/mitrecx/blog/.deploy_git/about/index.html’</font>
+
+<p>遇到这样的权限问题，理所当然的想到<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod -R 777 .</span><br></pre></td></tr></table></figure></p>
+<p>简单粗暴，解决问题。</p>
+<p><strong>但是，我没有这么做！</strong></p>
+<p>我直接<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo hexo d</span><br></pre></td></tr></table></figure></p>
+<p>新问题来了</p>
+<font color="orange"><br>ssh: connect to host my.github.com port 22: Connection timed out　　　　<br>fatal: Could not read from remote repository.　　<br>Please make sure you have the correct access rights<br>and the repository exists.　　<br>FATAL Something’s wrong. Maybe you can find the solution here: <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">http://hexo.io/docs/troubleshooting.html</a><br><br></font>
+
+<p><strong>为什么会ssh　github　会有问题？</strong>　　　</p>
+<p>我试了一下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure></p>
+<p><a href>两个帐号都可以连接到github</a></p>
+<p>但是 用sudo就不行<br><a href>sudo ssh连接github提示publickey不行</a></p>
+<p>原因很明显了：<br><strong>我用的 sshkey　是 mitrecx 用户生成的。sudo执行 命令时，用的是 root 用户的 sshkey，所以github会拒绝接受git请求。</strong><br>sshkey在 <strong>~./ssh</strong> 目录下，root 可以复制，查看 mitrecx 的 sshkey, 感觉有点不安全.<br>但是, root 用户 连 mitrecx 的 登录密码 都能改,  还说啥安全不安全的…..</p>
+<p>github权限的坑踩完了。  </p>
+<p>为什么最初我在 <code>hexo d</code> 会出出错呢？<br><strong>原因是我在 <code>hexo d</code> 执行前，执行的是 <code>sudo hexo g</code> ，而不是 <code>hexo g</code></strong> 。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/26/git简单教程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -826,7 +985,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">103</span>
+                  <span class="site-state-item-count">104</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -848,7 +1007,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">33</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
