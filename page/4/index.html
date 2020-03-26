@@ -294,6 +294,156 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/23/servlet线程安全/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mitre">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MITRE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/23/servlet线程安全/" itemprop="url">servlet线程安全</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-23T09:25:54+08:00">
+                2018-09-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/servlet/" itemprop="url" rel="index">
+                    <span itemprop="name">servlet</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="servlet-线程安全问题"><a href="#servlet-线程安全问题" class="headerlink" title="servlet 线程安全问题"></a>servlet 线程安全问题</h1><p>容器在默认情况下，只会创建一个 <strong>servlet实例</strong>。<br>容器收到一个请求，就会 <strong>启动一个线程</strong> 来处理。  </p>
+<p>如果有多个请求同时访问某个 servlet，<br>就会有多个线程调用同一个 servlet实例，<br>就有可能产生线程安全问题（如，这些线程要修改servlet的属性）。   </p>
+<p>一个 多线程访问 servlet 示例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> web;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServlet;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(HttpServletRequest arg0, HttpServletResponse arg1)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">		count++;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 输出线程名+线程个数</span></span><br><span class="line">		System.out.println(Thread.currentThread().getName() + <span class="string">":"</span> + count);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>利用 jMeter 测试：<br>1、 打开 jMeter，创建一个线程组<br><img src="https://mitre.oss-cn-hangzhou.aliyuncs.com/java-%E8%BE%BE%E5%86%85%E8%A7%86%E9%A2%91%E5%AD%A6%E4%B9%A0/jMeter1.png" alt>  </p>
+<p>2、 配置线程组<br><img src="https://mitre.oss-cn-hangzhou.aliyuncs.com/java-%E8%BE%BE%E5%86%85%E8%A7%86%E9%A2%91%E5%AD%A6%E4%B9%A0/jMeter2.png" alt>  </p>
+<p>3、 为线程组添加 访问协议类型，配置并启动<br><img src="https://mitre.oss-cn-hangzhou.aliyuncs.com/java-%E8%BE%BE%E5%86%85%E8%A7%86%E9%A2%91%E5%AD%A6%E4%B9%A0/jMeter3.png" alt>  </p>
+<p>4、 测试结果<br><img src="https://mitre.oss-cn-hangzhou.aliyuncs.com/java-%E8%BE%BE%E5%86%85%E8%A7%86%E9%A2%91%E5%AD%A6%E4%B9%A0/jMeter4.png" alt>  </p>
+<h1 id="解决servlet-线程安全问题"><a href="#解决servlet-线程安全问题" class="headerlink" title="解决servlet 线程安全问题"></a>解决servlet 线程安全问题</h1><p>把可能产生线程不安全的程序 用 <strong>synchronized(this)</strong> 括起来。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> web;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServlet;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(HttpServletRequest arg0, HttpServletResponse arg1)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">		<span class="keyword">synchronized</span>(<span class="keyword">this</span>) &#123;</span><br><span class="line">			count++;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">// 输出线程名+线程个数</span></span><br><span class="line">			System.out.println(Thread.currentThread().getName() + <span class="string">":"</span> + count);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>测试结果：<br><img src="https://mitre.oss-cn-hangzhou.aliyuncs.com/java-%E8%BE%BE%E5%86%85%E8%A7%86%E9%A2%91%E5%AD%A6%E4%B9%A0/jMeter5.png" alt>  </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/22/servlet监听器/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3579,258 +3729,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/14/Linux系统程序设计1-文件/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="mitre">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MITRE">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/02/14/Linux系统程序设计1-文件/" itemprop="url">Linux系统程序设计1--文件</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-14T19:48:53+08:00">
-                2018-02-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="1-linux系统程序设计—文件"><a href="#1-linux系统程序设计—文件" class="headerlink" title="1.  linux系统程序设计—文件"></a>1.  linux系统程序设计—文件</h1><p>系统调用是一种例程。<br>系统调用用于执行文件I/O、分配内存、创建进程等。<br>标准ANSI C库函数，如fopen和printf可以作为对象模块捆绑到一个档案中。系统调用与之不同，它们内置在内核中，一般由汇编语言编写。但是，提供了接口，可以像调用函数一样调用接口。  </p>
-<p><font color="orange">库函数通常不包含系统调用提供的精细控制功能</font> 。例如：<br>fopen不能设置文件权限，而open可以设置。<br>只有利用stat系统调用才能知道文件的大小。<br>只有fork系统调用才能创建进程。  </p>
-<p><strong>系统调用</strong>要比调用<strong>库函数</strong> 的的开销大.  </p>
-<h1 id="2-errno-和-perror：处理错误"><a href="#2-errno-和-perror：处理错误" class="headerlink" title="2.  errno 和 perror：处理错误"></a>2.  errno 和 perror：处理错误</h1><p><strong>系统调用在错误时返回-1</strong><br>错误的发生可能会有多种原因——资源不可用、接收到一个信号、I/O操作失败、调用参数无效。  </p>
-<p>当系统调用返回-1时，内核将静态（全局）变量errno设定为一个正整数。这个<strong>用符号常量表示的整数</strong>与<strong>错误消息</strong>相关联。  </p>
-<p>仅当系统调用返回错误时才使用perror。<br>perror函数语法：<br>void perror(const char *s)  ;<br>函数的以一个字符串s为参数。函数输出：打印该字符串s、一个冒号、一个空格，然后是与errno相关联的消息。  </p>
-<table>
-<thead>
-<tr>
-<th>符号常量</th>
-<th>errno</th>
-<th>消息</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>E PERM</td>
-<td>1</td>
-<td>Operation not permitted</td>
-</tr>
-<tr>
-<td>E NOENT</td>
-<td>2</td>
-<td>No such file or directory</td>
-</tr>
-<tr>
-<td>E SRCH</td>
-<td>3</td>
-<td>No such process</td>
-</tr>
-<tr>
-<td>E INTR</td>
-<td>4</td>
-<td>Interrupted system call</td>
-</tr>
-<tr>
-<td>E IO</td>
-<td>5</td>
-<td>I/O error</td>
-</tr>
-<tr>
-<td>E ACCES</td>
-<td>13</td>
-<td>Permission denied</td>
-</tr>
-<tr>
-<td>E EXIT</td>
-<td>17</td>
-<td>File exits</td>
-</tr>
-<tr>
-<td>E NOTDIR</td>
-<td>20</td>
-<td>Not a directory</td>
-</tr>
-<tr>
-<td>EISDIR</td>
-<td>21</td>
-<td>Is a directory</td>
-</tr>
-</tbody>
-</table>
-<p>以下程序show_errors.c</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;  //获取open中的O_RDONLY</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;  //获取fprintf中的stderr</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt; //获取exit</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/error.h&gt;  //获取errno</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span>&#123;</span><br><span class="line">  <span class="comment">//以只读模式打开</span></span><br><span class="line">  <span class="keyword">if</span>(open(argv[<span class="number">1</span>],O_RDONLY)==<span class="number">-1</span>) <span class="comment">//O表示open，RD表示read。</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"errno=%d\n"</span>, errno);</span><br><span class="line">    perror(<span class="string">"open"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>执行时，如：<br>$ ./a.out foofoo<br>errno = 2<br>open: No such file or directory</p>
-<h1 id="3-open-打开和创建文件"><a href="#3-open-打开和创建文件" class="headerlink" title="3. open: 打开和创建文件"></a>3. open: 打开和创建文件</h1><p>一些与文件Ｉ/O相关的系统调用：　　</p>
-<ul>
-<li>open , close</li>
-<li>read , write</li>
-<li>lseek</li>
-<li>truncate , ftruncate</li>
-</ul>
-<p><strong>在读写一个文件之前，必须要用open打开它。</strong><br>open语法：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> open（<span class="keyword">const</span> <span class="keyword">char</span> \*path, <span class="keyword">int</span> oflag, ...)  ;</span><br></pre></td></tr></table></figure></p>
-<p><strong>open以int形式返回一个文件说明符 (<font color="orange"> file description</font> ) 。当发生错误时，open返回 -1 。</strong><br>第一个参数(path)是一个指针，指向一个表示文件路径名的字符串(绝对路径或相对路径)，<br>第二个参数(oflag)用于<strong>设置打开模式</strong>(读、写或读-写)。这一模式用三个符号常量表示：<br><strong>O_RDONLY</strong> 打开文件供读取<br><strong>O_WRONLY</strong>  打开文件供写入<br><strong>O_RDWR</strong>    打开文件供读和写<br>这些常量在/usr/include下的文件 fcnlt.h 中定义。<br>用法:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> fd;</span><br><span class="line"><span class="comment">//以只读方式打开passwd文件，如果打开出错，就打印错误</span></span><br><span class="line"><span class="keyword">if</span>( (fd=open(<span class="string">"/etc/passwd"</span>,O_RDONLY)) == <span class="number">-1</span>)&#123;</span><br><span class="line">  perror(<span class="string">"open"</span>);</span><br><span class="line">  <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>此外，open还有更多打开模式 ( 也在fcntl.h中定义 ):<br><strong>O_APPEND</strong>  追加模式打开文件(仅当打开模式为O_WRONLY或O_RDWR)<br><strong>O_TRUNC</strong>  将文件截短为0(条件同上)，其实就是覆盖文件(注:truncate  截短、缩短)<br><strong>O_CREAT</strong>  若文件不存在，则创建文件<br><strong>O_EXCL</strong>   若指定O_CREAT，且该文件存在，则生成一条错误<br><strong>O_SYNC</strong>  同步读写操作。确保在将数据写到磁盘之前，write不会返回<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//类似shell中的&gt;&gt;</span></span><br><span class="line">fd=open(<span class="string">"foo.txt"</span>, O_WRONLY | O_APPEND )</span><br><span class="line"><span class="comment">//类似shell中的&gt;</span></span><br><span class="line">fd=open(<span class="string">"../foo.txt"</span>, O_WRONLY | O_TRUNC )</span><br></pre></td></tr></table></figure></p>
-<p>如果文件不存在，就要用O_CREAT（有时会用到O_EXCL）创建它，并在第三参数指定其权限。<br><strong>Linux/Unix在sys/stat.h中提供了符号常量以设置权限</strong><br>但是也可以，用八进制(octal)数设置权限，必须添加前缀0。（例如0644而不是644）<br>0644等同于：<br>S_IRUSR|S_IWUSR | S_IRGRP | S_IROTH<br>表示用户可读写，组可读，其他可写<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//打开foo.txt，以截断方式写入，如果foo.txt不存在，就创建该文件</span></span><br><span class="line">fd = open(<span class="string">"foo.txt"</span>, O_WRONLY|O_CREAT|OTRUNC, <span class="number">0644</span>);</span><br></pre></td></tr></table></figure></p>
-<h1 id="4-close-关闭文件"><a href="#4-close-关闭文件" class="headerlink" title="4. close: 关闭文件"></a>4. close: 关闭文件</h1><p><strong>程序在终止之前会关闭所有已打开文件，但不在需要文件时主动关闭是一种好习惯。</strong><br>close系统调用可以关闭一个文件:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">close</span><span class="params">(<span class="keyword">int</span> fd)</span></span>;</span><br></pre></td></tr></table></figure></p>
-<p>close用文件描述符( file description )作为参数，实际上是释放<strong>对该进程的文件说明符</strong>。<br>close成功返回0，失败返回-1.  </p>
-<h1 id="5-read-读取文件"><a href="#5-read-读取文件" class="headerlink" title="5. read:  读取文件"></a>5. read:  读取文件</h1><p>两个系统调用——read和write——负责对常规文件(REG,regular)以及管道和套接字进行读写操作。<br><strong>这两个调用的语法类似，都利用了用户定义的缓冲区。</strong><br>read利用open返回的文件说明符来读取文件：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ssize_t</span> read(<span class="keyword">int</span> fildes, <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> nbyte);</span><br></pre></td></tr></table></figure></p>
-<p>read尝试从文件说明符fildes向缓冲区buf中读取nbyte个字符。<br><strong>文件说明符</strong>就是要<strong>读取的对象</strong>，<strong>缓冲区</strong>是读取后<strong>内容存放的地方</strong>，<strong>nbyte</strong>是一次<strong>读取n个字节</strong><br>注：nbyte通常是缓冲区本身的大小<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BUFSIZE 4096</span></span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="keyword">char</span> buf[BUFSIZE];</span><br><span class="line"><span class="keyword">while</span>( (n=read(fd, buf, BUFSIZE))&gt;<span class="number">0</span> ) <span class="comment">//由open获得的fd</span></span><br></pre></td></tr></table></figure></p>
-<p>每次read调用，读取4096个字节。<strong>在遇到EOF之前，read返回所读字符数，<del>而遇到EOF时，返回0</del>( 准确地说，是文件的大小是缓冲区的整数倍，最后一次遇到EOF返回0 )</strong>。但最后一次迭代可能例外，最后一次迭代中，返回的是尚未读取的字符数（因为文件的大小可能不是缓冲区大小的整数倍）。read错误返回-1。<br>例如：如上程序，fd描述的文件有4100个字节，第一次迭代read返回4096，第二次迭代read返回4个字节，第三次返回0。  </p>
-<p>如果要处理所读取的每个字符，可将buf声明为一个char变量，然后将其地址传给read：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="keyword">char</span> buf;</span><br><span class="line"><span class="keyword">while</span>( (n=read(fd, &amp;buf, <span class="number">1</span>))&gt;<span class="number">0</span> )</span><br></pre></td></tr></table></figure></p>
-<p>用单字符缓冲区读取100个字符需要100次系统调用，这个代价高昂。在这种情况下，诸如fgetc之类的<strong>库函数</strong>是比较好的选择。  </p>
-<h1 id="6-write：-写文件"><a href="#6-write：-写文件" class="headerlink" title="6. write： 写文件"></a>6. write： 写文件</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ssize_t</span> write(<span class="keyword">int</span> fildes, <span class="keyword">const</span> <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> nbyte) ;</span><br></pre></td></tr></table></figure>
-<p>write把<strong>缓冲区</strong>的内容写入到fildes说明的<strong>文件</strong>中。<br>write返回所写字符个数。如果write运行期间磁盘已满或文件大小超出系统限制，则write返回-1。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BUFSIZE 8192</span></span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="keyword">char</span> buf[BUFSIZE];</span><br><span class="line">n = write(fd, buf, BUFSIZE);</span><br></pre></td></tr></table></figure></p>
-<p>和read一样，write可以一次写一个字符：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> buf;</span><br><span class="line">write(fd, &amp;buf, <span class="number">1</span>);</span><br></pre></td></tr></table></figure></p>
-<hr>
-<p>一个利用系统调用复制文件的程序：  </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//quit.h</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">quit</span><span class="params">(<span class="keyword">char</span> *, <span class="keyword">int</span>)</span></span>;</span><br></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//quit.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"quit.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">quit</span><span class="params">(<span class="keyword">char</span> *message, <span class="keyword">int</span> exit_status)</span></span>&#123;</span><br><span class="line">        perror(message);</span><br><span class="line">        <span class="built_in">exit</span>(exit_status);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//ccp.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"quit.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BUFSIZE 1024</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> **argv)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> fd1,fd2;</span><br><span class="line">        <span class="keyword">int</span> n;</span><br><span class="line">        <span class="keyword">char</span> buf[BUFSIZE];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>((fd1=open(argv[<span class="number">1</span>],O_RDONLY))==<span class="number">-1</span>)</span><br><span class="line">                quit(<span class="string">"open"</span>,<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span>((fd2=open(<span class="string">"passwd.bak"</span>,O_WRONLY|O_CREAT|O_TRUNC, <span class="number">0664</span>))==<span class="number">-1</span>)</span><br><span class="line">                quit(<span class="string">"open2"</span>,<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>( (n=read(fd1,buf,BUFSIZE))&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(n!=write(fd2,buf,n))</span><br><span class="line">                        quit(<span class="string">"write"</span>,<span class="number">3</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        close(fd1);</span><br><span class="line">        close(fd2);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>编译、运行：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#编译quit.c 生成quit.o目标文件</span></span><br><span class="line">$ gcc -c quit.c</span><br><span class="line"></span><br><span class="line"><span class="comment">#用ccp.c和quit.o编译出a.out(默认的可执行文件名，可用-o指定别的名)</span></span><br><span class="line">$ gcc ccp.c quit.o</span><br><span class="line"></span><br><span class="line"><span class="comment">#执行程序，复制passwd的内容到当前目录下的passwd.bak文件中</span></span><br><span class="line">$ ./a.out /etc/passwd</span><br></pre></td></tr></table></figure></p>
-<p>write不一定写入磁盘，如果把ccp.c中的第二个open和close删除，把fd2改为1 ( 或改为STDOUT_FILENO，需要包含头文件unistd.h )，就可以写到标准输出了。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"quit.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BUFSIZE 1024</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> **argv)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> fd1,fd2;</span><br><span class="line">        <span class="keyword">int</span> n;</span><br><span class="line">        <span class="keyword">char</span> buf[BUFSIZE];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>((fd1=open(argv[<span class="number">1</span>],O_RDONLY))==<span class="number">-1</span>)</span><br><span class="line">                quit(<span class="string">"open"</span>,<span class="number">1</span>);</span><br><span class="line"><span class="comment">//      if((fd2=open("passwd.bak",O_WRONLY|O_CREAT|O_TRUNC, 0664))==-1)</span></span><br><span class="line"><span class="comment">//              quit("open2",2);</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>( (n=read(fd1,buf,BUFSIZE))&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(n!=write(STDOUT_FILENO,buf,n))</span><br><span class="line">                        quit(<span class="string">"write"</span>,<span class="number">3</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        close(fd1);</span><br><span class="line"><span class="comment">//      close(fd2);</span></span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>注：<br>读写标准流时，应当使用符号常量STDIN_FILENO、STDOUT_FILENO、STDERR_FILENO作为文件说明符，而不是他们所表示的整数0、1、2。这些符号常量在unistd.h中定义。  </p>
-<hr>
-<h2 id="缓冲IO和无缓冲IO"><a href="#缓冲IO和无缓冲IO" class="headerlink" title="缓冲IO和无缓冲IO"></a>缓冲IO和无缓冲IO</h2><p><a href="https://www.cnblogs.com/cavehubiao/p/3981482.html" target="_blank" rel="noopener">带不带缓存是相对层来说的</a>。<br>如果你要写入数据到文件上时（就是写入磁盘上），内核先将数据写入到内核中所设的缓冲储存器。<br>假如这个缓冲储存器的长度是100个字节，你调用系统函：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ssize_t</span> write (<span class="keyword">int</span> fd,<span class="keyword">const</span> <span class="keyword">void</span> * buf,<span class="keyword">size_t</span> count);</span><br></pre></td></tr></table></figure></p>
-<p>写操作时，设每次写入长度count=10个字节，那么你几要调用10次这个函数才能把这个缓冲区写满，<strong>此时数据还是在缓冲区，并没有写入到磁盘。</strong><br>缓冲区满时才进行实际上的IO操作，把数据写入到磁盘上，所以上面说的“不带缓存””不是没有缓存而是没有直写进磁盘。</p>
-<p>那么，既然<strong>不带缓存的操作实际在内核是有缓存器的</strong>，那<strong>带缓存的IO操作</strong>又是怎么回事呢？</p>
-<p>带缓存IO也叫标准IO，符合ANSI C 的标准IO处理，不依赖系统内核，所以移植性强，我们使用标准IO操作很多时候是为了减少对read()和write()的系统调用次数，带缓存IO其实就是在用户层再建立一个缓存区，这个缓存区的分配和优化长度等细节都是标准IO库代你处理好了，不用去操心.<br>还是用上面那个例子说明这个操作过程：<br>内核缓存（注意这个不是用户层缓存区）区长度是100字节，<br>我们调用不带缓存的IO函数write()就要调用10次，这样系统效率低，<br>现在我们在用户层建立另一个缓存区（用户层缓存区或者叫流缓存），假设流缓存的长度是50字节，<br>我们用标准C库函数的fwrite()将数据写入到这个流缓存区里面，流缓存区满50字节后在进入内核缓存区，此时再调用系统函数write()将数据写入到文件（实质是磁盘）上，<br>标准IO操作fwrite()最后还是要掉用无缓存IO操作write,这里进行了两次调用fwrite()写100字节也就是进行两次系统调用write()。  </p>
-<h1 id="lseek-定位偏移指针"><a href="#lseek-定位偏移指针" class="headerlink" title="lseek: 定位偏移指针"></a>lseek: 定位偏移指针</h1><h1 id="truncate和ftruncate：截短文件"><a href="#truncate和ftruncate：截短文件" class="headerlink" title="truncate和ftruncate：截短文件"></a>truncate和ftruncate：截短文件</h1><h1 id="umask：-在创建期间修改文件权限"><a href="#umask：-在创建期间修改文件权限" class="headerlink" title="umask： 在创建期间修改文件权限"></a>umask： 在创建期间修改文件权限</h1><h1 id="目录导航–getcwd"><a href="#目录导航–getcwd" class="headerlink" title="目录导航–getcwd"></a>目录导航–getcwd</h1><h1 id="读取目录"><a href="#读取目录" class="headerlink" title="读取目录"></a>读取目录</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//打开目录</span></span><br><span class="line"><span class="function">DIR *<span class="title">opendir</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *dirname)</span></span>;</span><br><span class="line"><span class="comment">//读打开的目录，这个结构体至少有目录的inode和dirName两个成员</span></span><br><span class="line"><span class="function">struct dirent *<span class="title">readdir</span><span class="params">(DIR *dirp)</span></span>;</span><br><span class="line"><span class="comment">//关闭打开的目录</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">closedir</span><span class="params">(DIR *dirp)</span></span></span><br></pre></td></tr></table></figure>
-<h1 id="修改目录中的项目"><a href="#修改目录中的项目" class="headerlink" title="修改目录中的项目"></a>修改目录中的项目</h1><ol>
-<li>mkdir和rmdir——这些调用的意义与同名命令相同</li>
-<li>link和symlink——link创建一个硬链接，symlink创建一个符号链接</li>
-<li>unlink——和rm差不多，删除一个普通文件或符号链接，它不会删除目录</li>
-<li>rename——和mv一样</li>
-</ol>
-<h1 id="读取Inode：struct-stat-和-stat"><a href="#读取Inode：struct-stat-和-stat" class="headerlink" title="读取Inode：struct stat 和 stat"></a>读取Inode：struct stat 和 stat</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">stat</span>&#123;</span></span><br><span class="line">  <span class="keyword">ino_t</span> st_ino ; <span class="comment">//Inode 编号</span></span><br><span class="line">  <span class="keyword">mode_t</span> st_mode; <span class="comment">//模式(类型和权限)</span></span><br><span class="line">  <span class="keyword">nlink_t</span> st_nlink; <span class="comment">//硬链接数</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">uid_t</span> st_uid; <span class="comment">//UID(所有者)</span></span><br><span class="line">  <span class="keyword">gid_t</span> st_gid; <span class="comment">//GID(用户组所有者)</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">dev_t</span> st_rdev; <span class="comment">//设备ID(用于设备文件)</span></span><br><span class="line">  <span class="keyword">off_t</span> st_size; <span class="comment">//文件大小(字节)</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">time_t</span> st_atime; <span class="comment">//最后访问时间</span></span><br><span class="line">  <span class="keyword">time_t</span> st_mtime; <span class="comment">//最后修改时间</span></span><br><span class="line">  <span class="keyword">time_t</span> st_ctime; <span class="comment">//inode 最后修改时间</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">blksize_t</span> st_blksize ; <span class="comment">//IO的优选块大小</span></span><br><span class="line">  <span class="keyword">blkcnt_t</span> st_blocks; <span class="comment">//分配的块数</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>stat系统调用：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">stat</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, struct stat *buf)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lstat</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, struct stat *buf)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fstat</span><span class="params">(<span class="keyword">int</span> fildes, struct stat *buf)</span></span>;</span><br></pre></td></tr></table></figure></p>
-<p>stat和lstat的第一参数需要路径名，第二参数是一个stat结构的地址（把第一参数下的文件信息以stat结构存放在第二参数中）。stat和lstat的区别是，对于符号链接，stat会沿着符号链接前进：如果，文件foo是链接到bar的(foo-&gt;bar)，那么对foo进行stat操作，<strong>stat会用bar的属性填充stat结构</strong>, 而 <strong>lstat会提取foo的属性</strong>。其他方面，stat和lstat没有区别。lstat更常用。<br>fstat的第一参数是文件说明符，第二参数同样是stat结构地址。  </p>
-<h1 id="access：检查实际用户的权限"><a href="#access：检查实际用户的权限" class="headerlink" title="access：检查实际用户的权限"></a>access：检查实际用户的权限</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">access</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">int</span> amode)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>第一参数是 <strong>路径名</strong>, 第二参数指定了 <strong>要测试的访问权限</strong> 。<br>amode可以取以下4个值：<br>R_OK ——读取权限正常<br>W_OK ——写权限OK<br>X_OK ——执行权限OK<br>F_OK ——文件存在</p>
-<h1 id="修改文件属性"><a href="#修改文件属性" class="headerlink" title="修改文件属性"></a>修改文件属性</h1><h2 id="chmod和fchmod：改变文件权限"><a href="#chmod和fchmod：改变文件权限" class="headerlink" title="chmod和fchmod：改变文件权限"></a>chmod和fchmod：改变文件权限</h2><h2 id="chown：改变所有权"><a href="#chown：改变所有权" class="headerlink" title="chown：改变所有权"></a>chown：改变所有权</h2><h2 id="utime：改变时间戳"><a href="#utime：改变时间戳" class="headerlink" title="utime：改变时间戳"></a>utime：改变时间戳</h2>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3883,7 +3781,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">104</span>
+                  <span class="site-state-item-count">105</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3905,7 +3803,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

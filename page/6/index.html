@@ -294,6 +294,160 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/27/linux后台程序/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mitre">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://mitre.oss-cn-hangzhou.aliyuncs.com/img/vlcsnap-2018-02-22-21h01m56s237.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MITRE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/27/linux后台程序/" itemprop="url">linux后台程序</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-27T15:52:12+08:00">
+                2017-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在终端输入<font color="green">htop</font><br><img src="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic/htop-bg-fg.png" alt></p>
+<p>然后Ctrl+Z, 把进程放在后台执行。<br>再在本终端输入<font color="green">bmon</font><br>（<font color="red">b</font>andwide　<font color="red">mon</font>itor）<br><img src="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic/bmon-bg-fg.png" alt><br>然后Ctrl+Z, 把进程放在后台执行。</p>
+<p>那么，<strong>Ctrl+Z</strong> 是什么呢？</p>
+<p>在终端输入<font color="green">top &amp;</font>，程序直接在后台执行。<br><img src="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic/top-bg-fg.png" alt></p>
+<p><strong><em>结论</em></strong> ：<strong>Ctrl+Z</strong> 执行的操作是，在当前命令的结尾加一个<font color="green"> &amp;</font>，然后当前程序就放在本终端的后台执行了。</p>
+<p>在本终端输入<font color="green">jobs</font>, 可以看到本终端的后台程序。<br><img src="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic/jobs-bg-fg.png" alt></p>
+<ul>
+<li>把后台程序调入前台：<font color="green">fg + &lt;序号&gt;</font>   </li>
+<li><font color="green">bg</font>显示最后一个加入后台的程序(序号最大)</li>
+<li><font color="green">fg</font>　默认把序号最大的后台程序调入前台</li>
+</ul>
+<p>在别的终端输入<font color="green">jobs</font>,看不到。但是用<font color="green">ps</font>可以查到。<br><img src="http://mitre.oss-cn-hangzhou.aliyuncs.com/blog_pic/newterminal-bg-fg.png" alt></p>
+<p><strong><em>最后</em></strong>：<br>如果不<font color="green">kill</font>后台进程，而是把当前终端关闭，当前终端的后台程序会自动kill掉。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/27/github遇到的坑/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -985,7 +1139,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">104</span>
+                  <span class="site-state-item-count">105</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1007,7 +1161,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
